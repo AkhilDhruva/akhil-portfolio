@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Workflow Quest — Guided Simulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f3efe6;
+    --paper-2:#ece5d7;
+    --paper-3:#e4dbca;
+    --ink:#211f1a;
+    --ink-soft:#4b463c;
+    --ink-faint:#6e6757;
+    --line:#d9d1bf;
+    --line-soft:#e6dfd0;
+    --accent:#b8552b;
+    --accent-deep:#7c330f;
+    --accent-tint:#f1ddd0;
+    --safe:#3f6b4a;
+    --safe-tint:#dde9df;
+    --danger:#ad2e25;
+    --danger-tint:#f4ddd9;
+    --warn:#a9742a;
+    --warn-tint:#f0e3cd;
+    --sys:#15181f;
+    --sys-2:#1d212b;
+    --sys-3:#272d3a;
+    --sys-line:#333a49;
+    --sys-ink:#dde2ec;
+    --sys-mute:#8b94a6;
+    --sys-cyan:#6fb6cf;
+    --sys-amber:#e0a85a;
+    --sys-green:#7cc08a;
+    --sys-red:#e07a72;
+    --shadow:0 1px 2px rgba(33,31,26,.06),0 8px 28px -12px rgba(33,31,26,.22);
+    --shadow-lg:0 2px 4px rgba(33,31,26,.08),0 30px 60px -24px rgba(33,31,26,.35);
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(184,85,43,.045), transparent 38%),
+      radial-gradient(circle at 90% 95%, rgba(63,107,74,.05), transparent 42%);
+    background-attachment:fixed;
+  }
+  .serif{font-family:'Newsreader',Georgia,serif;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+
+  /* ---------- header / progress rail ---------- */
+  header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(243,239,230,.86);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .bar{
+    max-width:1080px;margin:0 auto;padding:14px 26px;
+    display:flex;align-items:center;gap:18px;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;flex-shrink:0;cursor:pointer}
+  .brand .mark{
+    font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;
+    letter-spacing:.5px;color:var(--accent-deep);
+    border:1.5px solid var(--accent);border-radius:6px;padding:3px 7px;line-height:1;
+  }
+  .brand .name{font-family:'Newsreader',serif;font-size:19px;font-weight:600;letter-spacing:.1px}
+  .brand .name em{font-style:italic;color:var(--accent-deep)}
+  .role-pill{
+    margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.6px;
+    text-transform:uppercase;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--paper-2);
+    transition:all .5s ease;
+  }
+  .role-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);transition:background .5s}
+  .role-pill.supervisor{color:var(--safe);border-color:#bcd3c0;background:var(--safe-tint)}
+  .role-pill.supervisor .dot{background:var(--safe)}
+  .role-pill.flip{animation:flip .7s ease}
+  @keyframes flip{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+  .info-btn{
+    flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+    background:var(--paper-2);color:var(--ink-soft);font-family:'Newsreader',serif;font-style:italic;
+    font-size:16px;cursor:pointer;transition:.2s;
+  }
+  .info-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .rail{max-width:1080px;margin:0 auto;padding:0 26px 13px;display:flex;gap:5px}
+  .seg{flex:1;display:flex;flex-direction:column;gap:5px;opacity:.6;transition:opacity .5s}
+  .seg.on{opacity:1}
+  .seg .track{height:4px;border-radius:3px;background:var(--line);overflow:hidden;position:relative}
+  .seg .track i{position:absolute;inset:0;width:0;background:var(--accent);border-radius:3px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+  .seg.done .track i{width:100%}
+  .seg.active .track i{width:55%;background:linear-gradient(90deg,var(--accent),var(--accent) 60%,transparent)}
+  .seg.roadmap .track{background:transparent;border:1px dashed var(--line);height:4px}
+  .seg.roadmap.done .track i{width:100%;background:repeating-linear-gradient(90deg,var(--ink-faint),var(--ink-faint) 4px,transparent 4px,transparent 8px)}
+  .seg .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3px;color:var(--ink-faint);text-transform:uppercase;line-height:1.25}
+  .seg .lbl b{color:var(--ink);font-weight:600;display:block}
+  .seg.done .lbl b,.seg.active .lbl b{color:var(--ink)}
+
+  /* ---------- stage ---------- */
+  main{max-width:840px;margin:0 auto;padding:42px 26px 120px}
+  .stage{transition:opacity .22s ease, transform .22s ease}
+  .stage.leaving{opacity:0;transform:translateY(8px)}
+
+  .step-tag{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.7px;
+    text-transform:uppercase;color:var(--accent-deep);margin-bottom:18px;
+  }
+  .step-tag .n{background:var(--accent-deep);color:#fff;border-radius:5px;padding:2px 7px;font-weight:600}
+  .step-tag .build{margin-left:4px;color:var(--ink-faint);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+  .step-tag .build.road{color:#6d4d12;border-color:var(--warn-tint);background:var(--warn-tint)}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:-.5px;margin-bottom:8px}
+  h1.title em{font-style:italic;color:var(--accent-deep)}
+  .lede{font-family:'Newsreader',serif;font-size:clamp(17px,2.4vw,21px);color:var(--ink-soft);line-height:1.5;max-width:60ch;margin-bottom:8px}
+  p.body{font-size:15.5px;color:var(--ink-soft);max-width:62ch;margin:14px 0}
+  .reveal{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* coach voice */
+  .coach{
+    position:relative;border-left:3px solid var(--accent);
+    background:linear-gradient(180deg,var(--accent-tint),transparent);
+    padding:14px 18px 14px 20px;border-radius:0 10px 10px 0;margin:20px 0;
+  }
+  .coach .who{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--accent-deep);margin-bottom:4px}
+  .coach p{font-family:'Newsreader',serif;font-size:17px;line-height:1.5;color:var(--ink)}
+
+  /* generic cards */
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .card .head{padding:13px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;gap:10px;background:var(--paper-2)}
+  .card .head .ico{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-size:12px;flex-shrink:0}
+  .card .head .t{font-weight:600;font-size:13.5px}
+  .card .head .meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint)}
+  .card .pad{padding:18px}
+
+  /* email-ish block */
+  .email .row{display:flex;gap:10px;font-size:13.5px;padding:5px 0;border-bottom:1px dashed var(--line-soft)}
+  .email .row .k{width:62px;color:var(--ink-faint);flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding-top:2px}
+  .email .row .v{color:var(--ink);font-weight:500}
+  .email .row .v .ext{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--danger-tint);color:var(--danger);padding:1px 6px;border-radius:4px;margin-left:7px;letter-spacing:.4px}
+  .email .row .v .int{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--safe-tint);color:var(--safe);padding:1px 6px;border-radius:4px;margin-left:7px;letter-spacing:.4px}
+  .email .bodytext{padding-top:13px;font-size:14.5px;color:var(--ink);line-height:1.6}
+  .flag{background:var(--danger-tint);box-shadow:inset 0 0 0 1px rgba(173,46,37,.35);border-radius:4px;padding:0 3px}
+
+  /* system / agent surface */
+  .sys{
+    background:var(--sys);color:var(--sys-ink);border-radius:var(--r);overflow:hidden;
+    border:1px solid var(--sys-line);box-shadow:var(--shadow);
+  }
+  .sys .topbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--sys-2);border-bottom:1px solid var(--sys-line)}
+  .sys .topbar .dots{display:flex;gap:5px}
+  .sys .topbar .dots i{width:9px;height:9px;border-radius:50%;background:var(--sys-line)}
+  .sys .topbar .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sys-mute);letter-spacing:.5px;margin-left:4px}
+  .sys .topbar .stat{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sys-green);display:flex;align-items:center;gap:6px}
+  .sys .topbar .stat .blink{width:7px;height:7px;border-radius:50%;background:var(--sys-green);animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  .sys .log{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9}
+  .logline{display:flex;gap:10px;opacity:0;animation:logIn .4s ease forwards}
+  @keyframes logIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+  .logline .ar{color:var(--sys-cyan);flex-shrink:0}
+  .logline .txt{color:var(--sys-ink)}
+  .logline .txt .call{color:var(--sys-cyan)}
+  .logline .txt .ret{color:var(--sys-green)}
+  .logline .txt .think{color:var(--sys-mute)}
+  .logline.warnline .ar{color:var(--sys-amber)}
+  .logline.warnline .txt{color:var(--sys-amber)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--sys-cyan);vertical-align:-2px;animation:blink .9s steps(1) infinite;margin-left:2px}
+
+  /* buttons */
+  .btn{
+    font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:14.5px;
+    border:none;border-radius:10px;padding:12px 22px;cursor:pointer;transition:.18s;
+    display:inline-flex;align-items:center;gap:9px;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:#000}
+  .btn-accent{background:var(--accent);color:#fff}
+  .btn-accent:hover{background:var(--accent-deep)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);background:var(--paper-2)}
+  .btn-safe{background:var(--safe);color:#fff}
+  .btn-safe:hover{filter:brightness(.92)}
+  .btn-danger{background:#fff;color:var(--danger);border:1.5px solid var(--danger-tint)}
+  .btn-danger:hover{background:var(--danger-tint)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn .ar{font-family:serif}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;align-items:center}
+
+  .hint{font-size:13.5px;color:var(--ink-soft);font-style:italic;font-family:'Newsreader',serif}
+
+  /* workflow map */
+  .wfmap{display:flex;flex-direction:column;gap:0;margin:8px 0}
+  .node{
+    display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 15px;box-shadow:var(--shadow);position:relative;
+    opacity:0;transform:translateY(10px);
+  }
+  .node.show{animation:rise .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .node .idx{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;background:var(--paper-3);color:var(--ink)}
+  .node .desc{flex:1}
+  .node .desc .nm{font-weight:600;font-size:14px}
+  .node .desc .io{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:2px}
+  .node .kind{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:6px;flex-shrink:0}
+  .node .kind.wait{background:var(--paper-2);color:var(--ink-faint)}
+  .connector{width:2px;height:16px;background:var(--line);margin:0 auto;opacity:0;transition:opacity .4s}
+  .connector.show{opacity:1}
+  .connector.show::after{content:"▾";display:block;text-align:center;color:var(--ink-faint);font-size:11px;margin-top:-3px}
+
+  /* tagging */
+  .tagrow{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-bottom:9px;box-shadow:var(--shadow);flex-wrap:wrap}
+  .tagrow .idx{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;background:var(--paper-3);flex-shrink:0}
+  .tagrow .nm{flex:1;min-width:160px;font-size:14px;font-weight:500}
+  .seg-toggle{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg-toggle button{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3px;padding:7px 12px;background:#fff;border:none;cursor:pointer;color:var(--ink-soft);transition:.15s}
+  .seg-toggle button+button{border-left:1px solid var(--line)}
+  .seg-toggle button.sel-think{background:var(--ink);color:var(--paper)}
+  .seg-toggle button.sel-act{background:var(--accent);color:#fff}
+  .flagbtn{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.3px;padding:7px 11px;border-radius:8px;border:1px dashed var(--line);background:#fff;cursor:pointer;color:var(--ink-faint);transition:.15s;display:flex;align-items:center;gap:6px}
+  .flagbtn.on{background:var(--danger-tint);border-color:var(--danger);border-style:solid;color:var(--danger)}
+  .flagbtn .fi{font-size:11px}
+
+  /* approval banner */
+  .await{
+    display:flex;align-items:center;gap:13px;background:var(--warn-tint);
+    border:1px solid #e3cf9e;border-radius:12px;padding:14px 18px;margin:20px 0 8px;
+  }
+  .await .pulse{width:12px;height:12px;border-radius:50%;background:var(--warn);position:relative;flex-shrink:0}
+  .await .pulse::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--warn);opacity:.5;animation:ring 1.6s ease-out infinite}
+  @keyframes ring{0%{transform:scale(.6);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+  .await .txt b{display:block;font-size:14px;letter-spacing:.2px}
+  .await .txt span{font-size:12.5px;color:var(--ink-soft)}
+
+  /* consequence */
+  .incident{border:1px solid var(--danger);background:var(--danger-tint);border-radius:var(--r);padding:18px 20px;margin:18px 0}
+  .incident .hd{display:flex;align-items:center;gap:10px;color:var(--danger);font-weight:700;font-size:14px;letter-spacing:.3px;margin-bottom:8px}
+  .incident .hd .x{width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;display:grid;place-items:center;font-size:13px}
+  .incident p{font-size:14px;color:#7c241d;line-height:1.55}
+  .success{border:1px solid #bcd3c0;background:var(--safe-tint);border-radius:var(--r);padding:18px 20px;margin:18px 0}
+  .success .hd{display:flex;align-items:center;gap:10px;color:var(--safe);font-weight:700;font-size:14px;margin-bottom:8px}
+  .success .hd .v{width:22px;height:22px;border-radius:50%;background:var(--safe);color:#fff;display:grid;place-items:center;font-size:12px}
+  .success p{font-size:14px;color:#2c4d35;line-height:1.55}
+
+  /* editor */
+  .editrow{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:11px;box-shadow:var(--shadow)}
+  .editrow .q{font-size:13px;color:var(--ink-soft);margin-bottom:9px;font-weight:500}
+  .editrow .q .badname{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--danger-tint);color:var(--danger);padding:1px 6px;border-radius:4px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--line);border-radius:9px;padding:10px 13px;cursor:pointer;transition:.15s;font-size:13.5px}
+  .opt:hover{border-color:var(--ink-faint)}
+  .opt.sel{border-color:var(--accent);background:var(--accent-tint)}
+  .opt.sel.good{border-color:var(--safe);background:var(--safe-tint)}
+  .opt .rad{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;margin-top:2px;transition:.15s}
+  .opt.sel .rad{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px #fff}
+  .opt.sel.good .rad{border-color:var(--safe);background:var(--safe)}
+
+  /* orchestration board */
+  .board{display:flex;flex-direction:column;gap:6px;margin:14px 0;max-width:520px}
+  .agent{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow);position:relative}
+  .agent .ah{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .agent .ah .ai{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px;background:var(--sys);color:var(--paper)}
+  .agent .ah .an{font-weight:600;font-size:13px;line-height:1.15}
+  .agent .ah .an small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-faint);font-weight:400;letter-spacing:.3px;text-transform:uppercase}
+  .agent .out{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);background:var(--paper-2);border-radius:7px;padding:8px 10px;line-height:1.5;margin-bottom:11px;min-height:54px}
+  .agent .out .bad{color:var(--danger);font-weight:600}
+  .agent .alloc{display:flex;flex-direction:column;gap:5px}
+  .agent .alloc button{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2px;text-align:left;padding:7px 9px;border-radius:7px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-soft);transition:.13s;display:flex;align-items:center;gap:7px}
+  .agent .alloc button .ck{width:13px;height:13px;border-radius:4px;border:1.5px solid var(--line);flex-shrink:0}
+  .agent .alloc button.sel{border-color:var(--ink);color:var(--ink);font-weight:600}
+  .agent .alloc button.sel .ck{background:var(--ink);border-color:var(--ink)}
+  .agent .alloc button.sel.auto{border-color:var(--accent);color:var(--accent-deep)}
+  .agent .alloc button.sel.auto .ck{background:var(--accent);border-color:var(--accent)}
+  .agent .alloc button.sel.appr{border-color:var(--safe);color:var(--safe)}
+  .agent .alloc button.sel.appr .ck{background:var(--safe);border-color:var(--safe)}
+  .verify-toggle{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3px;padding:6px 9px;border-radius:7px;border:1px dashed var(--line);background:#fff;cursor:pointer;color:var(--ink-faint);width:100%;text-align:center;transition:.13s}
+  .verify-toggle.on{background:var(--warn-tint);border-color:var(--warn);border-style:solid;color:#6d4d12}
+  .handoff{text-align:center;color:var(--ink-faint);font-size:18px;align-self:center}
+  @media(max-width:680px){.board{grid-template-columns:1fr}.handoff{transform:rotate(90deg)}}
+
+  /* report */
+  .report-row{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft)}
+  .report-row .badge{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:grid;place-items:center;font-size:13px;color:#fff}
+  .report-row .badge.y{background:var(--safe)}
+  .report-row .badge.n{background:var(--ink-faint)}
+  .report-row .rc .beh{font-weight:600;font-size:14px}
+  .report-row .rc .sig{font-size:13px;color:var(--ink-soft);margin-top:2px}
+  .report-row .rc .sig em{color:var(--accent-deep);font-style:normal;font-weight:600}
+
+  /* info drawer */
+  .scrim{position:fixed;inset:0;background:rgba(33,31,26,.45);backdrop-filter:blur(2px);z-index:60;opacity:0;pointer-events:none;transition:.25s}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,92vw);background:var(--paper);z-index:70;
+    transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow-lg);
+    overflow-y:auto;padding:30px 28px 50px}
+  .drawer.open{transform:none}
+  .drawer h3{font-family:'Newsreader',serif;font-size:24px;font-weight:500;margin-bottom:4px}
+  .drawer h3 em{font-style:italic;color:var(--accent)}
+  .drawer .close{position:absolute;top:18px;right:20px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--ink-soft);line-height:1}
+  .drawer .blk{margin-top:22px}
+  .drawer .blk h4{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--accent-deep);margin-bottom:7px}
+  .drawer .blk p{font-size:14px;color:var(--ink-soft);line-height:1.6}
+  .drawer .blk p+p{margin-top:9px}
+  .drawer .thesis{background:#fff;border:1px solid var(--line);border-radius:11px;padding:15px 17px;font-family:'Newsreader',serif;font-size:17px;line-height:1.5}
+  .drawer .thesis b{color:var(--accent-deep)}
+
+  /* misc */
+  .disclaimer{max-width:840px;margin:0 auto;padding:0 26px 40px}
+  .disclaimer .note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);line-height:1.7;border-top:1px solid var(--line);padding-top:16px;letter-spacing:.2px}
+  .kbd{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .divider{height:1px;background:var(--line);margin:26px 0;border:none}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3px;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink-soft)}
+  .feedback{border-radius:11px;padding:13px 16px;font-size:13.5px;line-height:1.5;margin-top:14px;animation:rise .4s both}
+  .feedback.good{background:var(--safe-tint);border:1px solid #bcd3c0;color:#2c4d35}
+  .feedback.warn{background:var(--warn-tint);border:1px solid #e3cf9e;color:#54400f}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand" onclick="go('intro')">
+      <span class="mark">AWQ</span>
+      <span class="name">AI Workflow <em>Quest</em></span>
+    </div>
+    <div class="role-pill" id="rolePill"><span class="dot"></span><span id="roleTxt">Role: AI User</span></div>
+    <button class="info-btn" onclick="toggleInfo(true)" title="About this prototype">i</button>
+  </div>
+  <div class="rail" id="rail"></div>
+</header>
+
+<main>
+  <div class="stage" id="stage"></div>
+</main>
+
+<div class="disclaimer">
+  <p class="note" id="disc">PORTFOLIO CONCEPT · A designed learning experience shown through an interactive prototype. No production AI, no real accounts or data. Dana Okafor, Shanda Patel, Shanda Reyes, Brightline Agency and Project Halo are fictional. Any figures are design targets to validate in a pilot — not measured results.</p>
+</div>
+
+<!-- info drawer -->
+<div class="scrim" id="scrim" onclick="toggleInfo(false)"></div>
+<aside class="drawer" id="drawer">
+  <button class="close" onclick="toggleInfo(false)">×</button>
+  <h3>Why this is hard <em>to simulate</em></h3>
+  <p style="font-size:14px;color:var(--ink-soft);margin-top:6px">The recruiter-facing layer. A working demo can't explain its own design decisions — this can.</p>
+
+  <div class="blk">
+    <div class="thesis">The core tension: a prototype is <b>deterministic</b>, but the thing it teaches judgment about is <b>not</b>. So you don't simulate the agent. <b>You simulate the decision points.</b></div>
+  </div>
+
+  <div class="blk">
+    <h4>The six problems</h4>
+    <p><b>1 · Non-determinism vs. authored branches.</b> Real agents vary run to run; a prototype must use pre-written states — without feeling on-rails.</p>
+    <p><b>2 · The invisible made visible.</b> Tool-calling and handoffs happen under the hood. Surfacing them risks re-introducing the terminology overload this design exists to prevent.</p>
+    <p><b>3 · Time compression.</b> A real workflow runs over hours; the prototype compresses it to seconds while keeping cause and effect legible.</p>
+    <p><b>4 · Safe but real-feeling consequence.</b> Productive failure is the teaching tool. The cost of a bad approval must land emotionally yet stay recoverable.</p>
+    <p><b>5 · Branching explosion.</b> Writing out every possible path is impossible; removing choice entirely teaches nothing.</p>
+    <p><b>6 · Authentic agency.</b> The learner's choices must genuinely change what happens, or it quietly becomes manipulation.</p>
+  </div>
+
+  <div class="blk">
+    <h4>The resolution</h4>
+    <p>Concentrate effort on the few moments that carry the teaching — verify, allocate, intervene — and write out the branches with vivid consequences <em>only there</em>. Everything between is compressed and guided. The invisible process is surfaced just-in-time, one concept per moment.</p>
+  </div>
+
+  <div class="blk">
+    <h4>Honest scope</h4>
+    <p>Scenarios 1–3 are fully built. Scenario 4 (multi-agent coordination) is storyboarded as a roadmap — forcing it into a working build would promise more than the prototype can deliver. A fully-realized slice proves more than a sprawling half-built system.</p>
+  </div>
+
+  <div class="blk">
+    <h4>What it screens for</h4>
+    <p>Performance-consulting thinking · cognitive-load management · AI-enablement capability · responsible-AI judgment · design maturity under constraint.</p>
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const S = {
+  screen:'intro',
+  role:'user',
+  layersDone:new Set(),      // 1..7
+  s1:{drafted:false,connected:false,completed:false},
+  s2:{tags:{},flags:{},score:null,passed:false},
+  s3:{reviewed:false,firstChoice:null,leaked:false,
+      recipient:null,assertion:null,context:null,
+      caughtRecipient:false,caughtData:false,repaired:false,calendarConfirmed:false,
+      askedClarify:false},
+  s4:{alloc:{research:null,drafting:null,scheduling:null},
+      verify:{research:false,drafting:false,scheduling:false},
+      flaggedFab:false,scored:false}
+};
+
+/* seven-layer rail definition */
+const LAYERS=[
+  {n:1,short:'Task',full:'Assistance'},
+  {n:2,short:'Tool',full:'Awareness'},
+  {n:3,short:'Workflow',full:'Awareness'},
+  {n:4,short:'Agent',full:'Awareness'},
+  {n:5,short:'Multi-Agent',full:'Awareness',road:true},
+  {n:6,short:'Human',full:'Oversight'},
+  {n:7,short:'AI Ops',full:'Thinking',road:true},
+];
+
+/* which layers are "active" (in progress) per screen */
+const ACTIVE_LAYERS={
+  s1:[1,2], s2:[3,4], s3:[6], s4:[5,7]
+};
+
+/* ============================================================
+   RAIL + ROLE
+   ============================================================ */
+function renderRail(){
+  const activeSet=new Set(ACTIVE_LAYERS[S.screen]||[]);
+  document.getElementById('rail').innerHTML=LAYERS.map(l=>{
+    const done=S.layersDone.has(l.n);
+    const active=activeSet.has(l.n)&&!done;
+    const cls=['seg'];
+    if(done){cls.push('done')}
+    if(active){cls.push('active')}
+    if(done||active){cls.push('on')}
+    if(l.road){cls.push('roadmap')}
+    return `<div class="${cls.join(' ')}">
+      <div class="track"><i></i></div>
+      <div class="lbl"><b>${l.n} · ${l.short}</b>${l.full}${l.road?' ◌':''}</div>
+    </div>`;
+  }).join('');
+}
+function setRole(r){
+  const p=document.getElementById('rolePill');
+  const t=document.getElementById('roleTxt');
+  if(r==='supervisor'&&S.role!=='supervisor'){
+    p.classList.add('flip');setTimeout(()=>p.classList.remove('flip'),700);
+  }
+  S.role=r;
+  if(r==='supervisor'){p.classList.add('supervisor');t.textContent='Role: AI Supervisor';}
+  else{p.classList.remove('supervisor');t.textContent='Role: AI User';}
+}
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+const stage=document.getElementById('stage');
+function go(id){
+  stage.classList.add('leaving');
+  setTimeout(()=>{
+    S.screen=id;
+    stage.innerHTML=SCREENS[id]();
+    stage.classList.remove('leaving');
+    window.scrollTo({top:0,behavior:'smooth'});
+    renderRail();
+    if(AFTER[id])AFTER[id]();
+  },200);
+}
+
+/* ============================================================
+   SCREENS
+   ============================================================ */
+const SCREENS={};
+const AFTER={};
+
+/* ---------- INTRO ---------- */
+SCREENS.intro=()=>`
+  <div class="reveal">
+    <div class="step-tag"><span>Guided Simulation</span></div>
+    <h1 class="title">You're about to go from <em>using</em> AI<br>to <em>supervising</em> it.</h1>
+    <p class="lede">Most of us will work alongside AI rather than build it. This is a friendly practice run for that role — you learn by doing the work, not by memorizing terms.</p>
+    <p class="body">You work for <b>Dana Okafor</b>. Across four short scenarios, you'll hand some work to an AI assistant, watch it grow into something that takes actions on its own, and reach the moment that matters most: a message waiting for your okay before it goes out.</p>
+    <div class="coach">
+      <div class="who">The premise</div>
+      <p>We won't start with jargon. Each new idea shows up right when you need it to solve a problem — so it makes sense before it ever gets a name.</p>
+    </div>
+    <div class="pills">
+      <span class="pill">4 scenarios</span>
+      <span class="pill">7 capability layers</span>
+      <span class="pill">user → supervisor</span>
+      <span class="pill">behavior, not recall</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="go('s1')">Begin <span class="ar">→</span></button>
+      <button class="btn btn-ghost" onclick="toggleInfo(true)">How this was designed</button>
+    </div>
+  </div>`;
+
+/* ============================================================
+   SCENARIO 1 — The first delegation (Layers 1–2)
+   ============================================================ */
+SCREENS.s1=()=>`
+  <div class="reveal">
+    <div class="step-tag"><span class="n">01</span> The first delegation <span class="build">Layers 1–2 · Full fidelity</span></div>
+    <h1 class="title">It knows some things. It can <em>look up</em> others.</h1>
+    <p class="lede">A customer needs help. Hand the email to the assistant and see what it can do on its own — and where it gets stuck.</p>
+
+    <div class="card email" style="margin-top:18px">
+      <div class="head"><span class="ico">✉</span><span class="t">Inbox · 1 new</span><span class="meta">cust-support@brightco</span></div>
+      <div class="pad">
+        <div class="row"><span class="k">From</span><span class="v">marcus.lee@gmail.com</span></div>
+        <div class="row"><span class="k">Subject</span><span class="v">Where is my order??</span></div>
+        <div class="bodytext">Hi — I placed an order last Thursday and still no shipping update. Can you tell me the status? This was a gift and I'm getting nervous. Thanks, Marcus</div>
+      </div>
+    </div>
+
+    <div id="s1area" style="margin-top:18px"></div>
+  </div>`;
+
+AFTER.s1=()=>{ S.s1={drafted:false,connected:false,completed:false}; renderS1(); };
+
+function renderS1(){
+  const a=document.getElementById('s1area');
+  if(!a)return;
+  if(!S.s1.drafted){
+    a.innerHTML=`<button class="btn btn-accent" onclick="s1Draft()">Ask the assistant to draft a reply <span class="ar">→</span></button>`;
+    return;
+  }
+  // drafted -> show first (model-only) draft, then the gap
+  let html=`
+    <div class="sys reveal">
+      <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">assistant · response</span><span class="stat"><span class="blink"></span>generated</span></div>
+      <div class="log">
+        <div class="logline" style="animation-delay:.05s"><span class="ar">›</span><span class="txt"><span class="think">composing reply from what I already know…</span></span></div>
+      </div>
+    </div>
+    <div class="card email reveal" style="margin-top:14px;animation-delay:.25s">
+      <div class="head"><span class="ico">✦</span><span class="t">Draft reply</span><span class="meta">using only what it knows</span></div>
+      <div class="pad">
+        <div class="bodytext">Hi Marcus, thanks for reaching out and sorry for the worry. I'd be glad to check on your order right away. To pull up the status I'll need your <b>order number</b> — could you confirm it? <span style="color:var(--ink-faint)">…</span></div>
+      </div>
+    </div>`;
+
+  if(!S.s1.connected){
+    html+=`
+    <div class="coach reveal" style="animation-delay:.45s">
+      <div class="who">Did you see where it got stuck?</div>
+      <p>The assistant wrote a smooth reply — but it stopped at the one fact it doesn't have. The order status isn't stored inside the assistant. It lives in another system.</p>
+    </div>
+    <div class="sys reveal" style="margin-top:14px;animation-delay:.6s">
+      <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">assistant · request</span><span class="stat" style="color:var(--sys-amber)"><span class="blink" style="background:var(--sys-amber)"></span>needs access</span></div>
+      <div class="log">
+        <div class="logline warnline"><span class="ar">!</span><span class="txt">I can look this up — if you connect me to the <b>Orders</b> system.</span></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="s1Connect()">🔌 Connect the Orders system</button>
+      <span class="hint">This is called a tool — a door to information the assistant doesn't have on its own.</span>
+    </div>`;
+  } else {
+    html+=`
+    <div class="sys reveal" style="margin-top:14px">
+      <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">assistant · tool call</span><span class="stat"><span class="blink"></span>connected</span></div>
+      <div class="log" id="s1log"></div>
+    </div>
+    <div id="s1final"></div>`;
+  }
+  a.innerHTML=html;
+  if(S.s1.connected) runS1Tool();
+}
+function s1Draft(){S.s1.drafted=true;renderS1();}
+function s1Connect(){S.s1.connected=true;renderS1();}
+
+function runS1Tool(){
+  const log=document.getElementById('s1log');
+  const lines=[
+    {d:0,  c:`<span class="ar">→</span><span class="txt"><span class="call">orders.lookup</span>(email:"marcus.lee@gmail.com")</span>`},
+    {d:700,c:`<span class="ar">←</span><span class="txt"><span class="ret">{ order:"#BC-4471", status:"shipped", eta:"Fri Jun 6", tracking:"1Z9…" }</span></span>`},
+    {d:1300,c:`<span class="ar">→</span><span class="txt"><span class="think">adding the looked-up details to the draft…</span></span>`}
+  ];
+  log.innerHTML='';
+  lines.forEach(l=>setTimeout(()=>{
+    const d=document.createElement('div');d.className='logline';
+    if(l.c.includes('warn'))d.className+=' warnline';
+    d.innerHTML=l.c;log.appendChild(d);
+  },l.d));
+  setTimeout(()=>{
+    S.s1.completed=true;
+    const f=document.getElementById('s1final');
+    f.innerHTML=`
+      <div class="card email reveal" style="margin-top:14px">
+        <div class="head"><span class="ico" style="background:var(--safe)">✓</span><span class="t">Completed reply</span><span class="meta">with the looked-up details</span></div>
+        <div class="pad">
+          <div class="bodytext">Hi Marcus, good news — your order <b>#BC-4471</b> shipped and is on track to arrive <b>Friday, Jun 6</b>. Here's your tracking: 1Z9… You'll get updates as it moves. Thanks for your patience! </div>
+        </div>
+      </div>
+      <div class="coach reveal" style="margin-top:14px">
+        <div class="who">What just happened</div>
+        <p>The first draft used only what the assistant already <em>knew</em>. The second used what it <em>looked up</em>. Same assistant — it simply became far more helpful once it could reach the right information.</p>
+      </div>
+      <div class="card reveal" style="margin-top:14px">
+        <div class="pad">
+          <div style="font-weight:600;font-size:14px;margin-bottom:10px">Quick check — this idea comes back again and again.</div>
+          <div class="opts" id="s1quiz">
+            <div class="opt" onclick="s1Quiz(this,false)"><span class="rad"></span><div>The assistant simply <b>knew</b> the order status and typed it out.</div></div>
+            <div class="opt" onclick="s1Quiz(this,true)"><span class="rad"></span><div>The assistant <b>looked up</b> the status in a connected system.</div></div>
+          </div>
+          <div id="s1fb"></div>
+        </div>
+      </div>`;
+  },2100);
+}
+function s1Quiz(el,correct){
+  document.querySelectorAll('#s1quiz .opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add('sel');if(correct)el.classList.add('good');
+  const fb=document.getElementById('s1fb');
+  if(correct){
+    fb.innerHTML=`<div class="feedback good">Exactly. From now on, when a task stalls, the useful question is: <b>what information would it need?</b> That one habit will carry you through everything ahead.</div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="completeS1()">Next: one step becomes many <span class="ar">→</span></button></div>`;
+  }else{
+    fb.innerHTML=`<div class="feedback warn">Not quite — no worries. Compare the two drafts: the first one stopped because the assistant didn't have the order status. It had to look it up.</div>`;
+    setTimeout(()=>document.querySelectorAll('#s1quiz .opt').forEach(o=>o.style.pointerEvents='auto'),900);
+    el.classList.remove('sel','good');
+  }
+}
+function completeS1(){S.layersDone.add(1);S.layersDone.add(2);go('s2');}
+
+/* ============================================================
+   SCENARIO 2 — It's not one step (Layers 3–4)
+   ============================================================ */
+const WF=[
+  {nm:'Extract intent',io:'in: Dana\'s message → out: structured request',kind:'think'},
+  {nm:'Draft the email to Shanda',io:'in: intent → out: draft message',kind:'think'},
+  {nm:'Send email & await reply',io:'out: sent → ⏳ waiting on a person',kind:'act',touch:'a person'},
+  {nm:'Detect confirmation in reply',io:'in: reply text → out: agreed time',kind:'think'},
+  {nm:'Create the calendar event',io:'in: agreed time → out: booked record',kind:'act',touch:'a record'},
+];
+
+SCREENS.s2=()=>`
+  <div class="reveal">
+    <div class="step-tag"><span class="n">02</span> It's not one step <span class="build">Layers 3–4 · Full fidelity</span></div>
+    <h1 class="title">One sentence. <em>Five</em> moving parts.</h1>
+    <p class="lede">Dana sends a request that sounds simple. Watch it unfold into a chain of steps — then you'll label what each step really does.</p>
+
+    <div class="card reveal" style="margin-top:18px">
+      <div class="head"><span class="ico" style="background:var(--accent)">D</span><span class="t">Dana Okafor</span><span class="meta">direct message</span></div>
+      <div class="pad"><div class="bodytext">“Set up a 30-min sync with Shanda next week about the Q3 launch.”</div></div>
+    </div>
+
+    <div id="s2build" style="margin-top:20px"></div>
+  </div>`;
+
+AFTER.s2=()=>{ S.s2={tags:{},flags:{},score:null,passed:false}; buildS2(); };
+
+function buildS2(){
+  const c=document.getElementById('s2build');
+  c.innerHTML=`<button class="btn btn-accent" onclick="s2Decompose()">Hand it to the assistant <span class="ar">→</span></button>`;
+}
+function s2Decompose(){
+  const c=document.getElementById('s2build');
+  let html=`<div class="sys" style="margin-bottom:16px">
+    <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">assistant · planning</span><span class="stat"><span class="blink"></span>decomposing</span></div>
+    <div class="log"><div class="logline"><span class="ar">›</span><span class="txt"><span class="think">this needs more than one step — planning the sequence…</span></span></div></div>
+  </div><div class="wfmap" id="wfmap"></div>`;
+  c.innerHTML=html;
+  const map=document.getElementById('wfmap');
+  WF.forEach((s,i)=>{
+    map.innerHTML+=`<div class="node" id="wn${i}">
+        <span class="idx">${i+1}</span>
+        <div class="desc"><div class="nm">${s.nm}</div><div class="io">${s.io}</div></div>
+        ${s.kind==='wait'?'<span class="kind wait">wait</span>':''}
+      </div>${i<WF.length-1?`<div class="connector" id="wc${i}"></div>`:''}`;
+  });
+  // staggered reveal
+  WF.forEach((s,i)=>{
+    setTimeout(()=>{
+      document.getElementById('wn'+i).classList.add('show');
+      if(i>0){const c=document.getElementById('wc'+(i-1));if(c)c.classList.add('show');}
+    }, 350 + i*620);
+  });
+  setTimeout(()=>{
+    c.innerHTML+=`
+    <div class="coach reveal" style="margin-top:18px">
+      <div class="who">Now this word becomes useful</div>
+      <p>When an assistant links steps together like this — planning the order, passing each result into the next step, and <em>taking actions</em> on its own — we call it an <b>agent</b>. It doesn't just answer questions. It does things.</p>
+    </div>
+    <h2 class="serif" style="font-size:24px;font-weight:500;margin:26px 0 4px">Your turn: label the chain</h2>
+    <p class="body" style="margin-top:4px">Some steps just <b>think</b> (drafting, interpreting). Others <b>act</b> (sending, booking). Flag the acting steps that reach a real person or change a record — those are the ones that deserve extra attention.</p>
+    <div id="s2tags" style="margin-top:14px"></div>`;
+    renderS2Tags();
+  }, 350 + WF.length*620 + 500);
+}
+
+function renderS2Tags(){
+  const c=document.getElementById('s2tags');
+  c.innerHTML=WF.map((s,i)=>{
+    const t=S.s2.tags[i], f=S.s2.flags[i];
+    return `<div class="tagrow">
+      <span class="idx">${i+1}</span>
+      <span class="nm">${s.nm}</span>
+      <div class="seg-toggle">
+        <button class="${t==='think'?'sel-think':''}" onclick="s2Tag(${i},'think')">THINK</button>
+        <button class="${t==='act'?'sel-act':''}" onclick="s2Tag(${i},'act')">ACT</button>
+      </div>
+      <button class="flagbtn ${f?'on':''}" onclick="s2Flag(${i})"><span class="fi">⚑</span>${f?'touches '+(s.touch||'someone'):'flag: touches person/record'}</button>
+    </div>`;
+  }).join('') + `<div id="s2check"></div>`;
+  renderS2Check();
+}
+function s2Tag(i,v){S.s2.tags[i]=v;renderS2Tags();}
+function s2Flag(i){S.s2.flags[i]=!S.s2.flags[i];renderS2Tags();}
+
+function renderS2Check(){
+  const c=document.getElementById('s2check');
+  const allTagged=WF.every((_,i)=>S.s2.tags[i]);
+  if(S.s2.passed){return;}
+  c.innerHTML=`<div class="btn-row">
+    <button class="btn btn-accent" ${allTagged?'':'disabled'} onclick="s2Grade()">Check my labels</button>
+    ${allTagged?'':'<span class="hint">Tag all five as think or act first.</span>'}
+  </div><div id="s2fb"></div>`;
+}
+function s2Grade(){
+  let correct=0;
+  WF.forEach((s,i)=>{ if(S.s2.tags[i]===s.kind) correct++; });
+  // flag accuracy: correct flags on acting steps that touch
+  const shouldFlag=WF.map((s,i)=>!!s.touch);
+  let flagHits=0, flagMiss=0;
+  WF.forEach((s,i)=>{ if(shouldFlag[i]&&S.s2.flags[i])flagHits++; if(!shouldFlag[i]&&S.s2.flags[i])flagMiss++; });
+  S.s2.score=correct;
+  const fb=document.getElementById('s2fb');
+  const passTags=correct>=4;
+  const passFlags=flagHits>=1 && flagMiss===0;
+  if(passTags&&passFlags){
+    S.s2.passed=true;
+    fb.innerHTML=`<div class="feedback good">
+      <b>${correct} / 5</b> labeled correctly — nice work. You also flagged the steps that reach the outside world: <b>sending the email</b> (a person) and <b>creating the event</b> (a record). Those are exactly the moments where a person matters most, and they're what the next scenario is all about.</div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="completeS2()">The moment that matters <span class="ar">→</span></button></div>`;
+    document.querySelectorAll('#s2tags .seg-toggle button, #s2tags .flagbtn').forEach(b=>b.style.pointerEvents='none');
+  } else {
+    let msg=[];
+    if(!passTags)msg.push(`You got <b>${correct} of 5</b> — close! A helpful rule: drafting and interpreting are <em>thinking</em>; sending and booking are <em>acting</em>.`);
+    if(flagMiss>0)msg.push(`One of your flags is on a thinking step. Try flagging only the steps that actually reach a person or change a record.`);
+    if(flagHits<1)msg.push(`No flags yet — which steps actually reach a person or change a record? Those are the ones to mark.`);
+    fb.innerHTML=`<div class="feedback warn">${msg.join('<br><br>')}</div>`;
+  }
+}
+function completeS2(){S.layersDone.add(3);S.layersDone.add(4);go('s3');}
+
+/* ============================================================
+   SCENARIO 3 — The approval that mattered (Layer 6) CENTERPIECE
+   ============================================================ */
+SCREENS.s3=()=>`
+  <div class="reveal">
+    <div class="step-tag"><span class="n">03</span> The approval that mattered <span class="build">Layer 6 · Human Oversight · The centerpiece</span></div>
+    <h1 class="title">The agent stopped. <em>On purpose.</em></h1>
+    <p class="lede">It prepared an email from Dana's request — then paused, because the next step reaches a real person. It's waiting for you.</p>
+
+    <div class="await reveal" style="animation-delay:.1s">
+      <span class="pulse"></span>
+      <div class="txt"><b>Action held for approval</b><span>The agent will not send this email until you decide.</span></div>
+    </div>
+
+    <div id="s3area"></div>
+  </div>`;
+
+AFTER.s3=()=>{
+  S.s3={reviewed:false,firstChoice:null,leaked:false,recipient:null,assertion:null,context:null,
+        caughtRecipient:false,caughtData:false,repaired:false,calendarConfirmed:false,askedClarify:false};
+  renderS3();
+};
+
+function renderS3(){
+  const a=document.getElementById('s3area');
+  a.innerHTML=`
+    <div class="card reveal" style="margin-top:6px;animation-delay:.2s">
+      <div class="head"><span class="ico">✦</span><span class="t">Agent's proposed action</span><span class="meta">intent → send email</span></div>
+      <div class="pad">
+        <div style="font-size:12.5px;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;margin-bottom:12px">stated intent: “Set up the Q3 sync with Shanda, as Dana asked.”</div>
+        <div id="s3draftWrap">
+          <button class="btn btn-ghost" onclick="s3Review()">👁 Review the draft before deciding</button>
+          <p class="hint" style="margin-top:8px">Opening it first is up to you.</p>
+        </div>
+      </div>
+    </div>
+    <div id="s3decide" style="margin-top:18px"></div>`;
+  renderS3Decide();
+}
+
+function s3Review(){
+  S.s3.reviewed=true;
+  const w=document.getElementById('s3draftWrap');
+  w.innerHTML=`
+    <div class="email reveal">
+      <div class="row"><span class="k">To</span><span class="v">Shanda Reyes <span class="ext">EXTERNAL · BRIGHTLINE AGENCY</span></span></div>
+      <div class="row"><span class="k">Subject</span><span class="v">Q3 launch sync — <b>Project Halo</b></span></div>
+      <div class="bodytext">
+        Hi Shanda,<br><br>
+        Following <span class="flag">our conversation last week</span>, I'd love to grab 30 minutes about the <span class="flag">Project Halo</span> Q3 launch. <span class="flag">I've scheduled us for Tuesday at 7:30 AM</span> — talk then!<br><br>
+        Best,<br>Dana's office
+      </div>
+    </div>
+    <p class="hint" style="margin-top:10px">Take your time. Does everything look right to you?</p>`;
+  renderS3Decide();
+}
+
+function renderS3Decide(){
+  const d=document.getElementById('s3decide');
+  if(S.s3.firstChoice) return; // already chose
+  d.innerHTML=`
+    <div class="btn-row">
+      <button class="btn btn-safe" onclick="s3Choose('approve')">✓ Approve & send</button>
+      <button class="btn btn-accent" onclick="s3Choose('edit')">✎ Edit first</button>
+      <button class="btn btn-danger" onclick="s3Choose('reject')">✕ Reject</button>
+    </div>
+    <p class="hint" style="margin-top:10px">${S.s3.reviewed?'You\'ve read the draft. Decide whenever you\'re ready.':'You haven\'t opened the draft yet.'}</p>`;
+}
+
+function s3Choose(choice){
+  S.s3.firstChoice=choice;
+  if(choice==='approve'){ s3Approve(); }
+  else if(choice==='reject'){ s3Reject(); }
+  else { s3Edit(); }
+}
+
+/* --- APPROVE (without fixing) -> leak + rewind --- */
+function s3Approve(){
+  S.s3.leaked=true;
+  const a=document.getElementById('s3area');
+  a.innerHTML=`
+    <div class="sys" style="margin-top:6px">
+      <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">agent · executing approved action</span><span class="stat" style="color:var(--sys-amber)"><span class="blink" style="background:var(--sys-amber)"></span>sending</span></div>
+      <div class="log" id="s3log"></div>
+    </div>
+    <div id="s3aftermath"></div>`;
+  const log=document.getElementById('s3log');
+  const seq=[
+    {d:0,c:`<span class="ar">→</span><span class="txt"><span class="call">mail.send</span>(to:"shanda.reyes@brightline-agency.com")</span>`},
+    {d:850,c:`<span class="ar">←</span><span class="txt"><span class="ret">delivered ✓</span></span>`},
+    {d:1500,warn:true,c:`<span class="ar">!</span><span class="txt">external recipient · message contained codename “Project Halo”</span>`}
+  ];
+  seq.forEach(l=>setTimeout(()=>{
+    const e=document.createElement('div');e.className='logline'+(l.warn?' warnline':'');
+    e.innerHTML=l.c;log.appendChild(e);
+  },l.d));
+  setTimeout(()=>{
+    document.getElementById('s3aftermath').innerHTML=`
+      <div class="incident reveal">
+        <div class="hd"><span class="x">!</span>What happened</div>
+        <p>The email went to <b>Shanda Reyes</b> — an outside vendor at Brightline Agency — instead of your colleague Shanda Patel. It carried the name <b>Project Halo</b>, an unreleased product. A harmless codename became a <b>data leak</b> simply because it reached the wrong person.</p>
+      </div>
+      <div class="card email reveal" style="margin-top:14px;animation-delay:.15s">
+        <div class="head"><span class="ico" style="background:var(--danger)">↩</span><span class="t">Reply · 2 min later</span><span class="meta">shanda.reyes@brightline-agency.com</span></div>
+        <div class="pad"><div class="bodytext">“Hi — I think this came to me by mistake? I'm not sure what Project Halo is, and we never spoke last week. Also 7:30 AM doesn't work for me. Did you mean someone else?”</div></div>
+      </div>
+      <div class="coach reveal" style="margin-top:14px;animation-delay:.3s">
+        <div class="who">${S.s3.reviewed?'It slipped past — that happens to everyone':'It went out unread — that happens a lot'}</div>
+        <p>${S.s3.reviewed
+          ? 'Reading a draft and checking a draft are different skills. The problems here were designed to add up: a wrong recipient, a confidential name, and a meeting time that was never agreed. Each looks small on its own. Together, they caused a leak.'
+          : 'Approving without reading is easy to do — especially when the AI usually gets things right. This pause exists because the very same draft can be perfectly fine or genuinely risky, and only a person can tell which.'}</p>
+      </div>
+      <div class="coach reveal" style="margin-top:14px;animation-delay:.45s;border-left-color:var(--safe);background:linear-gradient(180deg,var(--safe-tint),transparent)">
+        <div class="who" style="color:var(--safe)">Nothing is broken — let's rewind</div>
+        <p>In real life this would be a stressful day. Here, nothing actually happened — so let's go back to the approval and look at it with fresh eyes.</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="s3Rewind()">↺ Rewind and try again</button></div>`;
+  },2300);
+}
+function s3Rewind(){
+  // keep leaked memory for the report, but reset the decision
+  const leaked=S.s3.leaked, reviewedBefore=S.s3.reviewed;
+  S.s3.firstChoice=null; S.s3.reviewed=true;
+  S.s3.leaked=leaked;
+  renderS3();
+  // jump them toward editing path by surfacing draft already
+  s3Review();
+}
+
+/* --- REJECT -> good instinct, but task still needs doing -> edit --- */
+function s3Reject(){
+  const a=document.getElementById('s3area');
+  a.innerHTML=`
+    <div class="success reveal" style="margin-top:6px;background:var(--safe-tint)">
+      <div class="hd"><span class="v">✓</span>Good instinct — you stopped the send</div>
+      <p>Rejecting kept everything safe — nothing left the company. The task still needs doing, though, so the next step is to <b>fix the draft</b> rather than start over.</p>
+    </div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="s3Edit()">Fix the draft <span class="ar">→</span></button></div>`;
+}
+
+/* --- EDIT -> the repair path --- */
+function s3Edit(){
+  S.s3.reviewed=true;
+  const a=document.getElementById('s3area');
+  a.innerHTML=`
+    <div class="reveal">
+      <div class="coach" style="margin-top:6px">
+        <div class="who">Let's fix it together</div>
+        <p>There are three things to check: who receives it, what it claims, and what it reveals.</p>
+      </div>
+
+      <div class="editrow">
+        <div class="q"><b>1 · Recipient.</b> The draft is addressed to <span class="badname">Shanda Reyes — external, Brightline Agency</span>. Dana meant a colleague about an internal launch.</div>
+        <div class="opts" id="ed-rec">
+          <div class="opt" onclick="s3Set('recipient','reyes',this,false)"><span class="rad"></span><div>Keep <b>Shanda Reyes</b> (Brightline Agency — external vendor)</div></div>
+          <div class="opt" onclick="s3Set('recipient','patel',this,true)"><span class="rad"></span><div>Change to <b>Shanda Patel</b> (internal · Marketing)</div></div>
+        </div>
+      </div>
+
+      <div class="editrow">
+        <div class="q"><b>2 · The booking claim.</b> The draft asserts <span class="badname">“I've scheduled us for Tuesday at 7:30 AM.”</span> No time was ever agreed — and Dana implied next week, not a 7:30 AM slot.</div>
+        <div class="opts" id="ed-ass">
+          <div class="opt" onclick="s3Set('assertion','assert',this,false)"><span class="rad"></span><div>Keep the asserted time</div></div>
+          <div class="opt" onclick="s3Set('assertion','propose',this,true)"><span class="rad"></span><div>Soften to a <b>proposal</b>: “Could we find 30 minutes next week — afternoons work?”</div></div>
+        </div>
+      </div>
+
+      <div class="editrow">
+        <div class="q"><b>3 · Invented context.</b> The draft references <span class="badname">“our conversation last week,”</span> which never happened.</div>
+        <div class="opts" id="ed-ctx">
+          <div class="opt" onclick="s3Set('context','keep',this,false)"><span class="rad"></span><div>Leave it in</div></div>
+          <div class="opt" onclick="s3Set('context','remove',this,true)"><span class="rad"></span><div><b>Remove</b> the invented reference</div></div>
+        </div>
+      </div>
+
+      <div id="ed-status"></div>
+    </div>`;
+  renderEditStatus();
+}
+function s3Set(field,val,el,good){
+  S.s3[field]=val;
+  const wrap=el.parentElement;
+  wrap.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','good'));
+  el.classList.add('sel'); if(good)el.classList.add('good');
+  if(field==='recipient') S.s3.caughtRecipient=(val==='patel');
+  renderEditStatus();
+}
+function renderEditStatus(){
+  const s=document.getElementById('ed-status');
+  if(!s)return;
+  const done=S.s3.recipient&&S.s3.assertion&&S.s3.context;
+  const allGood=S.s3.recipient==='patel'&&S.s3.assertion==='propose'&&S.s3.context==='remove';
+  if(!done){
+    s.innerHTML=`<p class="hint" style="margin-top:6px">Make a choice on all three to continue.</p>`;
+    return;
+  }
+  if(allGood){
+    S.s3.caughtData=true;
+    s.innerHTML=`<div class="btn-row"><button class="btn btn-accent" onclick="s3SendFixed()">Approve the corrected email <span class="ar">→</span></button></div>`;
+  } else {
+    s.innerHTML=`<div class="feedback warn">Almost there — all three need a fix. The recipient should be the internal Shanda (otherwise the codename leaks), the time should be a suggestion rather than a done deal, and the made-up reference should come out. Take another look at the choices above.</div>`;
+  }
+}
+
+function s3SendFixed(){
+  S.s3.repaired=true;
+  const a=document.getElementById('s3area');
+  a.innerHTML=`
+    <div class="card email reveal" style="margin-top:6px">
+      <div class="head"><span class="ico" style="background:var(--safe)">✓</span><span class="t">Corrected email — sent</span><span class="meta">verified by you</span></div>
+      <div class="pad">
+        <div class="email">
+          <div class="row"><span class="k">To</span><span class="v">Shanda Patel <span class="int">INTERNAL · MARKETING</span></span></div>
+          <div class="row"><span class="k">Subject</span><span class="v">Quick Q3 launch sync next week?</span></div>
+          <div class="bodytext">Hi Shanda — could we grab 30 minutes next week about the Q3 launch? Afternoons work well on my side. Let me know a couple of times that suit you. Thanks!</div>
+        </div>
+      </div>
+    </div>
+    <div class="sys reveal" style="margin-top:14px;animation-delay:.15s">
+      <div class="topbar"><div class="dots"><i></i><i></i><i></i></div><span class="lbl">agent · awaiting reply</span><span class="stat"><span class="blink"></span>monitoring</span></div>
+      <div class="log" id="s3log2"></div>
+    </div>
+    <div id="s3confirm"></div>`;
+  const log=document.getElementById('s3log2');
+  [
+    {d:0,c:`<span class="ar">←</span><span class="txt"><span class="ret">reply from Shanda Patel: “Sure! Tue 2:30 or Wed 4:00 work for me.”</span></span>`},
+    {d:900,c:`<span class="ar">→</span><span class="txt"><span class="think">detected two candidate times. preparing to book — pausing for approval.</span></span>`}
+  ].forEach(l=>setTimeout(()=>{const e=document.createElement('div');e.className='logline';e.innerHTML=l.c;log.appendChild(e);},l.d));
+  setTimeout(()=>{
+    document.getElementById('s3confirm').innerHTML=`
+      <div class="await reveal" style="margin-top:16px"><span class="pulse"></span>
+        <div class="txt"><b>Calendar action held for approval</b><span>It found two times and won't book anything until you confirm.</span></div>
+      </div>
+      <div class="card reveal" style="margin-top:8px">
+        <div class="head"><span class="ico">📅</span><span class="t">Proposed booking</span><span class="meta">create event</span></div>
+        <div class="pad">
+          <p class="body" style="margin:0 0 12px">Which time should the agent book with Shanda Patel?</p>
+          <div class="opts" id="cal">
+            <div class="opt" onclick="s3Cal(this)"><span class="rad"></span><div><b>Tuesday 2:30 PM</b> · 30 min · Q3 launch sync</div></div>
+            <div class="opt" onclick="s3Cal(this)"><span class="rad"></span><div><b>Wednesday 4:00 PM</b> · 30 min · Q3 launch sync</div></div>
+          </div>
+          <div id="calfb"></div>
+        </div>
+      </div>`;
+  },1600);
+}
+function s3Cal(el){
+  document.querySelectorAll('#cal .opt').forEach(o=>{o.classList.remove('sel','good');o.style.pointerEvents='none';});
+  el.classList.add('sel','good');
+  S.s3.calendarConfirmed=true;
+  setRole('supervisor');
+  document.getElementById('calfb').innerHTML=`
+    <div class="success reveal" style="margin-top:14px">
+      <div class="hd"><span class="v">✓</span>Booked — and every step that reached the outside world got your okay first</div>
+      <p>You fixed the recipient before anything could leak, turned a claim into a friendly request, removed the made-up reference, and confirmed the booking yourself. The agent did the busywork. <b>You supplied the judgment.</b></p>
+    </div>
+    <div class="coach reveal" style="margin-top:14px;animation-delay:.15s">
+      <div class="who">Your role just changed</div>
+      <p>Take a look at the top of the screen. You began as an AI <em>user</em>. You just handled that whole exchange as an AI <em>supervisor</em> — the role most of us will actually hold.</p>
+    </div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="completeS3()">Last: who should do what? <span class="ar">→</span></button></div>`;
+}
+function completeS3(){S.layersDone.add(6);go('s4');}
+
+/* ============================================================
+   SCENARIO 4 — Who should do what (Layers 5 & 7) STORYBOARDED
+   ============================================================ */
+const AGENTS=[
+  {key:'research',ico:'🔍',nm:'Research agent',tag:'pull last quarter',out:`Pulled Q2 figures — <span class="bad">source dated 2023 (out of date)</span>`,risk:'verify',rubric:'appr'},
+  {key:'drafting',ico:'✎',nm:'Drafting agent',tag:'build the deck',out:`Built 12-slide deck — <span class="bad">added a market-size number that appears in no source</span>`,risk:'verify',rubric:'appr'},
+  {key:'scheduling',ico:'📅',nm:'Scheduling agent',tag:'book + invite',out:`Will book the review room & email 9 external + internal invitees`,risk:'external',rubric:'appr'},
+];
+
+SCREENS.s4=()=>`
+  <div class="reveal">
+    <div class="step-tag"><span class="n">04</span> Who should do what <span class="build road">Layers 5 & 7 · Storyboarded roadmap</span></div>
+    <div class="feedback warn" style="margin-bottom:18px">
+      <b>A note on scope.</b> This final part is a <b>storyboard</b> — a preview of the full experience rather than a finished build. You can still make the key decision below.
+    </div>
+    <h1 class="title">Now there's a <em>team</em> of agents.</h1>
+    <p class="lede">“Prepare for the Q3 launch review” is split across three specialist agents. Your job isn't to do the work — it's to decide how it should be shared, and where a person should double-check.</p>
+
+    <div class="board" id="board"></div>
+
+    <div class="coach reveal" style="margin-top:6px">
+      <div class="who">The big shift</div>
+      <p>The question changes from “how do I use AI” to “<em>how should the work be shared between people and AI</em>.” A good rule: decide by <b>risk</b>, not convenience. Anything that reaches outside the company, changes records, or moves money should wait for approval — and made-up numbers need to be caught before they spread.</p>
+    </div>
+    <div id="s4check" style="margin-top:14px"></div>
+  </div>`;
+
+AFTER.s4=()=>{
+  S.s4={alloc:{research:null,drafting:null,scheduling:null},verify:{research:false,drafting:false,scheduling:false},flaggedFab:false,scored:false};
+  renderBoard();
+};
+
+function renderBoard(){
+  const b=document.getElementById('board');
+  let html='';
+  AGENTS.forEach((ag,i)=>{
+    const al=S.s4.alloc[ag.key];
+    const v=S.s4.verify[ag.key];
+    html+=`<div class="agent reveal" style="animation-delay:${i*.12}s">
+      <div class="ah"><span class="ai">${ag.ico}</span><span class="an">${ag.nm}<small>${ag.tag}</small></span></div>
+      <div class="out">${ag.out}</div>
+      <div class="alloc">
+        <button class="${al==='auto'?'sel auto':''}" onclick="s4Alloc('${ag.key}','auto')"><span class="ck"></span>Run automatically</button>
+        <button class="${al==='appr'?'sel appr':''}" onclick="s4Alloc('${ag.key}','appr')"><span class="ck"></span>Require approval</button>
+        <button class="${al==='human'?'sel':''}" onclick="s4Alloc('${ag.key}','human')"><span class="ck"></span>Keep human-led</button>
+      </div>
+      <button class="verify-toggle ${v?'on':''}" onclick="s4Verify('${ag.key}')">⚑ ${v?'checkpoint marked — a person reviews here':'mark a checkpoint here'}</button>
+    </div>`;
+    if(i<AGENTS.length-1) html+=`<div class="handoff" style="transform:rotate(90deg)">→</div>`;
+  });
+  b.innerHTML=html;
+  renderS4Check();
+}
+function s4Alloc(k,v){S.s4.alloc[k]=v;renderBoard();}
+function s4Verify(k){S.s4.verify[k]=!S.s4.verify[k]; S.s4.flaggedFab = S.s4.verify.research||S.s4.verify.drafting; renderBoard();}
+
+function renderS4Check(){
+  const c=document.getElementById('s4check');
+  if(!c)return;
+  if(S.s4.scored){return;}
+  const allAlloc=Object.values(S.s4.alloc).every(Boolean);
+  c.innerHTML=`<div class="btn-row">
+    <button class="btn btn-accent" ${allAlloc?'':'disabled'} onclick="s4Grade()">Lock in my plan</button>
+    ${allAlloc?'':'<span class="hint">Choose an option for all three agents first.</span>'}
+  </div><div id="s4fb"></div>`;
+}
+function s4Grade(){
+  // rubric: every agent here is external/record-changing/fabrication-prone -> none should be pure "auto"
+  const noBlindAuto = Object.values(S.s4.alloc).every(v=>v!=='auto');
+  const flaggedFab = S.s4.verify.research || S.s4.verify.drafting; // fabrication / stale source points
+  const fb=document.getElementById('s4fb');
+  if(noBlindAuto && flaggedFab){
+    S.s4.scored=true; S.s4.flaggedFab=flaggedFab;
+    fb.innerHTML=`<div class="feedback good">
+      Well reasoned. Every step here either reaches outside the company, changes a record, or could contain a made-up number — so none of them should run unwatched. And you placed a checkpoint right where the work could go wrong${S.s4.verify.drafting?' (the invented number)':' (the outdated source)'}. Deciding by risk and catching problems early — that's the supervisor's mindset at scale.</div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="completeS4()">See your supervisor's report <span class="ar">→</span></button></div>`;
+    document.querySelectorAll('#board button').forEach(b=>b.style.pointerEvents='none');
+  } else {
+    let m=[];
+    if(!noBlindAuto)m.push(`At least one agent is set to <b>run automatically</b> — but each of these either contacts people outside the company or could include a wrong number. They all need some human oversight.`);
+    if(!flaggedFab)m.push(`Try marking a checkpoint where the work could go wrong — the outdated source and the invented number are good places for a person to take a look.`);
+    fb.innerHTML=`<div class="feedback warn">${m.join('<br><br>')}</div>`;
+  }
+}
+function completeS4(){S.layersDone.add(5);S.layersDone.add(7);go('report');}
+
+/* ============================================================
+   REPORT — measurement model read back from real choices
+   ============================================================ */
+SCREENS.report=()=>{
+  const rows=[
+    {beh:'Asks better questions',
+     done:S.s3.caughtRecipient||S.s3.assertion==='propose',
+     sig:(S.s3.caughtRecipient||S.s3.assertion==='propose')
+        ?`When the request was unclear, you pinned down which Shanda and which time before letting anything go out.`
+        :`When a request is unclear, ask first: which Shanda? Which day? Settle those before the agent acts.`},
+    {beh:'Checks work before approving',
+     done:S.s3.reviewed,
+     sig:S.s3.reviewed?`You opened the draft and edited it before it could go out.`:`You approved at least one action without opening it first.`},
+    {beh:'Recognizes risk',
+     done:S.s3.caughtRecipient||S.s3.caughtData,
+     sig:S.s3.caughtRecipient?`You caught the outside recipient and the Project Halo exposure — the two problems that added up to a leak.`:`The combination to watch for next time: an outside recipient plus a confidential name.`},
+    {beh:'Breaks work into steps',
+     done:S.s2.passed,
+     sig:S.s2.passed?`You labeled ${S.s2.score} of 5 steps correctly and flagged the ones that reach a person or record.`:`Telling thinking steps from acting steps is the skill to practice.`},
+    {beh:'Supervises AI',
+     done:S.s3.calendarConfirmed||S.s3.repaired,
+     sig:(S.s3.calendarConfirmed||S.s3.repaired)?`You required approval on the steps that reached people and records, and confirmed the booking yourself.`:`Requiring approval for anything that touches people, records, money, or outsiders is the supervisor's core move.`},
+    {beh:'Decides how work is shared (AI ops)',
+     done:S.s4.scored,
+     sig:S.s4.scored?`You shared the work according to risk and placed a checkpoint where the numbers could go wrong.`:`Sharing work by risk across several agents is the next level to grow into.`},
+  ];
+  const hit=rows.filter(r=>r.done).length;
+  return `
+  <div class="reveal">
+    <div class="step-tag"><span>Supervisor's report</span> <span class="build">behavior, not recall</span></div>
+    <h1 class="title">From <em>user</em> to <em>supervisor</em>.</h1>
+    <p class="lede">${S.s3.leaked
+      ? 'You hit a bump along the way — which is the best way to learn this. The leak was simulated. The habit you built is real.'
+      : 'You finished all four scenarios — the agents did the busywork, and you supplied the judgment.'}</p>
+
+    <div class="card" style="margin-top:18px">
+      <div class="head"><span class="ico">✓</span><span class="t">What this run showed</span><span class="meta">${hit} of 6</span></div>
+      <div class="pad" style="padding-top:6px">
+        ${rows.map(r=>`<div class="report-row">
+          <span class="badge ${r.done?'y':'n'}">${r.done?'✓':'·'}</span>
+          <div class="rc"><div class="beh">${r.beh}</div><div class="sig">${r.sig}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="coach" style="margin-top:22px">
+      <div class="who">The one habit to keep</div>
+      <p>Before any AI action reaches a person, a record, money, or the outside world — <b>check it, then approve it.</b> The very same message can be fine or risky, and only a person can tell which.</p>
+    </div>
+
+    <h2 class="serif" style="font-size:22px;font-weight:500;margin:26px 0 10px">The seven layers you covered</h2>
+    <div class="pills">
+      ${LAYERS.map(l=>`<span class="pill" style="${S.layersDone.has(l.n)?'border-color:var(--accent);color:var(--accent-deep)':''}">${l.n} · ${l.short} ${l.short==='Multi-Agent'||l.short==='AI Ops'?'◌':'✓'}</span>`).join('')}
+    </div>
+    <p class="body">◌ Layers 5 and 7 were previewed as storyboards. Everything else you experienced in full.</p>
+
+    <div class="divider"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('intro')">↺ Run it again</button>
+      <button class="btn btn-accent" onclick="toggleInfo(true)">Read the design thinking behind it</button>
+    </div>
+  </div>`;
+};
+AFTER.report=()=>{ /* keep supervisor role */ };
+
+/* ============================================================
+   INFO DRAWER
+   ============================================================ */
+function toggleInfo(open){
+  document.getElementById('drawer').classList.toggle('open',open);
+  document.getElementById('scrim').classList.toggle('open',open);
+}
+
+/* reset everything when replaying from the intro */
+AFTER.intro=()=>{
+  S.layersDone=new Set();
+  S.s1={drafted:false,connected:false,completed:false};
+  S.s2={tags:{},flags:{},score:null,passed:false};
+  S.s3={reviewed:false,firstChoice:null,leaked:false,recipient:null,assertion:null,context:null,
+        caughtRecipient:false,caughtData:false,repaired:false,calendarConfirmed:false,askedClarify:false};
+  S.s4={alloc:{research:null,drafting:null,scheduling:null},
+        verify:{research:false,drafting:false,scheduling:false},flaggedFab:false,scored:false};
+  setRole('user');
+  renderRail();
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+renderRail();
+stage.innerHTML=SCREENS.intro();
+setRole('user');
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')toggleInfo(false); });
+</script>
+</body>
+</html>

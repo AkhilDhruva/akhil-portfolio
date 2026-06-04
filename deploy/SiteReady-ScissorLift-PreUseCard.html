@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SiteReady — Scissor Lift Pre-Use Card</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23E5342B'/%3E%3Crect x='8' y='9' width='16' height='3.4' rx='1.7' fill='%23fff'/%3E%3Crect x='8' y='14.3' width='16' height='3.4' rx='1.7' fill='%23F4A91F'/%3E%3Crect x='8' y='19.6' width='16' height='3.4' rx='1.7' fill='%23fff'/%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{--red:#E5342B;--ink:#16181D;--paper:#FFFFFF;--steel:#C7CDD2;--amber:#F4A91F;--green:#2FA866;
+  --steel-2:#EEF1F3;--ink-70:rgba(22,24,29,.72);
+  --fd:'Oswald',sans-serif;--fb:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;}
+body{margin:0;background:#5b5f66;font-family:var(--fb);color:var(--ink);padding:24px;}
+.mono{font-family:var(--fm);text-transform:uppercase;letter-spacing:.12em;}
+.toolbar{max-width:760px;margin:0 auto 16px;display:flex;gap:10px;align-items:center;}
+.toolbar .t{color:#fff;font-family:var(--fm);font-size:12px;letter-spacing:.1em;}
+.btn{margin-left:auto;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 18px;
+  font-family:var(--fm);font-size:12px;letter-spacing:.06em;cursor:pointer;font-weight:700;}
+.card{max-width:760px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.5);}
+.head{background:var(--red);color:#fff;padding:18px 24px;display:flex;align-items:center;gap:14px;}
+.mark{width:30px;height:30px;border-radius:7px;background:#fff;position:relative;flex:0 0 30px;}
+.mark::after{content:"";position:absolute;left:7px;right:7px;top:8px;height:3px;background:var(--red);
+  box-shadow:0 6px 0 var(--amber),0 12px 0 var(--red);}
+.head h1{font-family:var(--fd);font-weight:500;font-size:21px;margin:0;letter-spacing:.02em;}
+.head .sub{font-family:var(--fm);font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.85);}
+.head .right{margin-left:auto;text-align:right;font-family:var(--fm);font-size:9.5px;letter-spacing:.12em;color:rgba(255,255,255,.9);}
+.body{padding:20px 24px 8px;}
+.row{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;}
+@media(max-width:640px){.row{grid-template-columns:1fr;}}
+h2.sec{font-family:var(--fd);font-weight:500;font-size:15px;letter-spacing:.02em;margin:0 0 8px;
+  padding-bottom:5px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:8px;}
+h2.sec .n{background:var(--ink);color:#fff;font-family:var(--fm);font-size:11px;border-radius:4px;padding:2px 7px;}
+ul.check{list-style:none;margin:0 0 14px;padding:0;}
+ul.check li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;padding:3.5px 0;line-height:1.35;}
+ul.check .box{width:14px;height:14px;flex:0 0 14px;border:2px solid var(--ink);border-radius:3px;margin-top:1px;}
+.verify{font-family:var(--fm);font-size:8.5px;letter-spacing:.06em;color:#9a6a00;border:1px solid var(--amber);
+  border-radius:4px;padding:0 4px;white-space:nowrap;}
+.siterule{background:var(--ink);color:#fff;border-radius:9px;padding:14px 16px;border-left:5px solid var(--red);margin-bottom:14px;}
+.siterule .tag{font-family:var(--fm);font-size:9px;letter-spacing:.16em;color:var(--amber);}
+.siterule .rule{font-family:var(--fd);font-weight:500;font-size:17px;margin:5px 0 8px;line-height:1.15;}
+.siterule .note{font-size:11px;color:var(--steel);line-height:1.5;}
+.siterule .note strong{color:#fff;}
+.remember{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
+.remember .chip{display:flex;gap:8px;align-items:center;background:var(--steel-2);border:1px solid var(--steel);
+  border-radius:7px;padding:7px 10px;font-size:11.5px;font-weight:600;}
+.remember .chip b{color:var(--red);font-family:var(--fm);font-size:10px;}
+.tagout{display:flex;gap:10px;align-items:center;border:2px dashed var(--red);color:var(--red);
+  border-radius:8px;padding:9px 12px;font-size:12px;font-weight:600;margin-bottom:14px;}
+.tagout .stamp{font-family:var(--fd);font-weight:500;border:2px solid var(--red);border-radius:5px;padding:1px 7px;transform:rotate(-4deg);}
+.fillin{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;margin:4px 0 14px;}
+.fillin div{font-size:11px;}
+.fillin .line{border-bottom:1.5px solid var(--ink);height:20px;margin-top:2px;}
+.foot{background:var(--steel-2);border-top:1px solid var(--steel);padding:12px 24px;font-size:10px;color:var(--ink-70);line-height:1.5;}
+.foot strong{color:var(--ink);}
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar{display:none;}
+  .card{box-shadow:none;max-width:100%;border-radius:0;}
+  @page{margin:12mm;}
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <span class="t">SiteReady · printable job aid</span>
+  <button class="btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="card">
+  <div class="head">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <h1>Scissor Lift · Pre-Use Card</h1>
+      <div class="sub">SITEREADY · AWARENESS JOB AID</div>
+    </div>
+    <div class="right">AWARENESS ONLY<br/>NOT AN AUTHORIZATION</div>
+  </div>
+
+  <div class="body">
+    <div class="row">
+      <div>
+        <h2 class="sec"><span class="n">1</span> Before you elevate — walk around</h2>
+        <ul class="check">
+          <li><span class="box"></span> Manuals &amp; decals present and legible</li>
+          <li><span class="box"></span> Scissor arms &amp; pins undamaged</li>
+          <li><span class="box"></span> Deck-extension locks work</li>
+          <li><span class="box"></span> Guardrails solid; entry gate closes &amp; latches</li>
+          <li><span class="box"></span> Tires &amp; lug nuts sound</li>
+          <li><span class="box"></span> Horn / alarm works</li>
+          <li><span class="box"></span> Hydraulic level OK at sight glass — never top up; call service</li>
+          <li><span class="box"></span> Test <b>both</b> control stations + emergency lowering</li>
+          <li><span class="box"></span> Inspection current per employer / manufacturer program <span class="verify">[VERIFY WITH SME]</span></li>
+          <li><span class="box"></span> Ground is firm, flat, level; no holes, slopes, or drop-offs</li>
+          <li><span class="box"></span> Look up — overhead lines, beams, ducts clear</li>
+        </ul>
+
+        <div class="tagout"><span class="stamp">TAG-OUT</span> Found a fault? Red-tag it, remove the key, tell your supervisor.</div>
+
+        <h2 class="sec"><span class="n">2</span> Sign-off</h2>
+        <div class="fillin">
+          <div>Machine ID<div class="line"></div></div>
+          <div>Inspection current to<div class="line"></div></div>
+          <div>Operator<div class="line"></div></div>
+          <div>Supervisor<div class="line"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="sec"><span class="n">3</span> The site rule</h2>
+        <div class="siterule">
+          <span class="tag">SITE RULE · EVERY ELEVATION</span>
+          <div class="rule">Hard hat on. Harness on and clipped to the platform anchor point.</div>
+          <div class="note">Guardrails are the scissor-lift fall-protection method; tie-off isn't federally required there — it <strong>is</strong> on boom-type lifts. Harness &amp; hat required under <strong>site policy</strong>. Clip <strong>only</strong> to a manufacturer-rated anchor. <span class="verify">[VERIFY WITH SME]</span></div>
+        </div>
+
+        <h2 class="sec"><span class="n">4</span> Remember</h2>
+        <div class="remember">
+          <span class="chip"><b>1</b> Firm · Flat · Level</span>
+          <span class="chip"><b>2</b> Guardrails up, gate closed</span>
+          <span class="chip"><b>3</b> Don't move elevated unless allowed</span>
+          <span class="chip"><b>4</b> 10 ft from power lines</span>
+          <span class="chip"><b>5</b> Know both E-Stops</span>
+          <span class="chip"><b>6</b> Know the descent rescue path</span>
+          <span class="chip"><b>7</b> Mind the danger zone</span>
+          <span class="chip"><b>8</b> Stay within rated load</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;background:var(--ink);border:2px solid var(--red);border-radius:8px;padding:10px 12px;">
+          <span style="flex:0 0 30px;width:30px;height:30px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:15px;">✋</span>
+          <div style="font-size:11.5px;color:#fff;line-height:1.4;"><b style="color:var(--amber);font-family:var(--fm);font-size:9.5px;letter-spacing:.08em;">STOP-WORK AUTHORITY</b><br/>Anyone can stop unsafe work — any

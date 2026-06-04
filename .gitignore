@@ -1,0 +1,28 @@
+# Dependencies / build output
+node_modules/
+dist/
+.vercel/
+
+# Secrets / env
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Backups & scratch (not part of the live site)
+*.bak
+*.bak*
+_*.png
+
+# DriveSmart is its own separate Vercel project — don't ship its source here
+ohio-drivesmart/
+
+# Unused source images / superseded files
+assets/ChatGPT*
+SiteReady-ScissorLift-Module.html
+
+# Firebase config (not used on Vercel — safe to keep locally, just not deployed)
+firebase.json
+DEPLOY.md

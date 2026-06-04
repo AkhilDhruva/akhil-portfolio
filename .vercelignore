@@ -1,0 +1,16 @@
+# Mirror of .gitignore for direct (CLI) Vercel deploys
+node_modules/
+dist/
+.vercel/
+.env
+.env.*
+.DS_Store
+Thumbs.db
+*.bak
+*.bak*
+_*.png
+ohio-drivesmart/
+assets/ChatGPT*
+SiteReady-ScissorLift-Module.html
+firebase.json
+DEPLOY.md

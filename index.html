@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK — Learning Experience Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --surface-2:#EEF1F4; --surface-3:#E3E7EC;
+  --border:rgba(22,24,29,.12); --border-2:rgba(22,24,29,.22);
+  --text:#171A21; --muted:#555F6E; --faint:#6C7682;
+  --primary:#2D5BD6; --primary-2:#1E47B5; --primary-soft:rgba(45,91,214,.10); --primary-line:rgba(45,91,214,.30);
+  --emerald:#178A55; --emerald-soft:rgba(23,138,85,.12);
+  --amber:#E0900C; --amber-soft:rgba(224,144,12,.14);
+  --display:'Schibsted Grotesk',sans-serif; --sans:'Hanken Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+  --maxw:1180px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(900px 600px at 80% -10%,var(--primary-soft),transparent 60%),
+   radial-gradient(700px 500px at 0% 5%,rgba(63,215,164,.05),transparent 55%);}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(22,24,29,.05) 1px,transparent 1px);background-size:30px 30px;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000,transparent 80%)}
+::selection{background:var(--primary);color:#fff}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:2}
+
+/* eyebrow / labels */
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);display:inline-flex;align-items:center;gap:9px}
+.kicker::before{content:"";width:18px;height:1px;background:var(--primary-line)}
+h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.02em;line-height:1.08;font-weight:700}
+
+/* ---------- NAV ---------- */
+nav.top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:15px 26px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.82);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:-.01em;cursor:pointer}
+.brand .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--emerald));display:grid;place-items:center;font-size:13px;color:#fff;font-weight:800}
+.brand .role{color:var(--muted);font-weight:500;font-size:12px;font-family:var(--sans);border-left:1px solid var(--border);padding-left:11px;margin-left:2px}
+.navlinks{display:flex;gap:6px;align-items:center}
+.navlinks a{font-size:13px;color:var(--muted);padding:8px 12px;border-radius:8px;transition:.2s;cursor:pointer}
+.navlinks a:hover{color:var(--text);background:var(--surface-2)}
+.navlinks a.cta{color:var(--text);border:1px solid var(--primary-line);background:var(--primary-soft)}
+.navlinks a.cta:hover{background:var(--primary);color:#fff}
+.burger{display:none;background:none;border:1px solid var(--border-2);color:var(--text);border-radius:8px;padding:7px 11px;cursor:pointer}
+@media(max-width:840px){.navlinks{display:none;position:absolute;top:60px;right:18px;left:18px;flex-direction:column;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px}
+ .navlinks.open{display:flex}.navlinks a{width:100%}.burger{display:block}.brand .role{display:none}}
+
+/* ---------- VIEWS ---------- */
+.view{display:none;padding-top:62px}
+.view.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:.8s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- HERO ---------- */
+.hero{padding:96px 0 70px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5.6vw,4.2rem);font-weight:800;margin:22px 0 0;max-width:16ch}
+.hero h1 .hl{color:var(--primary)}
+.hero .lead{margin-top:26px;font-size:clamp(1.05rem,1.5vw,1.22rem);color:var(--muted);max-width:48ch}
+.hero .lead b{color:var(--text);font-weight:600}
+.hero-cta{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;padding:13px 22px;border-radius:10px;transition:.25s;cursor:pointer;border:1px solid transparent}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-2);box-shadow:0 8px 30px rgba(94,139,255,.3)}
+.btn-ghost{border-color:var(--border-2);color:var(--text)}.btn-ghost:hover{background:var(--surface-2);border-color:var(--primary-line)}
+.hero-tags{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);background:var(--surface);padding:6px 11px;border-radius:7px}
+/* dashboard mock */
+.dash{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.dash-top .t{font-family:var(--display);font-weight:700;font-size:14px}
+.dash-top .pill{font-family:var(--mono);font-size:10px;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(63,215,164,.25);padding:4px 9px;border-radius:20px}
+.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
+.dstat{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px}
+.dstat .n{font-family:var(--display);font-weight:800;font-size:1.7rem;letter-spacing:-.03em}
+.dstat .n.up{color:var(--emerald)}.dstat .n.bl{color:var(--primary-2)}
+.dstat .l{font-size:11px;color:var(--muted);margin-top:3px}
+.bars{display:flex;align-items:flex-end;gap:7px;height:78px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:11px}
+.bars i{flex:1;background:linear-gradient(var(--primary),var(--primary-soft));border-radius:4px 4px 0 0;opacity:.9;animation:rise 1s cubic-bezier(.16,1,.3,1) both}
+@keyframes rise{from{height:4px!important;opacity:0}to{opacity:.9}}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:38px}}
+
+/* ---------- SECTION ---------- */
+section.blk{padding:72px 0;border-top:1px solid var(--border)}
+.sec-head{max-width:62ch;margin-bottom:42px}
+.sec-head h2{font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:800;margin-top:16px}
+.sec-head p{margin-top:16px;color:var(--muted);font-size:1.05rem;max-width:56ch}
+
+/* learning systems cards */
+.sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.sys-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.3s;display:flex;flex-direction:column}
+.sys-card:hover{transform:translateY(-5px);border-color:var(--primary-line);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+.sys-thumb{height:128px;position:relative;display:grid;place-items:center;border-bottom:1px solid var(--border);overflow:hidden}
+.sys-thumb .ic{font-size:30px;z-index:2}
+.sys-thumb .glow{position:absolute;inset:0;opacity:.9}
+.sys-thumb img.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:14px;z-index:2;filter:drop-shadow(0 10px 14px rgba(22,24,29,.18))}
+.sys-thumb svg.prev{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.t-lms .glow{background:radial-gradient(circle at 50% 40%,rgba(184,85,43,.22),transparent 65%)}
+.t-safe .glow{background:radial-gradient(circle at 50% 40%,rgba(242,180,92,.28),transparent 65%)}
+.t-drive .glow{background:radial-gradient(circle at 50% 40%,rgba(63,215,164,.28),transparent 65%)}
+.sys-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.sys-cat{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sys-card h3{font-size:1.25rem;margin:9px 0 8px}
+.sys-card p{color:var(--muted);font-size:.93rem;flex:1}
+.sys-meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+.mini{font-family:var(--mono);font-size:9.5px;color:var(--faint);border:1px solid var(--border);padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
+.sys-go{margin-top:16px;font-size:13px;font-weight:600;color:var(--primary-2);display:flex;align-items:center;gap:7px}
+.sys-card:hover .sys-go .a{transform:translateX(4px)}.sys-go .a{transition:.25s}
+@media(max-width:860px){.sys-grid{grid-template-columns:1fr}}
+
+/* ADDIE / process */
+.addie{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:34px}
+.addie-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative}
+.addie-step .s{font-family:var(--mono);font-size:11px;color:var(--primary)}
+.addie-step h4{font-size:1.02rem;margin:8px 0 6px}
+.addie-step p{font-size:.83rem;color:var(--muted)}
+.addie-step::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:14px;z-index:3}
+.addie-step:last-child::after{display:none}
+@media(max-width:860px){.addie{grid-template-columns:1fr 1fr}.addie-step::after{display:none}}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.method{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px;transition:.25s}
+.method:hover{border-color:var(--primary-line)}
+.method .ic{font-size:18px}
+.method h4{font-size:.98rem;margin:11px 0 6px}
+.method p{font-size:.82rem;color:var(--muted)}
+@media(max-width:860px){.method-grid{grid-template-columns:1fr 1fr}}
+
+/* artifacts */
+.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.art{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.art .ic{font-size:18px;color:var(--primary-2)}
+.art h4{margin:12px 0 6px;font-size:1.05rem}
+.art p{font-size:.86rem;color:var(--muted)}
+@media(max-width:860px){.art-grid{grid-template-columns:1fr}}
+
+/* about / resume */
+.two{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:start}
+@media(max-width:860px){.two{grid-template-columns:1fr;gap:34px}}
+.prose p{color:var(--muted);margin-bottom:16px;font-size:1.04rem}
+.prose b{color:var(--text);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px}
+.panel h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:18px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--border);font-size:.92rem}
+.kv:first-of-type{border-top:0}.kv .k{color:var(--faint)}.kv .v{text-align:right;font-weight:500}
+.comp-list{display:flex;flex-wrap:wrap;gap:8px}
+.comp{font-size:12px;border:1px solid var(--border);background:var(--surface-2);padding:7px 12px;border-radius:8px;color:var(--muted)}
+.res-row{padding:16px 0;border-top:1px solid var(--border)}
+.res-row:first-child{border-top:0}
+.res-row .rt{font-weight:600;font-family:var(--display)}
+.res-row .rs{font-size:12px;color:var(--primary-2);font-family:var(--mono);margin:3px 0 7px}
+.res-row p{font-size:.9rem;color:var(--muted)}
+
+/* contact */
+.contact{text-align:center;padding:90px 0}
+.contact h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
+.contact p{color:var(--muted);max-width:46ch;margin:18px auto 0;font-size:1.06rem}
+.contact .btn{margin-top:30px}
+.cx{margin-top:28px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--faint)}
+.cx a:hover{color:var(--primary-2)}
+
+footer{border-top:1px solid var(--border);padding:26px 0;font-size:12px;color:var(--faint);font-family:var(--mono)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* ============ PROJECT PAGE ============ */
+.proj-hero{padding:46px 0 30px;border-bottom:1px solid var(--border)}
+.back{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;cursor:pointer;transition:.2s}
+.back:hover{color:var(--text)}
+.proj-hero h1{font-size:clamp(2rem,4.6vw,3.2rem);font-weight:800;margin:14px 0 0;max-width:18ch}
+.proj-hero .sub{margin-top:18px;color:var(--muted);font-size:1.1rem;max-width:58ch}
+.proj-facts{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.fact{background:var(--surface);padding:16px}
+.fact .fl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.fact .fv{font-weight:600;font-size:.95rem;margin-top:5px}
+@media(max-width:760px){.proj-facts{grid-template-columns:1fr 1fr}.proj-hero h1{font-size:2rem}}
+
+/* sticky section nav */
+.proj-layout{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:40px 0}
+.sidenav{position:sticky;top:84px;align-self:start;font-size:13px}
+.sidenav a{display:block;padding:7px 12px;color:var(--muted);border-radius:8px;border-left:2px solid transparent;cursor:pointer;transition:.2s;line-height:1.3}
+.sidenav a:hover{color:var(--text);background:var(--surface)}
+.sidenav a.active{color:var(--primary-2);border-left-color:var(--primary)}
+@media(max-width:920px){.proj-layout{grid-template-columns:1fr}.sidenav{display:none}}
+
+.s-block{padding:30px 0;border-top:1px solid var(--border);scroll-margin-top:80px}
+.s-block:first-child{border-top:0}
+.s-block .num{font-family:var(--mono);font-size:11px;color:var(--primary)}
+.s-block h3{font-size:1.4rem;margin:8px 0 16px;font-weight:700}
+.s-block p{color:var(--muted);margin-bottom:14px}
+.s-block p b{color:var(--text);font-weight:600}
+
+/* objective list */
+.obj{list-style:none;display:flex;flex-direction:column;gap:10px}
+.obj li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+.obj .lvl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--primary-2);border:1px solid var(--primary-line);padding:3px 8px;border-radius:6px;white-space:nowrap;align-self:start}
+.obj .lvl.app{color:var(--emerald);border-color:rgba(63,215,164,.3)}
+.obj .lvl.eval{color:#9a6a00;border-color:rgba(224,144,12,.35)}
+.obj li span{font-size:.95rem}
+
+/* arch / module map */
+.arch{display:flex;flex-direction:column;gap:10px}
+.arch-tier{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.arch-tier .at{font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.arch-tier .at .badge{font-family:var(--mono);font-size:10px;color:var(--primary);background:var(--primary-soft);padding:3px 8px;border-radius:6px}
+.mods{display:flex;flex-wrap:wrap;gap:8px}
+.mod{font-size:12px;background:var(--surface-2);border:1px solid var(--border);padding:7px 11px;border-radius:8px;color:var(--muted)}
+
+/* storyboard frame */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.frame{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.frame .screen{height:150px;background:var(--surface-3);border-bottom:1px solid var(--border);position:relative;display:flex;flex-direction:column;padding:14px;gap:8px}
+.frame .screen .fnum{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.mock-bar{height:8px;border-radius:4px;background:var(--border-2)}
+.mock-bar.w70{width:70%}.mock-bar.w40{width:40%}.mock-bar.w90{width:90%}
+.mock-btn{margin-top:auto;display:flex;gap:7px}
+.mock-btn i{height:22px;border-radius:6px;background:var(--primary-soft);border:1px solid var(--primary-line);flex:1}
+.mock-btn i.alt{background:var(--surface);border-color:var(--border)}
+.frame .meta{padding:14px}
+.frame .meta .role{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--primary-2);margin-bottom:4px}
+.frame .meta p{font-size:.85rem;color:var(--muted);margin-bottom:10px}
+.frame .meta p:last-child{margin-bottom:0}
+@media(max-width:680px){.story-grid{grid-template-columns:1fr}}
+
+/* generic cards row */
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px}
+.mini-card .ic{font-size:17px;color:var(--primary-2)}
+.mini-card h4{font-size:1rem;margin:10px 0 6px}
+.mini-card p{font-size:.85rem;color:var(--muted);margin:0}
+@media(max-width:760px){.row3,.row2{grid-template-columns:1fr}}
+
+/* assessment table */
+.tbl{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:11px;overflow:hidden;font-size:.88rem}
+.tbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:12px 14px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td b{color:var(--text);font-weight:600}
+.tbl .tag-l{font-family:var(--mono);font-size:10px;color:var(--primary-2)}
+
+/* accessibility checklist */
+.a11y{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.a11y div{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px}
+.a11y .ck{color:var(--emerald);font-weight:700}
+@media(max-width:680px){.a11y{grid-template-columns:1fr}}
+
+/* prototype screens */
+.proto{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.device{background:var(--surface);border:1px solid var(--border-2);border-radius:14px;padding:10px;box-shadow:0 14px 36px rgba(0,0,0,.35)}
+.device .scr{background:var(--bg);border:1px solid var(--border);border-radius:9px;min-height:220px;padding:14px;display:flex;flex-direction:column;gap:9px}
+.device .scr .hd{display:flex;justify-content:space-between;align-items:center}
+.device .scr .hd .dt{font-family:var(--display);font-weight:700;font-size:13px}
+.device .scr .hd .dp{font-family:var(--mono);font-size:9px;color:var(--emerald);background:var(--emerald-soft);padding:2px 6px;border-radius:10px}
+.device .cap{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center;margin-top:10px;letter-spacing:.04em}
+.progress{height:6px;background:var(--surface-3);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--primary);border-radius:4px}
+.choice{border:1px solid var(--border);border-radius:8px;padding:10px;font-size:.78rem;color:var(--muted)}
+.choice.sel{border-color:var(--primary-line);background:var(--primary-soft);color:var(--text)}
+.donut{width:74px;height:74px;border-radius:50%;margin:6px auto;background:conic-gradient(var(--surface-3) 0 100%);display:grid;place-items:center}
+.donut::after{content:"—";width:52px;height:52px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:14px;color:var(--faint)}
+@media(max-width:760px){.proto{grid-template-columns:1fr}}
+
+/* metrics */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.mc .v{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:-.03em;color:var(--primary-2)}
+.mc .v.up{color:var(--emerald)}
+.mc .l{font-size:.82rem;color:var(--muted);margin-top:6px}
+.mc .k{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:8px;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:760px){.metric-grid{grid-template-columns:1fr 1fr}}
+.note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px;display:flex;gap:8px}
+.note b{color:var(--primary-2)}
+.mtgt{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(23,138,85,.32);border-radius:999px;padding:6px 13px}
+
+/* reflection */
+.reflect{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:12px;padding:24px}
+.reflect p{color:var(--muted);margin-bottom:12px}
+.reflect p:last-child{margin-bottom:0}
+.reflect b{color:var(--text)}
+
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.jstep{background:var(--surface);padding:16px}
+.jstep .jh{font-weight:600;font-size:.92rem;display:flex;align-items:center;gap:8px}
+.jstep .jh .d{width:7px;height:7px;border-radius:50%;background:var(--primary)}
+.jstep .je{font-size:.8rem;color:var(--muted);margin-top:8px}
+.jstep .jp{font-size:.74rem;color:var(--faint);margin-top:8px;font-style:italic}
+@media(max-width:760px){.journey{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav class="top">
+  <div class="brand" onclick="go('home')"><span class="mark">AK</span> AK <span class="role">Learning Experience Designer</span></div>
+  <div class="navlinks" id="navlinks">
+    <a onclick="go('home');scrollTo2('systems')">Learning Systems</a>
+    <a onclick="go('home');scrollTo2('process')">Design Process</a>
+    <a onclick="go('home');scrollTo2('artifacts')">Artifacts</a>
+    <a onclick="go('home');scrollTo2('about')">About</a>
+    <a onclick="go('home');scrollTo2('resume')">Resume</a>
+    <a class="cta" onclick="go('home');scrollTo2('contact')">Contact</a>
+  </div>
+  <button class="burger" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- ============================= HOME ============================= -->
+<main id="home" class="view active">
+  <div class="wrap">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker rv">Instructional Design · Learning Experience · AI Enablement</span>
+          <h1 class="rv">I design <span class="hl">interactive learning systems</span> that change behavior.</h1>
+          <p class="lead rv">I help people <b>learn faster, make safer decisions, and adopt new technology with confidence</b> — through scenario-based learning, performance support, and learning experiences grounded in evidence and measured against business outcomes.</p>
+          <div class="hero-cta rv">
+            <a class="btn btn-primary" onclick="scrollTo2('systems')">View learning systems →</a>
+            <a class="btn btn-ghost" onclick="scrollTo2('resume')">Resume &amp; credentials</a>
+          </div>
+          <div class="hero-tags rv">
+            <span class="tag">ADDIE</span><span class="tag">Adult Learning</span><span class="tag">Scenario-Based</span><span class="tag">Microlearning</span><span class="tag">WCAG 2.2 AA</span><span class="tag">Learning Analytics</span>
+          </div>
+        </div>
+        <div class="dash rv">
+          <div class="dash-top"><span class="t">Learning Impact</span><span class="pill">● behavior change</span></div>
+          <div class="dash-stats">
+            <div class="dstat"><div class="n up">↓</div><div class="l">time-to-competency reduction</div></div>
+            <div class="dstat"><div class="n bl">L3–4</div><div class="l">Kirkpatrick outcomes tracked</div></div>
+            <div class="dstat"><div class="n up">↑</div><div class="l">scenario mastery on retry</div></div>
+            <div class="dstat"><div class="n bl">AA</div><div class="l">accessibility conformance</div></div>
+          </div>
+          <div class="bars">
+            <i style="height:42%"></i><i style="height:58%"></i><i style="height:50%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:88%"></i><i style="height:80%"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- LEARNING SYSTEMS -->
+    <section class="blk" id="systems">
+      <div class="sec-head rv">
+        <span class="kicker">01 — Learning Systems</span>
+        <h2>Three systems. One pattern: a problem worth solving, a learner worth designing for.</h2>
+        <p>Each is an end-to-end learning system — analysis through evaluation — built on instructional theory and measured against the metric the organization actually cares about.</p>
+      </div>
+      <div class="sys-grid">
+        <article class="sys-card rv" onclick="go('p-lms')"><div class="sys-thumb t-lms"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AI Workflow Quest decision simulation"><rect x="60" y="16" width="240" height="96" rx="10" fill="#FFFFFF" stroke="#D8DEE6"/><path d="M60 26 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v6 h-240 z" fill="#F4EFE5"/><circle cx="74" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="84" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="94" cy="25" r="2.6" fill="#D8C9B6"/><rect x="70" y="42" width="104" height="62" rx="8" fill="#F4EFE5"/><rect x="78" y="50" width="30" height="7" rx="3" fill="#B8552B"/><rect x="78" y="63" width="86" height="5" rx="2" fill="#9A917F"/><rect x="78" y="72" width="68" height="5" rx="2" fill="#9A917F"/><rect x="78" y="90" width="42" height="11" rx="5.5" fill="#B8552B"/><rect x="126" y="90" width="42" height="11" rx="5.5" fill="none" stroke="#B8552B"/><rect x="186" y="42" width="104" height="62" rx="8" fill="#211E19"/><rect x="194" y="50" width="14" height="5" rx="2" fill="#5BBF86"/><rect x="212" y="50" width="40" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="61" width="72" height="5" rx="2" fill="#5BBF86"/><rect x="194" y="72" width="52" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="84" width="9" height="8" rx="1" fill="#5BBF86"/></svg></div><div class="sys-body"><div class="sys-cat">Enterprise · AI enablement · Live build</div><h3>AI Workflow Quest</h3><p>A branching simulation that takes a non-technical employee from AI user to AI supervisor — by simulating the decision points, not the agent.</p><div class="sys-meta"><span class="mini">Live simulation</span><span class="mini">Branching</span><span class="mini">Responsible AI</span></div><div class="sys-go">Open case study <span class="a">&#8594;</span></div></div></article>
+        <article class="sys-card rv" onclick="go('p-safe')">
+          <div class="sys-thumb t-safe"><div class="glow"></div><img class="prev" src="assets/p/01-hero.png" alt="Preview of the SiteReady scissor-lift safety awareness module" loading="lazy"></div>
+          <div class="sys-body">
+            <div class="sys-cat">Industrial · Safety · Live build</div>
+            <h3>SiteReady — Scissor Lift Safety</h3>
+            <p>A built, deployable awareness micro-module and printable pre-use job aid that help operators recognize scissor-lift hazards and choose Stop, Fix, or Proceed.</p>
+            <div class="sys-meta"><span class="mini">Live module</span><span class="mini">Job aid</span><span class="mini">SCORM-ready</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </article>
+        <article class="sys-card rv" onclick="go('p-drive')">
+          <div class="sys-thumb t-drive"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of a driver-education hazard scenario"><rect x="82" y="14" width="84" height="100" rx="12" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="90" y="22" width="68" height="84" rx="6" fill="#EAF1F6"/><rect x="114" y="26" width="20" height="3" rx="1.5" fill="#CDD4DD"/><rect x="90" y="34" width="68" height="30" fill="#DCE8F0"/><path d="M112 104 L136 104 L129 64 L119 64 Z" fill="#9AA6B2"/><line x1="124" y1="66" x2="124" y2="102" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4 4"/><circle cx="118" cy="86" r="4" fill="#E0900C"/><circle cx="118" cy="86" r="9" fill="none" stroke="#E0900C" stroke-width="1.5" opacity="0.85"/><rect x="186" y="14" width="74" height="14" rx="7" fill="#E4F2EA"/><circle cx="196" cy="21" r="3" fill="#178A55"/><rect x="204" y="19" width="34" height="4" rx="2" fill="#9FCBB4"/><rect x="186" y="36" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="43" width="50" height="3" rx="1.5" fill="#C7D0DA"/><rect x="186" y="58" width="92" height="16" rx="8" fill="#E4F2EA" stroke="#178A55"/><path d="M194 66 l3 3 l6 -7" stroke="#178A55" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="208" y="65" width="44" height="3" rx="1.5" fill="#3E9E73"/><rect x="186" y="80" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="87" width="54" height="3" rx="1.5" fill="#C7D0DA"/></svg></div>
+          <div class="sys-body">
+            <div class="sys-cat">Consumer · Driver education · Live build</div>
+            <h3>Ohio DriveSmart Academy</h3>
+            <p>An interactive React driver-ed app: eight lesson modules, hazard-decision practice, illustrated flashcards, and a guardrailed AI study coach. Educational concept.</p>
+            <div class="sys-meta"><span class="mini">React app</span><span class="mini">AI coach</span><span class="mini">Accessible</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DESIGN PROCESS -->
+    <section class="blk" id="process">
+      <div class="sec-head rv">
+        <span class="kicker">02 — Design Process</span>
+        <h2>A disciplined, evidence-based process — not decoration.</h2>
+        <p>I run ADDIE as a working loop and pull from the learning science that fits the problem. Every design decision traces back to a learner need and a measurable objective.</p>
+      </div>
+      <div class="addie rv">
+        <div class="addie-step"><div class="s">A</div><h4>Analyze</h4><p>Performance gap, audience, constraints, baseline metric.</p></div>
+        <div class="addie-step"><div class="s">D</div><h4>Design</h4><p>Objectives, assessment-of-learning, instructional strategy.</p></div>
+        <div class="addie-step"><div class="s">D</div><h4>Develop</h4><p>Storyboards, prototypes, content, performance support.</p></div>
+        <div class="addie-step"><div class="s">I</div><h4>Implement</h4><p>Pilot, LMS deploy, champions, change comms.</p></div>
+        <div class="addie-step"><div class="s">E</div><h4>Evaluate</h4><p>Kirkpatrick L1–4, analytics, iterate.</p></div>
+      </div>
+      <div class="method-grid">
+        <div class="method rv"><div class="ic">👤</div><h4>Adult Learning</h4><p>Relevance-first, self-directed, experience-anchored (Knowles / andragogy).</p></div>
+        <div class="method rv"><div class="ic">🌿</div><h4>Scenario-Based</h4><p>Decisions in context with branching consequences, not content dumps.</p></div>
+        <div class="method rv"><div class="ic">⚡</div><h4>Microlearning</h4><p>Focused, spaced, ≤5-min units mapped to single objectives.</p></div>
+        <div class="method rv"><div class="ic">🧩</div><h4>Performance Support</h4><p>Job aids at the moment of need — learning that lives in the workflow.</p></div>
+        <div class="method rv"><div class="ic">✅</div><h4>Assessment Design</h4><p>Aligned, criterion-referenced items that measure the objective.</p></div>
+        <div class="method rv"><div class="ic">📊</div><h4>Learning Analytics</h4><p>xAPI / LMS data tied to adoption and behavior-change signals.</p></div>
+        <div class="method rv"><div class="ic">♿</div><h4>Accessibility</h4><p>WCAG 2.2 AA, plain language, multi-device by default.</p></div>
+        <div class="method rv"><div class="ic">🎨</div><h4>UX for Learning</h4><p>Cognitive-load management, clear wayfinding, motivation by design.</p></div>
+      </div>
+    </section>
+
+    <!-- FEATURED ARTIFACTS -->
+    <section class="blk" id="artifacts">
+      <div class="sec-head rv">
+        <span class="kicker">03 — Featured Artifacts</span>
+        <h2>The thinking behind the screens.</h2>
+      </div>
+      <div class="art-grid">
+        <div class="art rv"><div class="ic">🗺️</div><h4>Action Maps &amp; Needs Analysis</h4><p>Linking each module to an on-the-job behavior and the business metric it moves.</p></div>
+        <div class="art rv"><div class="ic">🎯</div><h4>Learning Objectives</h4><p>Bloom-aligned, measurable objectives that drive both content and assessment.</p></div>
+        <div class="art rv"><div class="ic">🎬</div><h4>Storyboards</h4><p>Frame-by-frame screen text, narration, and interaction specs for developers.</p></div>
+        <div class="art rv"><div class="ic">🧪</div><h4>Assessment Blueprints</h4><p>Item-to-objective alignment tables with feedback and remediation paths.</p></div>
+        <div class="art rv"><div class="ic">🧭</div><h4>Learner Journey Maps</h4><p>Emotion, friction, and decision points across the full learning experience.</p></div>
+        <div class="art rv"><div class="ic">📈</div><h4>Analytics Dashboards</h4><p>Adoption, completion, and competency views that report in executive language.</p></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="blk" id="about">
+      <div class="sec-head rv"><span class="kicker">04 — About</span></div>
+      <div class="two">
+        <div class="prose rv">
+          <h2 style="font-size:2rem;margin-bottom:18px">An instructional designer who can build what they design.</h2>
+          <p>I design learning systems for technical and high-stakes environments where unclear training creates real business risk — errors, safety exposure, stalled adoption, and lost productivity.</p>
+          <p>My edge is that I can <b>design and prototype</b>. I do not just write storyboards and hand them off; I build interactive learning experiences that preserve the instructional intent through branching scenarios, web-based simulations, mobile-first performance support, and accessible interface design.</p>
+          <p>Across my work, the pattern is translation: converting complex systems into usable learning experiences for the people expected to act on them. Whether the subject is enterprise AI, jobsite safety, or decision-making under pressure, my goal is the same — <b>help teams understand the system, trust the process, and perform with confidence.</b></p>
+        </div>
+        <div class="panel rv">
+          <h4>Core Competencies</h4>
+          <div class="comp-list">
+            <span class="comp">Instructional Design (ADDIE / SAM)</span><span class="comp">Learning Experience Design</span><span class="comp">Scenario-Based Learning</span><span class="comp">Microlearning</span><span class="comp">Performance Support</span><span class="comp">Assessment Design</span><span class="comp">Learning Analytics (xAPI)</span><span class="comp">Accessibility (WCAG 2.2 AA)</span><span class="comp">AI Enablement &amp; Adoption</span><span class="comp">Change Management</span><span class="comp">Articulate Storyline</span><span class="comp">Rise 360</span><span class="comp">H5P · Twine</span><span class="comp">Figma</span><span class="comp">Camtasia</span><span class="comp">LMS Administration</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUME -->
+    <section class="blk" id="resume">
+      <div class="sec-head rv">
+        <span class="kicker">05 — Resume</span>
+        <h2>Experience, framed around outcomes.</h2>
+      </div>
+      <div style="max-width:680px">
+        <div class="panel rv">
+          <h4>Credentials &amp; Frameworks</h4>
+          <div class="kv"><span class="k">Methodology</span><span class="v">ADDIE · SAM · Backward Design</span></div>
+          <div class="kv"><span class="k">Theory</span><span class="v">Andragogy · Cognitive Load · Bloom's</span></div>
+          <div class="kv"><span class="k">Evaluation</span><span class="v">Kirkpatrick L1–4 · Phillips ROI</span></div>
+          <div class="kv"><span class="k">Standards</span><span class="v">WCAG 2.2 AA · SCORM / xAPI · Section 508</span></div>
+          <div class="kv"><span class="k">AI Enablement</span><span class="v">DOL AI Literacy Framework (2026)</span></div>
+          <div class="kv"><span class="k">Education</span><span class="v">[Degree / Certification]</span></div>
+          <div style="margin-top:22px"><a class="btn btn-primary" href="#" style="width:100%;justify-content:center" onclick="return false">⬇ Download full résumé (PDF)</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <span class="kicker rv" style="justify-content:center">06 — Contact</span>
+        <h2 class="rv" style="margin-top:16px">Let's design learning that moves a metric.</h2>
+        <p class="rv">Available for Instructional Designer, Learning Experience Designer, and AI Enablement roles. Bring me the performance gap — I'll bring the learning system.</p>
+        <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com" onclick="">Druva.akhil@gmail.com →</a>
+        <div class="cx rv"><a href="https://www.linkedin.com/in/akhilreddy-" target="_blank" rel="noopener">LinkedIn</a><a href="#" onclick="return false">Résumé (PDF)</a><a href="#" onclick="return false">Portfolio deck</a></div>
+      </div>
+    </section>
+  </div>
+  <footer><div class="wrap"><span>© 2026 AK · Learning Experience Designer</span><span>Designed &amp; built by AK</span></div></footer>
+</main>
+
+<!-- ============================= PROJECT: LMS ============================= -->
+<main id="p-lms" class="view"></main>
+<!-- PROJECT: SAFE -->
+<main id="p-safe" class="view"></main>
+<!-- PROJECT: DRIVE -->
+<main id="p-drive" class="view"></main>
+
+<script>
+/* ---------- 15-section project template ---------- */
+const SECTIONS=[
+ "Project Overview","Business Problem","Learner Problem","Target Audience","Learning Objectives",
+ "Instructional Strategy","Content Architecture","Storyboard Samples","Interaction Design Decisions",
+ "Assessment Strategy","Performance Support Assets","Accessibility Considerations","Prototype Screens",
+ "Success Metrics","Reflection & Lessons Learned"];
+
+/* reusable visual builders */
+function frame(num,roleTxt,onscreen,narration,interaction,bars="w90"){
+ return `<div class="frame"><div class="screen"><span class="fnum">${num}</span>
+   <div class="mock-bar w70"></div><div class="mock-bar ${bars}"></div><div class="mock-bar w40"></div>
+   <div class="mock-btn"><i></i><i class="alt"></i></div></div>
+   <div class="meta"><div class="role">${roleTxt}</div>
+   <p><b style="color:var(--text)">On-screen:</b> ${onscreen}</p>
+   <p><b style="color:var(--text)">Narration:</b> ${narration}</p>
+   <p><b style="color:var(--text)">Interaction:</b> ${interaction}</p></div></div>`;}
+
+const PROJECTS={
+ "p-lms":{
+  title:"AI Workflow Quest",
+  sub:"A guided, branching simulation that moves a non-technical employee from AI user to AI supervisor — built on one thesis: don't simulate the agent, simulate the decision points.",
+  facts:[["Role","ID + LXD + front-end build"],["Audience","Non-technical AI users"],["Domain","AI enablement · responsible use"],["Mode","Web simulation · branching · single-file"]],
+  thumbClass:"t-lms",
+  body:{
+   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="ai-workflow-quest.html" target="_blank" rel="noopener">&#9654; Open the live simulation</a></div><p>A built, interactive learning simulation that takes a non-technical employee through four authored scenarios — from a first AI delegation to supervising an automation chain — teaching them to <b>own the decision points</b> a human must keep. The governing idea: don't try to fake the AI, simulate the moments where judgment matters.</p><div class="row3"><div class="mini-card"><div class="ic">&#129517;</div><h4>User &#8594; supervisor</h4><p>The learner's role visibly flips from "using AI" to "supervising AI" at the pivotal approval.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Decide, don't watch</h4><p>Deterministic branches at a few load-bearing moments; consequence is shown, not described — and always recoverable.</p></div><div class="mini-card"><div class="ic">&#128202;</div><h4>Reads back real choices</h4><p>The closing report is computed from what the learner actually did — no hardcoded "demonstrated".</p></div></div>`,
+   "Business Problem":`<p>Organizations handed employees AI assistants faster than they taught the judgment to supervise them. The risk isn't a bad draft — it's an <b>unsupervised action</b>: an AI that sends, schedules, or shares before a human checks. Rubber-stamped approvals and context-blind automations leak data and erode trust.</p><p><b>The metric at risk:</b> safe, confident AI adoption. The gap is supervision behavior, not tool familiarity.</p>`,
+   "Learner Problem":`<ul class="obj"><li><span class="lvl">Trust</span><span><b>Output looks finished, so it gets approved</b> — learners rubber-stamp without opening the draft.</span></li><li><span class="lvl">Blind spots</span><span><b>The dangerous moment is invisible</b> — the same output is safe or harmful depending on a context only a human checks (internal vs. external recipient).</span></li><li><span class="lvl">Model</span><span><b>No mental model of think vs. act</b> — which steps are reversible reasoning, which touch a person or a record.</span></li></ul>`,
+   "Target Audience":`<p>Primary: <b>non-technical knowledge workers</b> beginning to use AI assistants for real work. Secondary: <b>enablement leads</b> who need adoption that is responsible and defensible, not just frequent.</p>`,
+   "Learning Objectives":`<p>Behavioral objectives, scoped to the simulation:</p><ul class="obj"><li><span class="lvl">Understand</span><span>Distinguish a model-only draft from a real tool action that touches a person or record.</span></li><li><span class="lvl app">Apply</span><span>Decompose a task into think (reasoning) and act (irreversible) steps.</span></li><li><span class="lvl eval">Evaluate</span><span>Catch a context flaw before approving — the right action to the wrong recipient.</span></li><li><span class="lvl eval">Supervise</span><span>Verify, correct, and re-approve — and keep supervising on the next gate, not just once.</span></li><li><span class="lvl app">Decide</span><span>Choose what to automate vs. where to keep a human verification point.</span></li></ul>`,
+   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127919;</div><h4>Simulate decisions, not the agent</h4><p>Authored branches concentrate at a few load-bearing moments; everything between is compressed and railed.</p></div><div class="mini-card"><div class="ic">&#9889;</div><h4>Just-in-time concepts</h4><p>One new idea surfaces at its moment of relevance — including the word "agent," which only earns its place once the learner needs it.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Consequence, recoverable</h4><p>The leak is experienced, then rewound — a mistake to learn from, never a punitive dead end.</p></div><div class="mini-card"><div class="ic">&#128483;</div><h4>Two voices, one screen</h4><p>A warm human coach (serif on paper) and a terse system layer (mono on dark) make the invisible visible without overload.</p></div></div>`,
+   "Content Architecture":`<p>Four scenarios across seven capability layers, with fidelity matched to teaching value.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">S1&#8211;S2</span> Foundations (full build)</div><div class="mods"><span class="mod">First delegation</span><span class="mod">Model vs. tool call</span><span class="mod">Think / act decomposition</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S3</span> The approval that mattered &#8212; centerpiece</div><div class="mods"><span class="mod">Review or rubber-stamp</span><span class="mod">Leak &#8594; rewind &#8594; repair</span><span class="mod">Second gate &#183; role flips</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S4</span> Orchestration &#8212; storyboarded (honest scope)</div><div class="mods"><span class="mod">Who does what</span><span class="mod">Where to keep a verification point</span></div></div></div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("S1 · First delegation","Contrast pair","A model-only draft sits beside the same task run as a real tool call, with an animated lookup trace.","Coach voice frames why the difference matters.","Connect the tool, watch the trace, then a quick check.")}${frame("S3 · The approval that mattered","Decision point",'The AI drafts a correct message to the wrong "Shanda" — internal vs. external. Approve, reject, or edit.',"No narration at the decision — the choice carries the weight.","Approve to see the leak and rewind; or edit recipient, claim, and context to repair.",bars="w70")}</div>`,
+   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Rubber-stamping is captured silently</b> — approving without opening the draft changes the consequence, without the UI scolding the learner.</span></li><li><span class="lvl">Why</span><span><b>The flaw is compound</b> — the output is only dangerous because the recipient is external; the lesson is context, not typos.</span></li><li><span class="lvl">Why</span><span><b>A second approval gate</b> proves supervision is a habit that persists, not a one-time catch.</span></li><li><span class="lvl">Why</span><span><b>Role flips on success</b> — the status changes from "user" to "supervisor" at the moment the behavior changes.</span></li></ul>`,
+   "Assessment Strategy":`<p>Assessment is the behavior itself — the closing report is computed from real choices, never hardcoded.</p><table class="tbl"><tr><th>Captured behavior</th><th>Signal</th><th>From</th></tr><tr><td><b>Checks work before approving</b></td><td class="tag-l">Verify</td><td>Did the learner open the draft?</td></tr><tr><td><b>Recognizes risk</b></td><td class="tag-l">Judgment</td><td>Caught the external recipient / sensitive context.</td></tr><tr><td><b>Breaks work into steps</b></td><td class="tag-l">Decompose</td><td>Think / act tagging accuracy.</td></tr><tr><td><b>Supervises AI</b></td><td class="tag-l">Transfer</td><td>Repaired and re-approved on the second gate.</td></tr></table>`,
+   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129534;</div><h4>Behavior report</h4><p>A debrief that reflects the learner's actual decisions back to them — and to a facilitator.</p></div><div class="mini-card"><div class="ic">&#128257;</div><h4>Rewind to repair</h4><p>Built-in recovery turns the mistake into the lesson, then lets the learner fix it.</p></div><div class="mini-card"><div class="ic">&#128228;</div><h4>Pilot instrumentation</h4><p>Captured signals are structured for an export / debrief view (planned) to support a real pilot.</p></div></div>`,
+   "Accessibility Considerations":`<p>Accessibility is the documented next iteration on this build — stated honestly rather than overclaimed.</p><div class="a11y"><div><span class="ck">&#10003;</span> AA-passing colour contrast across all text on the paper and system surfaces.</div><div><span class="ck">&#10003;</span> Real buttons for primary actions; semantic structure and a page language set.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: keyboard + focus-visible for the remaining choice rows.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: aria-live on the coach, incident, and report regions.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: prefers-reduced-motion for the animated traces.</div></div><p style="font-size:14px;color:var(--muted)">Claiming accessibility expertise means being honest about what is and isn't done yet — the keyboard, screen-reader, and reduced-motion pass is scoped and next.</p>`,
+   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Coach</span><span class="dp">S1</span></div><div class="choice">Model-only draft</div><div class="choice sel">Same task as a tool call &#10003;</div></div><div class="cap">Contrast pair</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Approval</span><span class="dp">S3</span></div><div class="choice">Approve now</div><div class="choice sel">Open &amp; check the recipient &#10003;</div><div class="choice">Reject</div></div><div class="cap">The decision that mattered</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Report</span><span class="dp">Debrief</span></div><div class="choice sel">Recognizes risk &#10003;</div><div class="choice sel">Supervises AI &#10003;</div></div><div class="cap">Computed from real choices</div></div></div>`,
+   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">human checkpoints correctly kept</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">rubber-stamped approvals</div><div class="k">L3 &#183; behavior</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">context-risk caught before send</div><div class="k">L3</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">appropriate-automation decisions</div><div class="k">L4</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending a pilot.</div>`,
+   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Simulating the decision points instead of the agent kept the build small and the teaching sharp — the leak-and-rewind on Scenario 3 carries more learning than any explanation could.</p><p><b>What I'd change:</b> The keyboard, screen-reader, and reduced-motion pass is the honest next step; the piece earns its accessibility claim only once that ships.</p><p><b>The transferable lesson:</b> Responsible-AI training is a supervision-behavior problem. Make the invisible decision visible, let the consequence be felt and recovered, and measure the behavior — not the click.</p></div>`
+  }},
+ "p-safe":{
+  title:"SiteReady — Scissor Lift Safety Awareness",
+  sub:"A mobile-first awareness micro-module and a printable pre-use job aid that help new operators and site personnel recognize scissor-lift hazards and make the right first move — Stop, Fix, or Proceed.",
+  facts:[["Role","ID + LXD + front-end build"],["Audience","New operators & site personnel"],["Domain","Industrial safety · awareness"],["Mode","Web module · Job aid · SCORM-ready"]],
+  thumbClass:"t-safe",
+  body:{
+   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="deploy/index.html" target="_blank" rel="noopener">▶ Open the live module</a><a class="btn btn-ghost" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener">⬇ Pre-Use Card (printable job aid)</a></div><p>A built, deployable <b>awareness micro-module</b> on scissor-lift safety, paired with a one-page <b>pre-use card</b> for the point of work. It teaches hazard recognition and the right first action through scroll-based microlearning, a randomized Stop / Fix / Proceed scenario check, and spaced-retrieval flashcards — then hands the worker a printable job aid to carry to the floor.</p><div class="row3"><div class="mini-card"><div class="ic">👁️</div><h4>Recognize</h4><p>Tip-over, struck-by, falls, and overhead/electrical hazards — dual-coded with isometric and scenario art.</p></div><div class="mini-card"><div class="ic">🌿</div><h4>Decide</h4><p>Low-stakes Stop / Fix / Proceed practice, drawn 3-of-5, with corrective retries and no shaming.</p></div><div class="mini-card"><div class="ic">📇</div><h4>Transfer</h4><p>A printable pre-use checklist + sign-off puts the job aid at the moment of work.</p></div></div>`,
+   "Business Problem":`<p>Annual classroom safety training satisfies a compliance checkbox but doesn't reliably transfer to behavior in the field, and scissor lifts remain a leading source of aerial-lift incidents — tip-overs, falls, and electrocutions. Sites need awareness that is <b>faster to deliver, clearer for a mixed-literacy crew, and actually carried to the floor</b>.</p><p><b>The metric at risk:</b> incident and near-miss rate, and the human and financial cost behind it. A transfer-and-behavior problem, not a content-volume problem.</p>`,
+   "Learner Problem":`<ul class="obj"><li><span class="lvl">Context</span><span><b>Learning happens off-site; the hazard is on-site</b> — a transfer gap between the classroom and the platform.</span></li><li><span class="lvl">Literacy</span><span><b>Mixed reading levels and languages</b> make text-heavy slides inaccessible to part of the crew.</span></li><li><span class="lvl">Relevance</span><span><b>Generic content</b> loses experienced operators; the module stays specific to the machine in front of them.</span></li></ul>`,
+   "Target Audience":`<p>Primary: <b>new scissor-lift operators and general site personnel</b> — often deskless, mobile-first, multilingual, with varied literacy and little spare time. Secondary: <b>supervisors</b> who run pre-use checks and hold stop-work authority. Designed for a phone, gloves, and a few spare minutes.</p>`,
+   "Learning Objectives":`<p>Awareness-level objectives, written to be observable:</p><ul class="obj"><li><span class="lvl eval">Recognize</span><span>Identify the main scissor-lift hazards — tip-over, struck-by, falls, and overhead/electrical contact.</span></li><li><span class="lvl app">Apply</span><span>Run a pre-use walk-around and red-tag a machine that fails it.</span></li><li><span class="lvl eval">Locate</span><span>Find both E-Stops and the emergency-descent rescue path before elevating.</span></li><li><span class="lvl eval">Decide</span><span>Choose the right first action in a hazard scenario — Stop, Fix, or Proceed.</span></li></ul><p style="font-size:14px;color:var(--muted)">Scoped as <b>awareness</b> — explicitly not OSHA-authorized training, operator authorization, or a qualified-person evaluation.</p>`,
+   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">🧠</div><h4>Behavior-based + dual coding</h4><p>Every rule pairs with a visual, one idea per screen, to cut cognitive load for a multilingual, lower-literacy crew.</p></div><div class="mini-card"><div class="ic">🌿</div><h4>Scenario decision practice</h4><p>Comic-style Stop / Fix / Proceed scenarios build judgment through consequence, not trivia.</p></div><div class="mini-card"><div class="ic">⚡</div><h4>Spaced retrieval</h4><p>An eight-card flashcard deck reinforces the rules with active recall.</p></div><div class="mini-card"><div class="ic">📇</div><h4>Performance support</h4><p>A printable pre-use card moves the job aid to the point of work — the L2→L3 bridge.</p></div></div>`,
+   "Content Architecture":`<p>An <b>awareness layer</b>, kept visibly separate from the competency-support layer (hands-on training, a qualified-person evaluation, and employer authorization).</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Explain</span> Scroll micro-module (M0–M8)</div><div class="mods"><span class="mod">Anatomy</span><span class="mod">Pre-use walk-around</span><span class="mod">Tip-over</span><span class="mod">Danger zone</span><span class="mod">Overhead / 10 ft</span><span class="mod">E-Stops</span><span class="mod">Manual descent</span><span class="mod">Fall protection</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Apply</span> Scenario check + retrieval</div><div class="mods"><span class="mod">Stop / Fix / Proceed (3 of 5)</span><span class="mod">Flashcards (×8)</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Support</span> Point of work</div><div class="mods"><span class="mod">Printable pre-use card</span><span class="mod">Tag-out guidance</span><span class="mod">Sign-off fields</span></div></div></div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("M3 · Tip-over","Dual-coded rule","Side-by-side stable vs. tip-over states with 'Firm · Flat · Level' as the single takeaway.","Plain-language, one idea per screen.","Scroll activates the unstable state; a pulsing ring marks the risk.")}${frame("Scenario · E-Stop","Stop / Fix / Proceed","The platform lurches and the controls go dead. Three options, no obvious tell.","No narration — the decision carries the weight.","Pick an option → corrective feedback; the correct answer reveals the safe-outcome panel.",bars="w70")}</div>`,
+   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Focus-lock scroll</b> spotlights one module at a time to control cognitive load.</span></li><li><span class="lvl">Why</span><span><b>Numbered anatomy callouts</b> (hover, tap, or keyboard focus) link the diagram to the parts list via dual coding.</span></li><li><span class="lvl">Why</span><span><b>Consequence-based feedback</b> in the scenario check — corrective retries, no score, no shaming — so judgment transfers.</span></li><li><span class="lvl">Why</span><span><b>Reduced-motion fallback</b> renders every module linearly for motion-sensitive users and assistive tech.</span></li></ul>`,
+   "Assessment Strategy":`<p>Low-stakes and behavior-focused — the goal is the right move at the right moment, not a grade.</p><table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Scenario check</b></td><td class="tag-l">Scenario</td><td>Decide</td><td>Stop / Fix / Proceed on 3 of 5 randomized hazards, with corrective retries.</td></tr><tr><td><b>Flashcard deck</b></td><td class="tag-l">Retrieval</td><td>Recognize</td><td>Active recall of the eight rules; self-paced review.</td></tr><tr><td><b>Pre-use card</b></td><td class="tag-l">Transfer</td><td>Apply</td><td>On-the-job walk-around + sign-off (an L3 behavior signal).</td></tr></table>`,
+   "Performance Support Assets":`<div style="margin:0 0 14px"><a class="btn btn-ghost" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener">⬇ Open the printable Pre-Use Card</a></div><div class="row3"><div class="mini-card"><div class="ic">📋</div><h4>Pre-use checklist</h4><p>One-page walk-around with sign-off for machine ID, operator, and supervisor.</p></div><div class="mini-card"><div class="ic">🟥</div><h4>Tag-out + stop-work</h4><p>Red-tag a failed machine; anyone can stop unsafe work, anytime, no penalty.</p></div><div class="mini-card"><div class="ic">🖨️</div><h4>Print-ready</h4><p>Dedicated print styles render a clean one-page PDF for the toolbox.</p></div></div>`,
+   "Accessibility Considerations":`<div class="a11y"><div><span class="ck">✓</span> Skip link, semantic landmarks, and visible focus throughout.</div><div><span class="ck">✓</span> Reduced-motion mode renders all modules linearly.</div><div><span class="ck">✓</span> Scenario check is a labeled radiogroup with an aria-live result.</div><div><span class="ck">✓</span> Flashcards flip via keyboard (Enter / Space).</div><div><span class="ck">✓</span> Dual coding — never color or text alone — for low-literacy and multilingual readers.</div><div><span class="ck">✓</span> Single self-contained file; SCORM-ready for an LMS.</div></div>`,
+   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Walk-around</span><span class="dp">M2</span></div><div class="choice sel">☑ Guardrails solid, gate latches</div><div class="choice">☐ Test both control stations</div></div><div class="cap">Pre-use checklist</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">E-Stop</span><span class="dp">Scenario</span></div><div class="choice">Climb over the rail</div><div class="choice sel">Hit the Emergency Stop ✓</div><div class="choice">Keep operating</div></div><div class="cap">Stop / Fix / Proceed</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Rule 1</span><span class="dp">Deck</span></div><div class="choice">Where do you elevate?</div><div class="choice sel">Firm · Flat · Level ✓</div></div><div class="cap">Spaced-retrieval flashcard</div></div></div>`,
+   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">↑ improve</div><div class="l">module + scenario completion</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">↑ improve</div><div class="l">pre-use card use on the floor</div><div class="k">L3 · behavior</div></div><div class="mc"><div class="mtgt">↑ improve</div><div class="l">near-miss reporting</div><div class="k">L3 · culture</div></div><div class="mc"><div class="mtgt">↓ reduce</div><div class="l">recordable incidents</div><div class="k">L4</div></div></div><div class="note"><b>▸</b> Awareness concept — arrows show the direction of success. No results are claimed; measured data and a baseline are added once captured.</div>`,
+   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Keeping the awareness layer visibly separate from competency — and flagging every machine-specific claim <b style="color:var(--amber)">[VERIFY WITH SME]</b> — made the piece honest and defensible, which matters more than polish in a safety context.</p><p><b>What I'd change:</b> The eight takeaways drift slightly between the module and the pre-use card; I'd lock one canonical list and reuse it everywhere.</p><p><b>The transferable lesson:</b> Building the front-end myself meant the instructional intent survived all the way to the screen — dual coding, reduced-motion, and the point-of-work job aid were design decisions, not handoff casualties.</p></div>`
+  }},
+ 
+ "p-drive":{
+  title:"Ohio DriveSmart Academy",
+  sub:"An interactive driver-education prototype — eight lesson modules, illustrated flashcards, a Road-Test-Readiness gauge, and a guardrailed AI study coach — built in React with a server-side AI proxy. Educational concept, not a BMV-approved course.",
+  facts:[["Role","ID + LXD + full-stack build"],["Audience","Ohio teen learner drivers"],["Domain","Driver education · responsible AI"],["Mode","React + Vite app · serverless AI"]],
+  thumbClass:"t-drive",
+  body:{
+   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="https://ohio-drivesmart-academy.vercel.app/" target="_blank" rel="noopener">&#9654; Open the live app</a></div><p>A built React/Vite single-page app that teaches teen drivers through a <b>learn &#8594; see &#8594; decide &#8594; feedback &#8594; mastery</b> loop, with illustrated flashcards, an xAPI-style learning record, an accessibility panel, and <b>RoadGuide AI</b> — a guardrailed study coach whose API key stays server-side. Framed honestly as an educational concept, not an official or BMV-approved course.</p><div class="row3"><div class="mini-card"><div class="ic">&#129496;</div><h4>Decide, then learn</h4><p>Each module practices a real driving decision and gates progress on mastery, not seat time.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>Guardrailed AI coach</h4><p>RoadGuide answers rules questions in plain English — never claims the learner is licensed; the key never reaches the browser.</p></div><div class="mini-card"><div class="ic">&#9855;</div><h4>Accessible by design</h4><p>Keyboard, focus, ARIA, reduce-motion, readable-font, larger-text and high-contrast toggles built in.</p></div></div>`,
+   "Business Problem":`<p>Novice drivers crash at far higher rates than experienced ones, and a rules-test-prep product can lift pass rates without changing the outcome that matters — real-road judgment. Dry, text-heavy courses also lose a digital-native audience fast.</p><p><b>The metric at risk:</b> novice-driver decision-readiness and crash risk. Sourced framing only (CDC, NHTSA, NSC, IIHS, Ohio DPS/OSHP) — no invented numbers.</p>`,
+   "Learner Problem":`<ul class="obj"><li><span class="lvl">Skill gap</span><span><b>Rules &#8800; judgment</b> — a learner can pass the written test and still freeze at a real hazard.</span></li><li><span class="lvl">Motivation</span><span><b>Dry content disengages teens</b> — a voluntary, young audience needs pace, feedback, and progress.</span></li><li><span class="lvl">Practice</span><span><b>No safe place to fail</b> — first real decisions otherwise happen at speed.</span></li></ul>`,
+   "Target Audience":`<p>Primary: <b>Ohio teens (15&#8211;17)</b> on a temporary permit — mobile-native, low tolerance for friction, high response to feedback. Secondary: <b>parents and instructors</b> who supervise and review.</p>`,
+   "Learning Objectives":`<ul class="obj"><li><span class="lvl">Recall</span><span>State Ohio road rules, signs, and right-of-way in context.</span></li><li><span class="lvl eval">Perceive</span><span>Detect a developing hazard in a driving scene.</span></li><li><span class="lvl eval">Decide</span><span>Choose the safe response under time pressure.</span></li><li><span class="lvl app">Apply</span><span>Transfer scanning and decision habits to supervised real practice.</span></li></ul>`,
+   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127807;</div><h4>Decision loop per module</h4><p>Learn &#8594; see &#8594; decide &#8594; feedback &#8594; mastery, with remediation when a concept is missed.</p></div><div class="mini-card"><div class="ic">&#127918;</div><h4>Mastery gating</h4><p>Progress reflects demonstrated skill, shown on a Road-Test-Readiness gauge that tops out at "Practice-ready."</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Spaced flashcards</h4><p>Illustrated signs and markings reinforce recall between modules.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>Just-in-time coach</h4><p>RoadGuide AI answers a learner's question at the moment of confusion, within strict guardrails.</p></div></div>`,
+   "Content Architecture":`<p>A data-driven module system (eight built, scoped toward an 18-module curriculum), plus dashboard, flashcards, learning record, and a Documents page that holds the research and compliance basis.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Learn</span> Eight lesson modules</div><div class="mods"><span class="mod">Signs &amp; signals</span><span class="mod">Right-of-way</span><span class="mod">Hazard scenarios</span><span class="mod">Mastery + remediation</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Practice</span> Recall &amp; coach</div><div class="mods"><span class="mod">Illustrated flashcards</span><span class="mod">RoadGuide AI</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Evidence</span> Records &amp; basis</div><div class="mods"><span class="mod">xAPI-style learning record</span><span class="mod">Readiness gauge</span><span class="mod">Documents (sources + liability)</span></div></div></div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("Module · Decide","Scenario decision","A first-person intersection — an unprotected left, the gap closing. Go, wait, or creep forward.","Brief coaching after the choice, never a scolding.","Pick an option, then see the consequence and the safer read.")}${frame("RoadGuide · Coach","Guardrailed AI","A learner asks a rules question; the coach answers in plain English and never claims they are licensed.","Calm, short, plain language.","A server-side proxy keeps the API key off the browser.",bars="w70")}</div>`,
+   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Readiness caps at "Practice-ready"</b> — the UI never implies the learner is licensed or legally ready.</span></li><li><span class="lvl">Why</span><span><b>The AI key stays server-side</b> — the browser calls a proxy, so the secret never ships in the bundle.</span></li><li><span class="lvl">Why</span><span><b>Feedback uses icon + text + colour</b> — never colour alone, so it reads for colour-blind users.</span></li><li><span class="lvl">Why</span><span><b>Reduce-motion is honoured</b> — animations respect the system setting and an in-app toggle.</span></li></ul>`,
+   "Assessment Strategy":`<table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Module mastery check</b></td><td class="tag-l">Mastery</td><td>Recall / Decide</td><td>Gates progress; triggers remediation on a miss.</td></tr><tr><td><b>Hazard scenario</b></td><td class="tag-l">Scenario</td><td>Perceive / Decide</td><td>Safe-choice rate under pressure.</td></tr><tr><td><b>Learning record</b></td><td class="tag-l">xAPI-style</td><td>Apply</td><td>Captured events shown on the record page (LRS-ready).</td></tr></table>`,
+   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129302;</div><h4>RoadGuide AI</h4><p>A guardrailed study coach for plain-English rules questions, on demand.</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Flashcard deck</h4><p>Illustrated signs and pavement markings for spaced recall.</p></div><div class="mini-card"><div class="ic">&#128196;</div><h4>Documents page</h4><p>The research sources and a clear liability statement — compliance in the open.</p></div></div>`,
+   "Accessibility Considerations":`<div class="a11y"><div><span class="ck">&#10003;</span> Full keyboard operability with visible focus throughout.</div><div><span class="ck">&#10003;</span> ARIA labels on controls; text equivalents for SVG diagrams and the readiness gauge.</div><div><span class="ck">&#10003;</span> Feedback is icon + text + colour — never colour alone.</div><div><span class="ck">&#10003;</span> Toggle panel: reduce-motion, plain-language, readable font (Atkinson Hyperlegible), larger text, high contrast.</div><div><span class="ck">&#10003;</span> prefers-reduced-motion honoured in CSS.</div><div><span class="ck">&#10003;</span> Compliance copy: educational concept only; readiness capped at "Practice-ready."</div></div>`,
+   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Dashboard</span><span class="dp">Readiness</span></div><div class="choice sel">Readiness: Practice-ready &#10003;</div><div class="choice">8 modules · mastery-gated</div></div><div class="cap">Readiness gauge</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Intersection</span><span class="dp">Decide</span></div><div class="choice">Go now</div><div class="choice sel">Wait for the gap &#10003;</div><div class="choice">Creep forward</div></div><div class="cap">Scenario decision</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">RoadGuide</span><span class="dp">AI coach</span></div><div class="choice">When do I yield here?</div><div class="choice sel">Plain-English answer &#10003;</div></div><div class="cap">Guardrailed coach</div></div></div>`,
+   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">hazard-detection accuracy</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">safe-choice rate under pressure</div><div class="k">L2 · decision skill</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">voluntary practice sessions</div><div class="k">Engagement</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">module mastery completion</div><div class="k">L2</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending a pilot.</div>`,
+   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Teaching judgment before rote rules, gated by mastery, gave the prototype a real spine — and a server-side AI proxy let me add an AI coach without ever exposing a key.</p><p><b>What I'd change:</b> State resets on reload; persisting progress and accessibility prefs in localStorage is the first enhancement — and persisting a11y prefs is itself a WCAG win.</p><p><b>The transferable lesson:</b> Responsible ed-tech is as much about what you refuse to claim — not "BMV-approved," not "licensed" — as about what you build.</p></div>`
+  }}
+};
+
+/* ---------- render a project page ---------- */
+function renderProject(id){
+ const p=PROJECTS[id];if(!p||document.getElementById(id).dataset.built)return;
+ let nav='',body='';
+ SECTIONS.forEach((s,i)=>{
+   const slug=id+'-s'+i;
+   nav+=`<a onclick="document.getElementById('${slug}').scrollIntoView()">${String(i+1).padStart(2,'0')} · ${s}</a>`;
+   body+=`<div class="s-block" id="${slug}"><div class="num">${String(i+1).padStart(2,'0')} / 15</div><h3>${s}</h3>${p.body[s]||'<p>—</p>'}</div>`;
+ });
+ const facts=p.facts.map(f=>`<div class="fact"><div class="fl">${f[0]}</div><div class="fv">${f[1]}</div></div>`).join('');
+ document.getElementById(id).innerHTML=`
+   <div class="proj-hero"><div class="wrap">
+     <div class="back" onclick="go('home');scrollTo2('systems')">← All learning systems</div>
+     <span class="kicker">Case Study</span>
+     <h1>${p.title}</h1>
+     <p class="sub">${p.sub}</p>
+     <div class="proj-facts">${facts}</div>
+   </div></div>
+   <div class="wrap"><div class="proj-layout">
+     <nav class="sidenav">${nav}</nav>
+     <div class="proj-content">${body}</div>
+   </div></div>
+   <div class="contact" style="border-top:1px solid var(--border)"><div class="wrap">
+     <h2 class="rv" style="font-size:2rem">Interested in this kind of work?</h2>
+     <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com" style="margin-top:24px">Get in touch →</a>
+   </div></div>
+   <footer><div class="wrap"><span>© 2026 AK · Learning Experience Designer</span><span>${p.title}</span></div></footer>`;
+ document.getElementById(id).dataset.built="1";
+}
+
+/* ---------- view router ---------- */
+function go(id){
+ if(id!=='home')renderProject(id);
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.getElementById('navlinks').classList.remove('open');
+ window.scrollTo(0,0);
+ setTimeout(observeReveal,60);
+}
+function scrollTo2(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});document.getElementById('navlinks').classList.remove('open');}
+
+/* ---------- reveal ---------- */
+let io;
+function observeReveal(){
+ if(!io)io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});
+ document.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{el.style.transitionDelay=(Math.min(i,5)*55)+'ms';io.observe(el);});
+}
+observeReveal();
+</script>
+</body>
+</html>
