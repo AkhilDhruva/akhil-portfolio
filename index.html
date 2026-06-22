@@ -116,6 +116,15 @@ section.blk{padding:72px 0;border-top:1px solid var(--border)}
 .mini{font-family:var(--mono);font-size:9.5px;color:var(--faint);border:1px solid var(--border);padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
 .sys-go{margin-top:16px;font-size:13px;font-weight:600;color:var(--primary-2);display:flex;align-items:center;gap:7px}
 .sys-card:hover .sys-go .a{transform:translateX(4px)}.sys-go .a{transition:.25s}
+.sys-extra{margin-top:18px}
+.sys-extra-link{display:flex;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;text-decoration:none;color:inherit;transition:.3s}
+.sys-extra-link:hover{transform:translateY(-3px);border-color:var(--primary-line);box-shadow:0 16px 38px rgba(0,0,0,.35)}
+.sys-extra-link .se-ic{flex:none;width:46px;height:46px;border-radius:11px;display:grid;place-items:center;font-size:24px;background:radial-gradient(circle at 50% 40%,rgba(31,158,196,.30),transparent 70%);border:1px solid var(--border)}
+.sys-extra-link .se-txt{flex:1;min-width:0}
+.sys-extra-link .se-txt b{display:block;font-size:1.05rem;margin-bottom:3px}
+.sys-extra-link .se-txt span{display:block;color:var(--muted);font-size:.9rem;line-height:1.5}
+.sys-extra-link .se-go{flex:none;font-size:13px;font-weight:600;color:var(--primary-2);white-space:nowrap}
+@media(max-width:680px){.sys-extra-link{flex-wrap:wrap;gap:12px}.sys-extra-link .se-go{width:100%}}
 @media(max-width:860px){.sys-grid{grid-template-columns:1fr}}
 
 /* ADDIE / process */
@@ -385,6 +394,13 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
             <div class="sys-go">Open case study <span class="a">→</span></div>
           </div>
         </article>
+      </div>
+      <div class="sys-extra rv">
+        <a class="sys-extra-link" href="gas-turbine-tutorial.html" target="_blank" rel="noopener">
+          <span class="se-ic">⚙️</span>
+          <span class="se-txt"><b>Gas Turbine — 3D Interactive Tutorial</b><span>A real-time 360° cutaway you can rotate, zoom, and strip to the internals — click any hotspot to learn the part, from compressor to exhaust diffuser. Original-geometry training model built in Three.js.</span></span>
+          <span class="se-go">Open 3D tutorial →</span>
+        </a>
       </div>
     </section>
 
