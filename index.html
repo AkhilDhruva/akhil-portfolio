@@ -675,6 +675,8 @@ function go(id){
  document.getElementById(id).classList.add('active');
  document.getElementById('navlinks').classList.remove('open');
  window.scrollTo(0,0);
+ /* analytics: register each view change as a pageview (SPA hash routing) */
+ if(window.va){try{window.va('event',{name:'pageview',data:{page:id==='home'?'/':'/#'+id}});}catch(e){}}
  /* analytics: which project view was opened */
  if(id!=='home'&&window.va){try{window.va('event',{name:'project_open',data:{project:id,title:(PROJECTS[id]&&PROJECTS[id].title)||id}});}catch(e){}}
  setTimeout(observeReveal,60);
