@@ -675,6 +675,8 @@ function go(id){
  document.getElementById(id).classList.add('active');
  document.getElementById('navlinks').classList.remove('open');
  window.scrollTo(0,0);
+ /* analytics: which project view was opened */
+ if(id!=='home'&&window.va){try{window.va('event',{name:'project_open',data:{project:id,title:(PROJECTS[id]&&PROJECTS[id].title)||id}});}catch(e){}}
  setTimeout(observeReveal,60);
 }
 function scrollTo2(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});document.getElementById('navlinks').classList.remove('open');}
@@ -686,6 +688,16 @@ function observeReveal(){
  document.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{el.style.transitionDelay=(Math.min(i,5)*55)+'ms';io.observe(el);});
 }
 observeReveal();
+
+/* ---------- analytics: outbound (live app / résumé) link clicks ---------- */
+document.addEventListener('click',function(e){
+ var a=e.target.closest&&e.target.closest('a[target="_blank"][href^="http"]');
+ if(a&&window.va){try{window.va('event',{name:'outbound_click',data:{href:a.getAttribute('href'),label:(a.textContent||'').replace(/\s+/g,' ').trim().slice(0,60)}});}catch(_){}}
+},true);
 </script>
+<!-- Vercel Web Analytics: page visits + custom project-click events.
+     Requires Web Analytics to be enabled for this project in the Vercel dashboard. -->
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
