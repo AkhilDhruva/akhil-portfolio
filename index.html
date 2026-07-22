@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AK — Knowledge Engineering · AI Enablement</title>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -11,9 +12,9 @@
 :root{
   --bg:#F5F6F8; --surface:#FFFFFF; --surface-2:#EEF1F4; --surface-3:#E3E7EC;
   --border:rgba(22,24,29,.12); --border-2:rgba(22,24,29,.22);
-  --text:#171A21; --muted:#555F6E; --faint:#6C7682;
+  --text:#171A21; --muted:#555F6E; --faint:#5B646F;
   --primary:#2D5BD6; --primary-2:#1E47B5; --primary-soft:rgba(45,91,214,.10); --primary-line:rgba(45,91,214,.30);
-  --emerald:#178A55; --emerald-soft:rgba(23,138,85,.12);
+  --emerald:#0D6840; --emerald-soft:rgba(13,104,64,.12);
   --amber:#E0900C; --amber-soft:rgba(224,144,12,.14);
   --display:'Schibsted Grotesk',sans-serif; --sans:'Hanken Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
   --maxw:1180px; --r:14px;
@@ -123,7 +124,6 @@ section.blk{padding:72px 0;border-top:1px solid var(--border)}
 /* ADDIE / process */
 .addie{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:34px}
 @media(max-width:1000px){.addie{grid-template-columns:repeat(3,1fr)}.addie-step::after{display:none}}
-@media(max-width:560px){.addie{grid-template-columns:1fr 1fr}}
 .addie-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative}
 .addie-step .s{font-family:var(--mono);font-size:11px;color:var(--primary)}
 .addie-step h4{font-size:1.02rem;margin:8px 0 6px}
@@ -283,7 +283,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 @media(max-width:760px){.metric-grid{grid-template-columns:1fr 1fr}}
 .note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px;display:flex;gap:8px}
 .note b{color:var(--primary-2)}
-.mtgt{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(23,138,85,.32);border-radius:999px;padding:6px 13px}
+.mtgt{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(13,104,64,.32);border-radius:999px;padding:6px 13px}
 
 /* reflection */
 .reflect{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:12px;padding:24px}
@@ -307,7 +307,7 @@ button.btn{font-family:inherit;line-height:inherit}
 button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
 :is(a,button,[tabindex="0"]):focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:8px}
 @media print{.rv{opacity:1 !important;transform:none !important}}
-@media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.view.active{animation:none}.bars i{animation:none}}
 </style>
 </head>
 <body>
@@ -335,7 +335,7 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
         <div>
           <span class="kicker rv">Knowledge Engineering · Agentic Systems · AI Enablement</span>
           <h1 class="rv">I build <span class="hl">governed AI systems</span> people can trust, supervise, and adopt.</h1>
-          <p class="lead rv">I design and implement the <b>provenance, evaluation, and human-oversight layers</b> behind agentic workflows — then build the learning systems that make them usable inside real organizations. Learning design isn’t my ceiling; it’s my adoption edge.</p>
+          <p class="lead rv">I build the <b>human-oversight layer</b> behind agentic workflows — approval gates, context risk, recoverable consequences — and design the provenance and evaluation systems around it. Learning design isn’t my ceiling; it’s my adoption edge.</p>
           <div class="hero-cta rv">
             <button class="btn btn-primary" onclick="scrollTo2('systems')">Explore AI systems →</button>
             <button class="btn btn-ghost" onclick="scrollTo2('artifacts')">View technical evidence</button>
@@ -348,7 +348,7 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
           <div class="dash-top"><span class="t">Design Targets</span><span class="pill">● measured, never claimed</span></div>
           <div class="dash-stats">
             <div class="dstat"><div class="n up">↓</div><div class="l">time-to-competency — pilot target</div></div>
-            <div class="dstat"><div class="n bl">xAPI</div><div class="l">scored sims instrumented end-to-end</div></div>
+            <div class="dstat"><div class="n bl">xAPI</div><div class="l">scored sims instrumented for xAPI</div></div>
             <div class="dstat"><div class="n up">↑</div><div class="l">oversight decisions correctly kept</div></div>
             <div class="dstat"><div class="n bl">AA</div><div class="l">WCAG 2.2 — designed to, verifying</div></div>
           </div>
@@ -508,7 +508,7 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
         <span class="kicker rv" style="justify-content:center">06 — Contact</span>
         <h2 class="rv" style="margin-top:16px">Let's build AI systems people can trust — and actually use.</h2>
         <p class="rv">Available for Knowledge Engineer, AI Enablement, Applied AI, and agentic-systems roles — and for learning-systems work where adoption is the hard part. Bring the governance gap or the performance gap; I'll bring the system.</p>
-        <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com" onclick="">Druva.akhil@gmail.com →</a>
+        <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com">Druva.akhil@gmail.com →</a>
         <div class="cx rv"><a href="https://www.linkedin.com/in/akhilreddy-" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/AkhilDhruva" target="_blank" rel="noopener">GitHub</a></div>
       </div>
     </section>
@@ -530,6 +530,7 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
 <main id="p-datacenter" class="view"></main>
 
 <script>
+const SB=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
 /* ---------- 15-section project template ---------- */
 const SECTIONS=[
  "Project Overview","Business Problem","Learner Problem","Target Audience","Learning Objectives",
@@ -561,7 +562,7 @@ const PROJECTS={
    "Learning Objectives":`<p>Behavioral objectives, scoped to the simulation:</p><ul class="obj"><li><span class="lvl">Understand</span><span>Distinguish a model-only draft from a real tool action that touches a person or record.</span></li><li><span class="lvl app">Apply</span><span>Decompose a task into think (reasoning) and act (irreversible) steps.</span></li><li><span class="lvl eval">Evaluate</span><span>Catch a context flaw before approving — the right action to the wrong recipient.</span></li><li><span class="lvl eval">Supervise</span><span>Verify, correct, and re-approve — and keep supervising on the next gate, not just once.</span></li><li><span class="lvl app">Decide</span><span>Choose what to automate vs. where to keep a human verification point.</span></li></ul>`,
    "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127919;</div><h4>Simulate decisions, not the agent</h4><p>Authored branches concentrate at a few load-bearing moments; everything between is compressed and railed.</p></div><div class="mini-card"><div class="ic">&#9889;</div><h4>Just-in-time concepts</h4><p>One new idea surfaces at its moment of relevance — including the word "agent," which only earns its place once the learner needs it.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Consequence, recoverable</h4><p>The leak is experienced, then rewound — a mistake to learn from, never a punitive dead end.</p></div><div class="mini-card"><div class="ic">&#128483;</div><h4>Two voices, one screen</h4><p>A warm human coach (serif on paper) and a terse system layer (mono on dark) make the invisible visible without overload.</p></div></div>`,
    "Content Architecture":`<p>Four scenarios across seven capability layers, with fidelity matched to teaching value.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">S1&#8211;S2</span> Foundations (full build)</div><div class="mods"><span class="mod">First delegation</span><span class="mod">Model vs. tool call</span><span class="mod">Think / act decomposition</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S3</span> The approval that mattered &#8212; centerpiece</div><div class="mods"><span class="mod">Review or rubber-stamp</span><span class="mod">Leak &#8594; rewind &#8594; repair</span><span class="mod">Second gate &#183; role flips</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S4</span> Orchestration &#8212; storyboarded (honest scope)</div><div class="mods"><span class="mod">Who does what</span><span class="mod">Where to keep a verification point</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("S1 · First delegation","Contrast pair","A model-only draft sits beside the same task run as a real tool call, with an animated lookup trace.","Coach voice frames why the difference matters.","Connect the tool, watch the trace, then a quick check.")}${frame("S3 · The approval that mattered","Decision point",'The AI drafts a correct message to the wrong "Shanda" — internal vs. external. Approve, reject, or edit.',"No narration at the decision — the choice carries the weight.","Approve to see the leak and rewind; or edit recipient, claim, and context to repair.",bars="w70")}</div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("S1 · First delegation","Contrast pair","A model-only draft sits beside the same task run as a real tool call, with an animated lookup trace.","Coach voice frames why the difference matters.","Connect the tool, watch the trace, then a quick check.")}${frame("S3 · The approval that mattered","Decision point",'The AI drafts a correct message to the wrong "Shanda" — internal vs. external. Approve, reject, or edit.',"No narration at the decision — the choice carries the weight.","Approve to see the leak and rewind; or edit recipient, claim, and context to repair.","w70")}</div>`,
    "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Rubber-stamping is captured silently</b> — approving without opening the draft changes the consequence, without the UI scolding the learner.</span></li><li><span class="lvl">Why</span><span><b>The flaw is compound</b> — the output is only dangerous because the recipient is external; the lesson is context, not typos.</span></li><li><span class="lvl">Why</span><span><b>A second approval gate</b> proves supervision is a habit that persists, not a one-time catch.</span></li><li><span class="lvl">Why</span><span><b>Role flips on success</b> — the status changes from "user" to "supervisor" at the moment the behavior changes.</span></li></ul>`,
    "Assessment Strategy":`<p>Assessment is the behavior itself — the closing report is computed from real choices, never hardcoded.</p><table class="tbl"><tr><th>Captured behavior</th><th>Signal</th><th>From</th></tr><tr><td><b>Checks work before approving</b></td><td class="tag-l">Verify</td><td>Did the learner open the draft?</td></tr><tr><td><b>Recognizes risk</b></td><td class="tag-l">Judgment</td><td>Caught the external recipient / sensitive context.</td></tr><tr><td><b>Breaks work into steps</b></td><td class="tag-l">Decompose</td><td>Think / act tagging accuracy.</td></tr><tr><td><b>Supervises AI</b></td><td class="tag-l">Transfer</td><td>Repaired and re-approved on the second gate.</td></tr></table>`,
    "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129534;</div><h4>Behavior report</h4><p>A debrief that reflects the learner's actual decisions back to them — and to a facilitator.</p></div><div class="mini-card"><div class="ic">&#128257;</div><h4>Rewind to repair</h4><p>Built-in recovery turns the mistake into the lesson, then lets the learner fix it.</p></div><div class="mini-card"><div class="ic">&#128228;</div><h4>Pilot instrumentation</h4><p>Captured signals are structured for an export / debrief view (planned) to support a real pilot.</p></div></div>`,
@@ -583,7 +584,7 @@ const PROJECTS={
    "Learning Objectives":`<p>Awareness-level objectives, written to be observable:</p><ul class="obj"><li><span class="lvl eval">Recognize</span><span>Identify the main scissor-lift hazards — tip-over, struck-by, falls, and overhead/electrical contact.</span></li><li><span class="lvl app">Apply</span><span>Run a pre-use walk-around and red-tag a machine that fails it.</span></li><li><span class="lvl eval">Locate</span><span>Find both E-Stops and the emergency-descent rescue path before elevating.</span></li><li><span class="lvl eval">Decide</span><span>Choose the right first action in a hazard scenario — Stop, Fix, or Proceed.</span></li></ul><p style="font-size:14px;color:var(--muted)">Scoped as <b>awareness</b> — explicitly not OSHA-authorized training, operator authorization, or a qualified-person evaluation.</p>`,
    "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">🧠</div><h4>Behavior-based + dual coding</h4><p>Every rule pairs with a visual, one idea per screen, to cut cognitive load for a multilingual, lower-literacy crew.</p></div><div class="mini-card"><div class="ic">🌿</div><h4>Scenario decision practice</h4><p>Comic-style Stop / Fix / Proceed scenarios build judgment through consequence, not trivia.</p></div><div class="mini-card"><div class="ic">⚡</div><h4>Spaced retrieval</h4><p>An eight-card flashcard deck reinforces the rules with active recall.</p></div><div class="mini-card"><div class="ic">📇</div><h4>Performance support</h4><p>A printable pre-use card moves the job aid to the point of work — the L2→L3 bridge.</p></div></div>`,
    "Content Architecture":`<p>An <b>awareness layer</b>, kept visibly separate from the competency-support layer (hands-on training, a qualified-person evaluation, and employer authorization).</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Explain</span> Scroll micro-module (M0–M8)</div><div class="mods"><span class="mod">Anatomy</span><span class="mod">Pre-use walk-around</span><span class="mod">Tip-over</span><span class="mod">Danger zone</span><span class="mod">Overhead / 10 ft</span><span class="mod">E-Stops</span><span class="mod">Manual descent</span><span class="mod">Fall protection</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Apply</span> Scenario check + retrieval</div><div class="mods"><span class="mod">Stop / Fix / Proceed (3 of 5)</span><span class="mod">Flashcards (×8)</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Support</span> Point of work</div><div class="mods"><span class="mod">Printable pre-use card</span><span class="mod">Tag-out guidance</span><span class="mod">Sign-off fields</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("M3 · Tip-over","Dual-coded rule","Side-by-side stable vs. tip-over states with 'Firm · Flat · Level' as the single takeaway.","Plain-language, one idea per screen.","Scroll activates the unstable state; a pulsing ring marks the risk.")}${frame("Scenario · E-Stop","Stop / Fix / Proceed","The platform lurches and the controls go dead. Three options, no obvious tell.","No narration — the decision carries the weight.","Pick an option → corrective feedback; the correct answer reveals the safe-outcome panel.",bars="w70")}</div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("M3 · Tip-over","Dual-coded rule","Side-by-side stable vs. tip-over states with 'Firm · Flat · Level' as the single takeaway.","Plain-language, one idea per screen.","Scroll activates the unstable state; a pulsing ring marks the risk.")}${frame("Scenario · E-Stop","Stop / Fix / Proceed","The platform lurches and the controls go dead. Three options, no obvious tell.","No narration — the decision carries the weight.","Pick an option → corrective feedback; the correct answer reveals the safe-outcome panel.","w70")}</div>`,
    "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Focus-lock scroll</b> spotlights one module at a time to control cognitive load.</span></li><li><span class="lvl">Why</span><span><b>Numbered anatomy callouts</b> (hover, tap, or keyboard focus) link the diagram to the parts list via dual coding.</span></li><li><span class="lvl">Why</span><span><b>Consequence-based feedback</b> in the scenario check — corrective retries, no score, no shaming — so judgment transfers.</span></li><li><span class="lvl">Why</span><span><b>Reduced-motion fallback</b> renders every module linearly for motion-sensitive users and assistive tech.</span></li></ul>`,
    "Assessment Strategy":`<p>Low-stakes and behavior-focused — the goal is the right move at the right moment, not a grade.</p><table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Scenario check</b></td><td class="tag-l">Scenario</td><td>Decide</td><td>Stop / Fix / Proceed on 3 of 5 randomized hazards, with corrective retries.</td></tr><tr><td><b>Flashcard deck</b></td><td class="tag-l">Retrieval</td><td>Recognize</td><td>Active recall of the eight rules; self-paced review.</td></tr><tr><td><b>Pre-use card</b></td><td class="tag-l">Transfer</td><td>Apply</td><td>On-the-job walk-around + sign-off (an L3 behavior signal).</td></tr></table>`,
    "Performance Support Assets":`<div style="margin:0 0 14px"><a class="btn btn-ghost" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener">⬇ Open the printable Pre-Use Card</a></div><div class="row3"><div class="mini-card"><div class="ic">📋</div><h4>Pre-use checklist</h4><p>One-page walk-around with sign-off for machine ID, operator, and supervisor.</p></div><div class="mini-card"><div class="ic">🟥</div><h4>Tag-out + stop-work</h4><p>Red-tag a failed machine; anyone can stop unsafe work, anytime, no penalty.</p></div><div class="mini-card"><div class="ic">🖨️</div><h4>Print-ready</h4><p>Dedicated print styles render a clean one-page PDF for the toolbox.</p></div></div>`,
@@ -606,7 +607,7 @@ const PROJECTS={
    "Learning Objectives":`<ul class="obj"><li><span class="lvl">Recall</span><span>State Ohio road rules, signs, and right-of-way in context.</span></li><li><span class="lvl eval">Perceive</span><span>Detect a developing hazard in a driving scene.</span></li><li><span class="lvl eval">Decide</span><span>Choose the safe response under time pressure.</span></li><li><span class="lvl app">Apply</span><span>Transfer scanning and decision habits to supervised real practice.</span></li></ul>`,
    "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127807;</div><h4>Decision loop per module</h4><p>Learn &#8594; see &#8594; decide &#8594; feedback &#8594; mastery, with remediation when a concept is missed.</p></div><div class="mini-card"><div class="ic">&#127918;</div><h4>Mastery gating</h4><p>Progress reflects demonstrated skill, shown on a Road-Test-Readiness gauge that tops out at "Practice-ready."</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Spaced flashcards</h4><p>Illustrated signs and markings reinforce recall between modules.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>Just-in-time coach</h4><p>RoadGuide AI answers a learner's question at the moment of confusion, within strict guardrails.</p></div></div>`,
    "Content Architecture":`<p>A data-driven module system (eight built, scoped toward an 18-module curriculum), plus dashboard, flashcards, learning record, and a Documents page that holds the research and compliance basis.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Learn</span> Eight lesson modules</div><div class="mods"><span class="mod">Signs &amp; signals</span><span class="mod">Right-of-way</span><span class="mod">Hazard scenarios</span><span class="mod">Mastery + remediation</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Practice</span> Recall &amp; coach</div><div class="mods"><span class="mod">Illustrated flashcards</span><span class="mod">RoadGuide AI</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Evidence</span> Records &amp; basis</div><div class="mods"><span class="mod">xAPI-style learning record</span><span class="mod">Readiness gauge</span><span class="mod">Documents (sources + liability)</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("Module · Decide","Scenario decision","A first-person intersection — an unprotected left, the gap closing. Go, wait, or creep forward.","Brief coaching after the choice, never a scolding.","Pick an option, then see the consequence and the safer read.")}${frame("RoadGuide · Coach","Guardrailed AI","A learner asks a rules question; the coach answers in plain English and never claims they are licensed.","Calm, short, plain language.","A server-side proxy keeps the API key off the browser.",bars="w70")}</div>`,
+   "Storyboard Samples":`<div class="story-grid">${frame("Module · Decide","Scenario decision","A first-person intersection — an unprotected left, the gap closing. Go, wait, or creep forward.","Brief coaching after the choice, never a scolding.","Pick an option, then see the consequence and the safer read.")}${frame("RoadGuide · Coach","Guardrailed AI","A learner asks a rules question; the coach answers in plain English and never claims they are licensed.","Calm, short, plain language.","A server-side proxy keeps the API key off the browser.","w70")}</div>`,
    "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Readiness caps at "Practice-ready"</b> — the UI never implies the learner is licensed or legally ready.</span></li><li><span class="lvl">Why</span><span><b>The AI key stays server-side</b> — the browser calls a proxy, so the secret never ships in the bundle.</span></li><li><span class="lvl">Why</span><span><b>Feedback uses icon + text + colour</b> — never colour alone, so it reads for colour-blind users.</span></li><li><span class="lvl">Why</span><span><b>Reduce-motion is honoured</b> — animations respect the system setting and an in-app toggle.</span></li></ul>`,
    "Assessment Strategy":`<table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Module mastery check</b></td><td class="tag-l">Mastery</td><td>Recall / Decide</td><td>Gates progress; triggers remediation on a miss.</td></tr><tr><td><b>Hazard scenario</b></td><td class="tag-l">Scenario</td><td>Perceive / Decide</td><td>Safe-choice rate under pressure.</td></tr><tr><td><b>Learning record</b></td><td class="tag-l">xAPI-style</td><td>Apply</td><td>Captured events shown on the record page (LRS-ready).</td></tr></table>`,
    "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129302;</div><h4>RoadGuide AI</h4><p>A guardrailed study coach for plain-English rules questions, on demand.</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Flashcard deck</h4><p>Illustrated signs and pavement markings for spaced recall.</p></div><div class="mini-card"><div class="ic">&#128196;</div><h4>Documents page</h4><p>The research sources and a clear liability statement — compliance in the open.</p></div></div>`,
@@ -690,7 +691,7 @@ function renderProject(id){
  let nav='',body='';
  SECTIONS.forEach((s,i)=>{
    const slug=id+'-s'+i;
-   nav+=`<button onclick="document.getElementById('${slug}').scrollIntoView({behavior:'smooth'})">${String(i+1).padStart(2,'0')} · ${s}</button>`;
+   nav+=`<button onclick="document.getElementById('${slug}').scrollIntoView({behavior:SB})">${String(i+1).padStart(2,'0')} · ${s}</button>`;
    body+=`<div class="s-block" id="${slug}"><div class="num">${String(i+1).padStart(2,'0')} / 15</div><h3>${s}</h3>${p.body[s]||'<p>—</p>'}</div>`;
  });
  const facts=p.facts.map(f=>`<div class="fact"><div class="fl">${f[0]}</div><div class="fv">${f[1]}</div></div>`).join('');
@@ -716,6 +717,7 @@ function renderProject(id){
 
 /* ---------- view router ---------- */
 const BASE_TITLE=document.title;
+function closeMenu(){var n=document.getElementById('navlinks');n.classList.remove('open');var b=document.querySelector('.burger');if(b)b.setAttribute('aria-expanded','false');}
 function routeId(){const h=location.hash||'';const id=h.indexOf('#/')===0?h.slice(2):'home';return (id!=='home'&&PROJECTS[id]&&document.getElementById(id))?id:'home';}
 function show(id){
  if(id!=='home'&&!(PROJECTS[id]&&document.getElementById(id)))id='home';
@@ -724,7 +726,7 @@ function show(id){
  if(id!=='home')renderProject(id);
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
  document.getElementById(id).classList.add('active');
- document.getElementById('navlinks').classList.remove('open');
+ closeMenu();
  if(changed)window.scrollTo(0,0);
  document.title=id==='home'?BASE_TITLE:BASE_TITLE+' — '+PROJECTS[id].title;
  /* analytics: which project view was opened */
@@ -738,7 +740,7 @@ function go(id){
 }
 window.addEventListener('hashchange',function(){show(routeId());});
 window.addEventListener('popstate',function(){show(routeId());});
-function scrollTo2(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});document.getElementById('navlinks').classList.remove('open');}
+function scrollTo2(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:SB});closeMenu();}
 
 /* ---------- reveal ---------- */
 let io;
@@ -760,7 +762,6 @@ document.addEventListener('click',function(e){
 </script>
 <!-- Vercel Web Analytics: page visits + custom project-click events.
      Requires Web Analytics to be enabled for this project in the Vercel dashboard. -->
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
