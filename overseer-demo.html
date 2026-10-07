@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Overseer tamper demo</title>
+<meta name="description" content="Edit a record in a bitemporal, hash-chained agent memory and watch verification fail. Interactive demo for the Overseer paper by Akhil Reddy Gaddam." />
+<style>
+  :root { --bg:#0f1218; --panel:#161b24; --ink:#e8ecf2; --muted:#9aa4b2; --line:#263040; --ok:#2fbf71; --bad:#ff5c5c; --warn:#f5b543; --accent:#6ea8fe; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 24px; margin: 0 0 6px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 26px 0 10px; }
+  p { color: var(--muted); margin: 6px 0; }
+  a { color: var(--accent); }
+  .bar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0; }
+  button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 8px 14px; }
+  button.primary { background: var(--accent); color: #08101c; border-color: var(--accent); font-weight: 600; }
+  .pill { display:inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12.5px; background: var(--line); color: var(--muted); }
+  .pill.ok { background: rgba(47,191,113,.18); color: var(--ok); }
+  .pill.bad { background: rgba(255,92,92,.18); color: var(--bad); }
+  table { width:100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 13.5px; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+  td.mono { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  tr.bad td { background: rgba(255,92,92,.08); }
+  tr.bad td.mono.hash { color: var(--bad); }
+  tr.stale td { background: rgba(245,181,67,.08); }
+  td[contenteditable] { outline: 1px dashed transparent; border-radius: 4px; cursor: text; }
+  td[contenteditable]:hover, td[contenteditable]:focus { outline-color: var(--accent); background: rgba(110,168,254,.08); }
+  .legend { font-size: 12.5px; color: var(--muted); }
+  .how { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; }
+  .how div { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; }
+  .how b { color: var(--ink); }
+  .status { font-weight: 600; }
+  footer { margin-top: 30px; font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Overseer: tamper with a record, watch verification fail</h1>
+  <p>Six memory events written by AI agents. Each row stores <em>when the fact was true</em> (valid time) and <em>when the agent recorded it</em> (transaction time), plus a SHA-256 hash that covers the previous row's hash. <b style="color:var(--ink)">Click any text in the "fact" column, change it, then press Verify.</b></p>
+
+  <div class="bar">
+    <button class="primary" id="verify">Verify chain</button>
+    <button id="rehash">Re-hash the edited row only</button>
+    <button id="restore">Restore original ledger</button>
+    <span id="status" class="pill">not verified yet</span>
+  </div>
+
+  <table id="ledger">
+    <thead><tr><th>#</th><th>agent</th><th>fact (editable)</th><th>valid from</th><th>recorded at</th><th>prev hash</th><th>hash</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="legend">Red rows fail verification. Amber rows carry a recomputed hash that no longer matches what the next row expected, which is the point: fixing one hash is not enough, you would have to rewrite every later row too, and the published anchor at the end would still disagree.</p>
+
+  <h2>What this demonstrates</h2>
+  <div class="how">
+    <div><b>Hash chaining.</b> row.hash = SHA-256(prev_hash + canonical JSON of the row). Any change to any earlier row changes every later hash.</div>
+    <div><b>Bitemporal fields.</b> "valid from" is when the fact held in the world; "recorded at" is when the agent wrote it. Corrections are new rows, never edits, so you can ask "what did the agent believe at 10:05?"</div>
+    <div><b>Append-only memory.</b> There is no edit operation in the real system. This page lets you edit only to show what verification catches.</div>
+    <div><b>Anchoring.</b> In the paper, the final hash is anchored externally (for example a timestamp proof), so even rewriting the whole ledger is detectable.</div>
+  </div>
+
+  <footer>
+    From <em>Overseer: Tamper-Evident Memory for AI Agents Using Bitemporal Knowledge Graphs</em> by Akhil Reddy Gaddam · Zenodo DOI <a href="https://doi.org/10.5281/zenodo.23023088">10.5281/zenodo.23023088</a>. The demo runs entirely in your browser with the Web Crypto API; nothing is sent anywhere.
+  </footer>
+</div>
+
+<script>
+const GENESIS = "0".repeat(64);
+const ORIGINAL = [
+  { agent: "intake-agent",   fact: "Customer 4821 requested a limit increase to $15,000", valid_from: "2026-03-02 09:14", recorded_at: "2026-03-02 09:15" },
+  { agent: "kyc-agent",      fact: "Identity verified against document scan, confidence 0.98", valid_from: "2026-03-02 09:20", recorded_at: "2026-03-02 09:21" },
+  { agent: "risk-agent",     fact: "Debt-to-income computed at 31% from Feb statements", valid_from: "2026-02-28 00:00", recorded_at: "2026-03-02 09:33" },
+  { agent: "policy-agent",   fact: "Limit increase within policy band B (max $20,000)", valid_from: "2026-03-02 09:34", recorded_at: "2026-03-02 09:34" },
+  { agent: "risk-agent",     fact: "Correction: DTI recomputed at 36% after a missed loan", valid_from: "2026-02-28 00:00", recorded_at: "2026-03-02 10:05" },
+  { agent: "approval-agent", fact: "Recommendation: approve $12,000, human review required", valid_from: "2026-03-02 10:06", recorded_at: "2026-03-02 10:06" },
+];
+
+let rows = [];           // working copy: {seq, agent, fact, valid_from, recorded_at, prev_hash, hash}
+const enc = new TextEncoder();
+
+async function sha256(text) {
+  const buf = await crypto.subtle.digest("SHA-256", enc.encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function canonical(r) {
+  // sorted keys, no whitespace: the same rule the Python audit log uses
+  const body = { agent: r.agent, fact: r.fact, prev_hash: r.prev_hash, recorded_at: r.recorded_at, seq: r.seq, valid_from: r.valid_from };
+  return JSON.stringify(body, Object.keys(body).sort());
+}
+async function hashRow(r) { return sha256(r.prev_hash + "\n" + canonical(r)); }
+
+async function buildLedger() {
+  rows = [];
+  let prev = GENESIS;
+  for (let i = 0; i < ORIGINAL.length; i++) {
+    const r = { seq: i + 1, ...ORIGINAL[i], prev_hash: prev };
+    r.hash = await hashRow(r);
+    rows.push(r);
+    prev = r.hash;
+  }
+}
+
+function render(status = {}) {
+  const tb = document.querySelector("#ledger tbody");
+  tb.innerHTML = "";
+  for (const r of rows) {
+    const tr = document.createElement("tr");
+    if (status.bad && status.bad.has(r.seq)) tr.className = "bad";
+    else if (status.stale && status.stale.has(r.seq)) tr.className = "stale";
+    tr.innerHTML = `
+      <td>${r.seq}</td>
+      <td>${r.agent}</td>
+      <td contenteditable="true" spellcheck="false" data-seq="${r.seq}">${escapeHtml(r.fact)}</td>
+      <td class="mono">${r.valid_from}</td>
+      <td class="mono">${r.recorded_at}</td>
+      <td class="mono">${r.prev_hash.slice(0, 10)}…</td>
+      <td class="mono hash" title="${r.hash}">${r.hash.slice(0, 10)}…</td>`;
+    tb.appendChild(tr);
+  }
+  tb.querySelectorAll("td[contenteditable]").forEach(td => {
+    td.addEventListener("input", () => {
+      const r = rows[Number(td.dataset.seq) - 1];
+      r.fact = td.textContent;
+      r.edited = true;
+      setStatus("edited, not verified", "");
+    });
+  });
+}
+function escapeHtml(s) { return s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function setStatus(text, cls) { const el = document.getElementById("status"); el.textContent = text; el.className = "pill " + cls; }
+
+async function verify() {
+  let prev = GENESIS;
+  const bad = new Set();
+  let firstBad = null;
+  for (const r of rows) {
+    const expected = await hashRow({ ...r, prev_hash: prev });
+    const linkOk = r.prev_hash === prev;
+    const hashOk = r.hash === expected;
+    if (!linkOk || !hashOk) { bad.add(r.seq); if (firstBad === null) firstBad = r.seq; }
+    prev = r.hash;
+  }
+  render({ bad });
+  if (firstBad === null) setStatus(`intact · ${rows.length} records`, "ok");
+  else setStatus(`BROKEN at record ${firstBad} (${bad.size} record${bad.size > 1 ? "s" : ""} fail)`, "bad");
+}
+
+async function rehashEdited() {
+  const edited = rows.filter(r => r.edited);
+  if (!edited.length) { setStatus("edit a fact first", ""); return; }
+  for (const r of edited) r.hash = await hashRow(r);
+  const stale = new Set(edited.map(r => r.seq));
+  render({ stale });
+  setStatus("edited row re-hashed; now press Verify and watch the next row fail", "");
+}
+
+async function restore() {
+  await buildLedger();
+  render();
+  setStatus("original ledger restored", "");
+}
+
+document.getElementById("verify").addEventListener("click", verify);
+document.getElementById("rehash").addEventListener("click", rehashEdited);
+document.getElementById("restore").addEventListener("click", restore);
+restore();
+</script>
+</body>
+</html>
