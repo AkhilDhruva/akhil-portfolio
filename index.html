@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AK — Knowledge Engineering · AI Enablement</title>
+<title>Akhil Reddy Gaddam · Agentic AI Engineer</title>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -308,15 +308,30 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
 :is(a,button,[tabindex="0"]):focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:8px}
 @media print{.rv{opacity:1 !important;transform:none !important}}
 @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.view.active{animation:none}.bars i{animation:none}}
+
+/* ---- flagship cards ---- */
+.flag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:980px){.flag-grid{grid-template-columns:1fr}}
+.flag-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:12px}
+.flag-card h3{margin:0;font-size:1.3rem}
+.flag-card .fc-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.flag-card dl{margin:0;display:grid;gap:8px}
+.flag-card dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.flag-card dd{margin:0;font-size:14.5px;line-height:1.55}
+.flag-card .fc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.flag-card .fc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.flag-card .fc-actions .btn{margin-top:0;padding:10px 16px;font-size:13.5px;text-decoration:none}
+.flag-card .fc-note{font-size:12.5px;color:var(--muted);margin:0}
 </style>
 </head>
 <body>
 <div class="grid-bg"></div>
 
 <nav class="top">
-  <button class="brand" onclick="go('home')" aria-label="Home"><span class="mark">AK</span> AK <span class="role">AI Systems &amp; Enablement</span></button>
+  <button class="brand" onclick="go('home')" aria-label="Home"><span class="mark">AK</span> AK <span class="role">Agentic AI Engineer</span></button>
   <div class="navlinks" id="navlinks">
-    <button onclick="go('home');scrollTo2('systems')">Systems</button>
+    <button onclick="go('home');scrollTo2('flagship')">Flagship</button>
+    <button onclick="go('home');scrollTo2('systems')">Other work</button>
     <button onclick="go('home');scrollTo2('process')">Method</button>
     <button onclick="go('home');scrollTo2('artifacts')">Evidence</button>
     <button onclick="go('home');scrollTo2('about')">About</button>
@@ -333,24 +348,22 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
     <header class="hero">
       <div class="hero-grid">
         <div>
-          <span class="kicker rv">Knowledge Engineering · Agentic Systems · AI Enablement</span>
-          <h1 class="rv">I build <span class="hl">governed AI systems</span> people can trust, supervise, and adopt.</h1>
-          <p class="lead rv">I build the <b>human-oversight layer</b> behind agentic workflows — approval gates, context risk, recoverable consequences — and design the provenance and evaluation systems around it. Learning design isn’t my ceiling; it’s my adoption edge.</p>
+          <span class="kicker rv">Agentic AI Engineering · LangGraph · MCP · Evals</span>
+          <h1 class="rv">I build <span class="hl">agentic AI systems</span> that ship with guardrails, evals, and a human in the loop.</h1>
+          <p class="lead rv">Multi-agent workflows that pull real data through <b>MCP</b>, check their own output against policy, and stop for approval before anything ships. Three flagship builds below. Each one runs in your browser, and the code is on GitHub.</p>
           <div class="hero-cta rv">
-            <button class="btn btn-primary" onclick="scrollTo2('systems')">Explore AI systems →</button>
-            <button class="btn btn-ghost" onclick="scrollTo2('artifacts')">View technical evidence</button>
+            <button class="btn btn-primary" onclick="scrollTo2('flagship')">See the flagship projects →</button>
+            <a class="btn btn-ghost" href="campaign-copilot/" target="_blank" rel="noopener">Try Campaign Copilot</a>
           </div>
-          <div class="hero-tags rv">
-            <span class="tag">Human Oversight</span><span class="tag">Agentic Workflows</span><span class="tag">Knowledge Systems</span><span class="tag">Scenario Design</span><span class="tag">SCORM / xAPI</span><span class="tag">WCAG 2.2 AA</span>
-          </div>
+          <div class="hero-tags rv"><span class="tag">LangGraph</span><span class="tag">MCP</span><span class="tag">RAG</span><span class="tag">Evals</span><span class="tag">Human Oversight</span><span class="tag">FastAPI · React</span></div>
         </div>
         <div class="dash rv">
-          <div class="dash-top"><span class="t">Design Targets</span><span class="pill">● measured, never claimed</span></div>
+          <div class="dash-top"><span class="t">Campaign Copilot, by the numbers</span><span class="pill">● from the test suite, not claimed</span></div>
           <div class="dash-stats">
-            <div class="dstat"><div class="n up">↓</div><div class="l">time-to-competency — pilot target</div></div>
-            <div class="dstat"><div class="n bl">xAPI</div><div class="l">scored sims instrumented for xAPI</div></div>
-            <div class="dstat"><div class="n up">↑</div><div class="l">oversight decisions correctly kept</div></div>
-            <div class="dstat"><div class="n bl">AA</div><div class="l">WCAG 2.2 — designed to, verifying</div></div>
+            <div class="dstat"><div class="n bl">36</div><div class="l">tests, all offline (pytest)</div></div>
+            <div class="dstat"><div class="n bl">20</div><div class="l">golden goals in the eval suite, CI-gated</div></div>
+            <div class="dstat"><div class="n bl">4</div><div class="l">MCP tools, the agents' only path to data</div></div>
+            <div class="dstat"><div class="n up">0</div><div class="l">API keys needed to run the demo</div></div>
           </div>
           <div class="bars">
             <i style="height:42%"></i><i style="height:58%"></i><i style="height:50%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:88%"></i><i style="height:80%"></i>
@@ -358,66 +371,71 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
         </div>
       </div>
     </header>
-
-    <!-- LEARNING SYSTEMS -->
-    <section class="blk" id="systems">
+    <!-- FLAGSHIP -->
+    <section class="blk" id="flagship">
       <div class="sec-head rv">
-        <span class="kicker">01 — AI &amp; Learning Systems</span>
-        <h2>Governed AI and knowledge systems — plus the learning layer that gets them adopted.</h2>
-        <p>Shipped builds spanning agent supervision, technical upskilling, and high-stakes simulation. Every card opens a full case study, and every case study opens a live system.</p>
+        <span class="kicker">01 — Flagship projects</span>
+        <h2>Three systems you can try in two minutes and inspect in twenty.</h2>
+        <p>Each card says what problem it solves, what I built, and the stack. "Try it" opens a working demo. "Code" opens the repository with tests, evals, and a plain-English walkthrough.</p>
       </div>
-      <div class="sys-grid">
-        <a class="sys-card rv" href="#/p-lms"><div class="sys-thumb t-lms"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AI Workflow Quest decision simulation"><rect x="60" y="16" width="240" height="96" rx="10" fill="#FFFFFF" stroke="#D8DEE6"/><path d="M60 26 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v6 h-240 z" fill="#F4EFE5"/><circle cx="74" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="84" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="94" cy="25" r="2.6" fill="#D8C9B6"/><rect x="70" y="42" width="104" height="62" rx="8" fill="#F4EFE5"/><rect x="78" y="50" width="30" height="7" rx="3" fill="#B8552B"/><rect x="78" y="63" width="86" height="5" rx="2" fill="#9A917F"/><rect x="78" y="72" width="68" height="5" rx="2" fill="#9A917F"/><rect x="78" y="90" width="42" height="11" rx="5.5" fill="#B8552B"/><rect x="126" y="90" width="42" height="11" rx="5.5" fill="none" stroke="#B8552B"/><rect x="186" y="42" width="104" height="62" rx="8" fill="#211E19"/><rect x="194" y="50" width="14" height="5" rx="2" fill="#5BBF86"/><rect x="212" y="50" width="40" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="61" width="72" height="5" rx="2" fill="#5BBF86"/><rect x="194" y="72" width="52" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="84" width="9" height="8" rx="1" fill="#5BBF86"/></svg></div><div class="sys-body"><div class="sys-cat">Enterprise · Human oversight · Live build</div><h3>AI Workflow Quest</h3><p>A branching simulation that trains employees to supervise AI agents — approval gates, context risk, and rewindable consequences at the exact decision points a human must keep.</p><div class="sys-meta"><span class="mini">Human oversight</span><span class="mini">Branching</span><span class="mini">Responsible AI</span></div><div class="sys-go">Open case study <span class="a">&#8594;</span></div></div></a>
-        <a class="sys-card rv" href="#/p-datacenter">
-          <div class="sys-thumb t-datacenter"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative schematic of a 42U data-center server rack with airflow"><rect x="150" y="10" width="60" height="108" rx="7" fill="#0E131C" stroke="#2A3A52"/><rect x="156" y="16" width="48" height="96" rx="3" fill="#111826"/><g stroke="#8b6ef6" stroke-width="0.8" fill="#16202E"><rect x="159" y="20" width="42" height="8" rx="1.5"/><rect x="159" y="31" width="42" height="8" rx="1.5"/><rect x="159" y="42" width="42" height="8" rx="1.5"/><rect x="159" y="53" width="42" height="8" rx="1.5"/><rect x="159" y="64" width="42" height="8" rx="1.5"/><rect x="159" y="75" width="42" height="8" rx="1.5"/><rect x="159" y="86" width="42" height="8" rx="1.5"/><rect x="159" y="97" width="42" height="8" rx="1.5"/></g><g><circle cx="197" cy="24" r="1.5" fill="#54E08A"/><circle cx="197" cy="46" r="1.5" fill="#54E08A"/><circle cx="197" cy="79" r="1.5" fill="#54E08A"/><circle cx="197" cy="35" r="1.5" fill="#FFB547"/><circle cx="197" cy="90" r="1.5" fill="#3FA9FF"/></g><g stroke="#3FA9FF" stroke-width="1.6" fill="none" opacity=".85"><path d="M120 44 h20"/><path d="M132 40 l8 4 -8 4"/><path d="M120 64 h20"/><path d="M132 60 l8 4 -8 4"/><path d="M120 84 h20"/><path d="M132 80 l8 4 -8 4"/></g><g stroke="#FF6B5C" stroke-width="1.6" fill="none" opacity=".85"><path d="M220 44 h20"/><path d="M232 40 l8 4 -8 4"/><path d="M220 64 h20"/><path d="M232 60 l8 4 -8 4"/><path d="M220 84 h20"/><path d="M232 80 l8 4 -8 4"/></g></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Data center ops · Technical upskilling · Live build</div>
-            <h3>Data Center Technician Upskilling</h3>
-            <p>A three-program upskilling suite that takes a new hire from the floor to a trusted 24×7 shift — with a fully-built flagship (Rack to Runtime) and an interactive 3D 42U rack, grounded in EIA-310-D, ASHRAE, and Uptime/TIA-942 standards.</p>
-            <div class="sys-meta"><span class="mini">Storyline / Rise</span><span class="mini">3D rack</span><span class="mini">SCORM · xAPI</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
+      <div class="flag-grid">
+
+        <article class="flag-card rv">
+          <span class="fc-kicker">Multi-agent workflow · Banking marketing</span>
+          <h3>Campaign Copilot</h3>
+          <dl>
+            <dt>The problem</dt>
+            <dd>A bank marketer wants a campaign that is backed by data and clears compliance. Today that is a week of handoffs between marketing, analytics, and compliance, and nobody can show afterwards why a claim was allowed.</dd>
+            <dt>What I built</dt>
+            <dd>A LangGraph workflow of five agents. The planner breaks the goal down; the audience agent queries a synthetic bank dataset only through an MCP server; the copy agent drafts a letter, an email, and two ads and cites the data behind each choice; the compliance agent runs a deterministic rulebook with retrieval over policy text and cites the paragraph for every flag; the evaluator scores and loops back at most twice. The graph then stops for a human to approve. Every step lands in a hash-chained audit log.</dd>
+            <dt>Stack</dt>
+            <dd class="fc-tags"><span class="tag">Python 3.11</span><span class="tag">LangGraph</span><span class="tag">MCP SDK 2</span><span class="tag">Claude structured outputs</span><span class="tag">FastAPI + SSE</span><span class="tag">React · TypeScript · Vite</span><span class="tag">pytest · 20 golden evals · CI</span></dd>
+          </dl>
+          <p class="fc-note">Northwind Community Bank is fictional and the data is synthetic. The demo replays a recorded run; clone the repo to run the live agents with no API key.</p>
+          <div class="fc-actions">
+            <a class="btn btn-primary" href="campaign-copilot/" target="_blank" rel="noopener">Try it &rarr;</a>
+            <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/campaign-copilot" target="_blank" rel="noopener">Code</a>
           </div>
-        </a>
-        <a class="sys-card rv" href="#/p-safe">
-          <div class="sys-thumb t-safe"><div class="glow"></div><img class="prev" src="assets/p/01-hero.png" alt="Preview of the SiteReady scissor-lift safety awareness module" loading="lazy"></div>
-          <div class="sys-body">
-            <div class="sys-cat">Industrial · Safety · Live build</div>
-            <h3>SiteReady — Scissor Lift Safety</h3>
-            <p>A built, deployable awareness micro-module and printable pre-use job aid that help operators recognize scissor-lift hazards and choose Stop, Fix, or Proceed.</p>
-            <div class="sys-meta"><span class="mini">Live module</span><span class="mini">Job aid</span><span class="mini">SCORM-ready</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
+        </article>
+
+        <article class="flag-card rv">
+          <span class="fc-kicker">Research · Tamper-evident agent memory</span>
+          <h3>Overseer</h3>
+          <dl>
+            <dt>The problem</dt>
+            <dd>When AI agents share a memory, one wrong or malicious write silently poisons every later decision, and nobody can prove what an agent knew at the moment it acted.</dd>
+            <dt>What I built</dt>
+            <dd>A paper and reference implementation of tamper-evident memory for AI agents: a bitemporal knowledge graph that records both when a fact was true and when it was written, with append-only, hash-chained events and external anchoring. Corrections are new records, never edits, so "what did the agent believe at 10:05?" has an exact answer. Verified with property tests, an adversarial battery, and formal checks.</dd>
+            <dt>Stack</dt>
+            <dd class="fc-tags"><span class="tag">Python</span><span class="tag">NumPy · SciPy</span><span class="tag">Hypothesis property tests</span><span class="tag">Z3</span><span class="tag">SHA-256 chaining</span></dd>
+          </dl>
+          <p class="fc-note">The demo lets you edit a record in a six-event agent ledger and watch verification fail at that line. It runs entirely in your browser.</p>
+          <div class="fc-actions">
+            <a class="btn btn-primary" href="overseer-demo.html" target="_blank" rel="noopener">Tamper demo &rarr;</a>
+            <a class="btn btn-ghost" href="https://doi.org/10.5281/zenodo.23023088" target="_blank" rel="noopener">Paper</a>
+            <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/overseer-agentic-memory" target="_blank" rel="noopener">Code</a>
           </div>
-        </a>
-        <a class="sys-card rv" href="#/p-turbine">
-          <div class="sys-thumb t-turbine"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative cutaway schematic of an axial-flow gas turbine"><line x1="30" y1="64" x2="330" y2="64" stroke="#2A3A52" stroke-width="2" stroke-dasharray="5 5"/><polygon points="40,64 70,52 70,76" fill="#1f9ec4" opacity=".85"/><path d="M70 50 L150 40 L150 88 L70 78 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#7fdcf3" stroke-width="2"><line x1="84" y1="44" x2="84" y2="84"/><line x1="98" y1="45" x2="98" y2="83"/><line x1="112" y1="46" x2="112" y2="82"/><line x1="126" y1="47" x2="126" y2="81"/><line x1="140" y1="48" x2="140" y2="80"/></g><path d="M150 36 L196 28 L196 100 L150 92 Z" fill="#0b6f8f" opacity=".55" stroke="#1f9ec4" stroke-width="1.4"/><circle cx="173" cy="40" r="4" fill="#FFB547"/><circle cx="173" cy="88" r="4" fill="#FFB547"/><path d="M196 34 L268 44 L268 84 L196 94 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#d8d3c6" stroke-width="3"><line x1="212" y1="40" x2="212" y2="88"/><line x1="230" y1="38" x2="230" y2="90"/><line x1="248" y1="36" x2="248" y2="92"/></g><path d="M268 44 L320 30 L320 98 L268 84 Z" fill="none" stroke="#1f9ec4" stroke-width="1.6"/><circle cx="290" cy="64" r="3" fill="#7fdcf3"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Energy · Equipment familiarization · Live build</div>
-            <h3>Gas Turbine — 3D Interactive Tutorial</h3>
-            <p>A browser-based 360° cutaway that teaches the anatomy and gas path of a heavy-duty gas turbine — rotate it, strip the casing, and click any component to learn what it does and why it matters.</p>
-            <div class="sys-meta"><span class="mini">3D cutaway</span><span class="mini">Hotspots</span><span class="mini">Three.js</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
+        </article>
+
+        <article class="flag-card rv">
+          <span class="fc-kicker">3D simulation · Training</span>
+          <h3>AeroMind FlightLab</h3>
+          <dl>
+            <dt>The problem</dt>
+            <dd>New drone operators crash real hardware while they are still learning what pitch, roll, yaw, and throttle do, and what the telemetry is telling them.</dd>
+            <dt>What I built</dt>
+            <dd>A browser-based 3D flight simulator that teaches stick inputs, telemetry literacy, and failsafe behavior before a first real flight. Every input becomes a visible, explained physics lesson, with scored scenarios and a readable HUD.</dd>
+            <dt>Stack</dt>
+            <dd class="fc-tags"><span class="tag">Three.js</span><span class="tag">JavaScript</span><span class="tag">Single-file build</span><span class="tag">Vercel</span></dd>
+          </dl>
+          <p class="fc-note">Also a full case study on this site, from learner problem to assessment design.</p>
+          <div class="fc-actions">
+            <a class="btn btn-primary" href="https://aeromind-flightlab.vercel.app/" target="_blank" rel="noopener">Fly it &rarr;</a>
+            <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/AeroMind-FlightLab" target="_blank" rel="noopener">Code</a>
+            <a class="btn btn-ghost" href="#/p-aero">Case study</a>
           </div>
-        </a>
-        <a class="sys-card rv" href="#/p-aero">
-          <div class="sys-thumb t-aero"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AeroMind 3D drone training simulator"><rect x="60" y="14" width="240" height="100" rx="10" fill="#0E131C" stroke="#2A3A52"/><rect x="70" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="76" y="26" width="20" height="4" rx="2" fill="#36E0C8"/><rect x="120" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="126" y="26" width="26" height="4" rx="2" fill="#3FA9FF"/><rect x="170" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="176" y="26" width="16" height="4" rx="2" fill="#FFB547"/><ellipse cx="180" cy="98" rx="58" ry="7" fill="#16202E"/><ellipse cx="180" cy="98" rx="34" ry="4.5" fill="none" stroke="#3FA9FF" stroke-width="1.4" opacity=".8"/><rect x="168" y="64" width="24" height="9" rx="3" fill="#1C2533" stroke="#3FA9FF" stroke-width="1.2"/><line x1="168" y1="66" x2="150" y2="58" stroke="#36E0C8" stroke-width="2"/><line x1="192" y1="66" x2="210" y2="58" stroke="#36E0C8" stroke-width="2"/><ellipse cx="148" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><ellipse cx="212" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><circle cx="180" cy="70" r="2" fill="#FF5566"/><path d="M180 80 v10" stroke="#36E0C8" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="252" y="40" width="40" height="56" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="258" y="47" width="28" height="4" rx="2" fill="#3FA9FF"/><rect x="258" y="56" width="22" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="64" width="26" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="74" width="12" height="12" rx="3" fill="none" stroke="#54E08A" stroke-width="1.4"/><path d="M261 80 l2.4 2.6 4.8-5.6" stroke="#54E08A" stroke-width="1.6" fill="none"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Simulation · Avionics training · Live build</div>
-            <h3>AeroMind — Drone Flight Trainer</h3>
-            <p>A 3D drone simulator that teaches pitch, roll, yaw, throttle, telemetry literacy, and failsafe behavior — every stick input becomes a visible, explained physics lesson.</p>
-            <div class="sys-meta"><span class="mini">3D simulation</span><span class="mini">Telemetry HUD</span><span class="mini">Gamepad + audio</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-        <a class="sys-card rv" href="#/p-drive">
-          <div class="sys-thumb t-drive"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of a driver-education hazard scenario"><rect x="82" y="14" width="84" height="100" rx="12" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="90" y="22" width="68" height="84" rx="6" fill="#EAF1F6"/><rect x="114" y="26" width="20" height="3" rx="1.5" fill="#CDD4DD"/><rect x="90" y="34" width="68" height="30" fill="#DCE8F0"/><path d="M112 104 L136 104 L129 64 L119 64 Z" fill="#9AA6B2"/><line x1="124" y1="66" x2="124" y2="102" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4 4"/><circle cx="118" cy="86" r="4" fill="#E0900C"/><circle cx="118" cy="86" r="9" fill="none" stroke="#E0900C" stroke-width="1.5" opacity="0.85"/><rect x="186" y="14" width="74" height="14" rx="7" fill="#E4F2EA"/><circle cx="196" cy="21" r="3" fill="#178A55"/><rect x="204" y="19" width="34" height="4" rx="2" fill="#9FCBB4"/><rect x="186" y="36" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="43" width="50" height="3" rx="1.5" fill="#C7D0DA"/><rect x="186" y="58" width="92" height="16" rx="8" fill="#E4F2EA" stroke="#178A55"/><path d="M194 66 l3 3 l6 -7" stroke="#178A55" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="208" y="65" width="44" height="3" rx="1.5" fill="#3E9E73"/><rect x="186" y="80" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="87" width="54" height="3" rx="1.5" fill="#C7D0DA"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Consumer · Driver education · Live build</div>
-            <h3>Ohio DriveSmart Academy</h3>
-            <p>An interactive React driver-ed app: eight lesson modules, hazard-decision practice, illustrated flashcards, and a guardrailed AI study coach. Educational concept.</p>
-            <div class="sys-meta"><span class="mini">React app</span><span class="mini">AI coach</span><span class="mini">Accessible</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
+        </article>
+
       </div>
     </section>
 
@@ -503,6 +521,68 @@ button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
     </section>
 
     <!-- CONTACT -->
+    <!-- LEARNING SYSTEMS -->
+    <section class="blk" id="systems">
+      <div class="sec-head rv">
+        <span class="kicker">06 — Other work</span>
+        <h2>Earlier builds: learning systems, simulations, and technical training.</h2>
+        <p>Instructional design and 3D training work from before the pivot to agentic systems. Every card opens a full case study.</p>
+      </div>
+      <div class="sys-grid">
+        <a class="sys-card rv" href="#/p-lms"><div class="sys-thumb t-lms"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AI Workflow Quest decision simulation"><rect x="60" y="16" width="240" height="96" rx="10" fill="#FFFFFF" stroke="#D8DEE6"/><path d="M60 26 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v6 h-240 z" fill="#F4EFE5"/><circle cx="74" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="84" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="94" cy="25" r="2.6" fill="#D8C9B6"/><rect x="70" y="42" width="104" height="62" rx="8" fill="#F4EFE5"/><rect x="78" y="50" width="30" height="7" rx="3" fill="#B8552B"/><rect x="78" y="63" width="86" height="5" rx="2" fill="#9A917F"/><rect x="78" y="72" width="68" height="5" rx="2" fill="#9A917F"/><rect x="78" y="90" width="42" height="11" rx="5.5" fill="#B8552B"/><rect x="126" y="90" width="42" height="11" rx="5.5" fill="none" stroke="#B8552B"/><rect x="186" y="42" width="104" height="62" rx="8" fill="#211E19"/><rect x="194" y="50" width="14" height="5" rx="2" fill="#5BBF86"/><rect x="212" y="50" width="40" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="61" width="72" height="5" rx="2" fill="#5BBF86"/><rect x="194" y="72" width="52" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="84" width="9" height="8" rx="1" fill="#5BBF86"/></svg></div><div class="sys-body"><div class="sys-cat">Enterprise · Human oversight · Live build</div><h3>AI Workflow Quest</h3><p>A branching simulation that trains employees to supervise AI agents — approval gates, context risk, and rewindable consequences at the exact decision points a human must keep.</p><div class="sys-meta"><span class="mini">Human oversight</span><span class="mini">Branching</span><span class="mini">Responsible AI</span></div><div class="sys-go">Open case study <span class="a">&#8594;</span></div></div></a>
+        <a class="sys-card rv" href="#/p-datacenter">
+          <div class="sys-thumb t-datacenter"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative schematic of a 42U data-center server rack with airflow"><rect x="150" y="10" width="60" height="108" rx="7" fill="#0E131C" stroke="#2A3A52"/><rect x="156" y="16" width="48" height="96" rx="3" fill="#111826"/><g stroke="#8b6ef6" stroke-width="0.8" fill="#16202E"><rect x="159" y="20" width="42" height="8" rx="1.5"/><rect x="159" y="31" width="42" height="8" rx="1.5"/><rect x="159" y="42" width="42" height="8" rx="1.5"/><rect x="159" y="53" width="42" height="8" rx="1.5"/><rect x="159" y="64" width="42" height="8" rx="1.5"/><rect x="159" y="75" width="42" height="8" rx="1.5"/><rect x="159" y="86" width="42" height="8" rx="1.5"/><rect x="159" y="97" width="42" height="8" rx="1.5"/></g><g><circle cx="197" cy="24" r="1.5" fill="#54E08A"/><circle cx="197" cy="46" r="1.5" fill="#54E08A"/><circle cx="197" cy="79" r="1.5" fill="#54E08A"/><circle cx="197" cy="35" r="1.5" fill="#FFB547"/><circle cx="197" cy="90" r="1.5" fill="#3FA9FF"/></g><g stroke="#3FA9FF" stroke-width="1.6" fill="none" opacity=".85"><path d="M120 44 h20"/><path d="M132 40 l8 4 -8 4"/><path d="M120 64 h20"/><path d="M132 60 l8 4 -8 4"/><path d="M120 84 h20"/><path d="M132 80 l8 4 -8 4"/></g><g stroke="#FF6B5C" stroke-width="1.6" fill="none" opacity=".85"><path d="M220 44 h20"/><path d="M232 40 l8 4 -8 4"/><path d="M220 64 h20"/><path d="M232 60 l8 4 -8 4"/><path d="M220 84 h20"/><path d="M232 80 l8 4 -8 4"/></g></svg></div>
+          <div class="sys-body">
+            <div class="sys-cat">Data center ops · Technical upskilling · Live build</div>
+            <h3>Data Center Technician Upskilling</h3>
+            <p>A three-program upskilling suite that takes a new hire from the floor to a trusted 24×7 shift — with a fully-built flagship (Rack to Runtime) and an interactive 3D 42U rack, grounded in EIA-310-D, ASHRAE, and Uptime/TIA-942 standards.</p>
+            <div class="sys-meta"><span class="mini">Storyline / Rise</span><span class="mini">3D rack</span><span class="mini">SCORM · xAPI</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </a>
+        <a class="sys-card rv" href="#/p-safe">
+          <div class="sys-thumb t-safe"><div class="glow"></div><img class="prev" src="assets/p/01-hero.png" alt="Preview of the SiteReady scissor-lift safety awareness module" loading="lazy"></div>
+          <div class="sys-body">
+            <div class="sys-cat">Industrial · Safety · Live build</div>
+            <h3>SiteReady — Scissor Lift Safety</h3>
+            <p>A built, deployable awareness micro-module and printable pre-use job aid that help operators recognize scissor-lift hazards and choose Stop, Fix, or Proceed.</p>
+            <div class="sys-meta"><span class="mini">Live module</span><span class="mini">Job aid</span><span class="mini">SCORM-ready</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </a>
+        <a class="sys-card rv" href="#/p-turbine">
+          <div class="sys-thumb t-turbine"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative cutaway schematic of an axial-flow gas turbine"><line x1="30" y1="64" x2="330" y2="64" stroke="#2A3A52" stroke-width="2" stroke-dasharray="5 5"/><polygon points="40,64 70,52 70,76" fill="#1f9ec4" opacity=".85"/><path d="M70 50 L150 40 L150 88 L70 78 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#7fdcf3" stroke-width="2"><line x1="84" y1="44" x2="84" y2="84"/><line x1="98" y1="45" x2="98" y2="83"/><line x1="112" y1="46" x2="112" y2="82"/><line x1="126" y1="47" x2="126" y2="81"/><line x1="140" y1="48" x2="140" y2="80"/></g><path d="M150 36 L196 28 L196 100 L150 92 Z" fill="#0b6f8f" opacity=".55" stroke="#1f9ec4" stroke-width="1.4"/><circle cx="173" cy="40" r="4" fill="#FFB547"/><circle cx="173" cy="88" r="4" fill="#FFB547"/><path d="M196 34 L268 44 L268 84 L196 94 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#d8d3c6" stroke-width="3"><line x1="212" y1="40" x2="212" y2="88"/><line x1="230" y1="38" x2="230" y2="90"/><line x1="248" y1="36" x2="248" y2="92"/></g><path d="M268 44 L320 30 L320 98 L268 84 Z" fill="none" stroke="#1f9ec4" stroke-width="1.6"/><circle cx="290" cy="64" r="3" fill="#7fdcf3"/></svg></div>
+          <div class="sys-body">
+            <div class="sys-cat">Energy · Equipment familiarization · Live build</div>
+            <h3>Gas Turbine — 3D Interactive Tutorial</h3>
+            <p>A browser-based 360° cutaway that teaches the anatomy and gas path of a heavy-duty gas turbine — rotate it, strip the casing, and click any component to learn what it does and why it matters.</p>
+            <div class="sys-meta"><span class="mini">3D cutaway</span><span class="mini">Hotspots</span><span class="mini">Three.js</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </a>
+        <a class="sys-card rv" href="#/p-aero">
+          <div class="sys-thumb t-aero"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AeroMind 3D drone training simulator"><rect x="60" y="14" width="240" height="100" rx="10" fill="#0E131C" stroke="#2A3A52"/><rect x="70" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="76" y="26" width="20" height="4" rx="2" fill="#36E0C8"/><rect x="120" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="126" y="26" width="26" height="4" rx="2" fill="#3FA9FF"/><rect x="170" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="176" y="26" width="16" height="4" rx="2" fill="#FFB547"/><ellipse cx="180" cy="98" rx="58" ry="7" fill="#16202E"/><ellipse cx="180" cy="98" rx="34" ry="4.5" fill="none" stroke="#3FA9FF" stroke-width="1.4" opacity=".8"/><rect x="168" y="64" width="24" height="9" rx="3" fill="#1C2533" stroke="#3FA9FF" stroke-width="1.2"/><line x1="168" y1="66" x2="150" y2="58" stroke="#36E0C8" stroke-width="2"/><line x1="192" y1="66" x2="210" y2="58" stroke="#36E0C8" stroke-width="2"/><ellipse cx="148" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><ellipse cx="212" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><circle cx="180" cy="70" r="2" fill="#FF5566"/><path d="M180 80 v10" stroke="#36E0C8" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="252" y="40" width="40" height="56" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="258" y="47" width="28" height="4" rx="2" fill="#3FA9FF"/><rect x="258" y="56" width="22" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="64" width="26" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="74" width="12" height="12" rx="3" fill="none" stroke="#54E08A" stroke-width="1.4"/><path d="M261 80 l2.4 2.6 4.8-5.6" stroke="#54E08A" stroke-width="1.6" fill="none"/></svg></div>
+          <div class="sys-body">
+            <div class="sys-cat">Simulation · Avionics training · Live build</div>
+            <h3>AeroMind — Drone Flight Trainer</h3>
+            <p>A 3D drone simulator that teaches pitch, roll, yaw, throttle, telemetry literacy, and failsafe behavior — every stick input becomes a visible, explained physics lesson.</p>
+            <div class="sys-meta"><span class="mini">3D simulation</span><span class="mini">Telemetry HUD</span><span class="mini">Gamepad + audio</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </a>
+        <a class="sys-card rv" href="#/p-drive">
+          <div class="sys-thumb t-drive"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of a driver-education hazard scenario"><rect x="82" y="14" width="84" height="100" rx="12" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="90" y="22" width="68" height="84" rx="6" fill="#EAF1F6"/><rect x="114" y="26" width="20" height="3" rx="1.5" fill="#CDD4DD"/><rect x="90" y="34" width="68" height="30" fill="#DCE8F0"/><path d="M112 104 L136 104 L129 64 L119 64 Z" fill="#9AA6B2"/><line x1="124" y1="66" x2="124" y2="102" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4 4"/><circle cx="118" cy="86" r="4" fill="#E0900C"/><circle cx="118" cy="86" r="9" fill="none" stroke="#E0900C" stroke-width="1.5" opacity="0.85"/><rect x="186" y="14" width="74" height="14" rx="7" fill="#E4F2EA"/><circle cx="196" cy="21" r="3" fill="#178A55"/><rect x="204" y="19" width="34" height="4" rx="2" fill="#9FCBB4"/><rect x="186" y="36" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="43" width="50" height="3" rx="1.5" fill="#C7D0DA"/><rect x="186" y="58" width="92" height="16" rx="8" fill="#E4F2EA" stroke="#178A55"/><path d="M194 66 l3 3 l6 -7" stroke="#178A55" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="208" y="65" width="44" height="3" rx="1.5" fill="#3E9E73"/><rect x="186" y="80" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="87" width="54" height="3" rx="1.5" fill="#C7D0DA"/></svg></div>
+          <div class="sys-body">
+            <div class="sys-cat">Consumer · Driver education · Live build</div>
+            <h3>Ohio DriveSmart Academy</h3>
+            <p>An interactive React driver-ed app: eight lesson modules, hazard-decision practice, illustrated flashcards, and a guardrailed AI study coach. Educational concept.</p>
+            <div class="sys-meta"><span class="mini">React app</span><span class="mini">AI coach</span><span class="mini">Accessible</span></div>
+            <div class="sys-go">Open case study <span class="a">→</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <section class="contact" id="contact">
       <div class="wrap">
         <span class="kicker rv" style="justify-content:center">06 — Contact</span>
