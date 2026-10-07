@@ -1,847 +1,310 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Akhil Reddy Gaddam · Agentic AI Engineer</title>
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#F5F6F8; --surface:#FFFFFF; --surface-2:#EEF1F4; --surface-3:#E3E7EC;
-  --border:rgba(22,24,29,.12); --border-2:rgba(22,24,29,.22);
-  --text:#171A21; --muted:#555F6E; --faint:#5B646F;
-  --primary:#2D5BD6; --primary-2:#1E47B5; --primary-soft:rgba(45,91,214,.10); --primary-line:rgba(45,91,214,.30);
-  --emerald:#0D6840; --emerald-soft:rgba(13,104,64,.12);
-  --amber:#E0900C; --amber-soft:rgba(224,144,12,.14);
-  --display:'Schibsted Grotesk',sans-serif; --sans:'Hanken Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
-  --maxw:1180px; --r:14px;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-   radial-gradient(900px 600px at 80% -10%,var(--primary-soft),transparent 60%),
-   radial-gradient(700px 500px at 0% 5%,rgba(63,215,164,.05),transparent 55%);}
-.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
-  background-image:radial-gradient(rgba(22,24,29,.05) 1px,transparent 1px);background-size:30px 30px;
-  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000,transparent 80%)}
-::selection{background:var(--primary);color:#fff}
-a{color:inherit;text-decoration:none}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:2}
-
-/* eyebrow / labels */
-.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);display:inline-flex;align-items:center;gap:9px}
-.kicker::before{content:"";width:18px;height:1px;background:var(--primary-line)}
-h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.02em;line-height:1.08;font-weight:700}
-
-/* ---------- NAV ---------- */
-nav.top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-  padding:15px 26px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.82);backdrop-filter:blur(14px)}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:-.01em;cursor:pointer}
-.brand .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--emerald));display:grid;place-items:center;font-size:13px;color:#fff;font-weight:800}
-.brand .role{color:var(--muted);font-weight:500;font-size:12px;font-family:var(--sans);border-left:1px solid var(--border);padding-left:11px;margin-left:2px}
-.navlinks{display:flex;gap:6px;align-items:center}
-.navlinks a,.navlinks button{font-size:13px;color:var(--muted);padding:8px 12px;border-radius:8px;transition:.2s;cursor:pointer;background:none;border:0;font-family:inherit;line-height:inherit}
-.navlinks a:hover,.navlinks button:hover{color:var(--text);background:var(--surface-2)}
-.navlinks a.cta,.navlinks button.cta{color:var(--text);border:1px solid var(--primary-line);background:var(--primary-soft)}
-.navlinks a.cta:hover{background:var(--primary);color:#fff}
-.burger{display:none;background:none;border:1px solid var(--border-2);color:var(--text);border-radius:8px;padding:7px 11px;cursor:pointer}
-@media(max-width:840px){.navlinks{display:none;position:absolute;top:60px;right:18px;left:18px;flex-direction:column;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px}
- .navlinks.open{display:flex}.navlinks a{width:100%}.burger{display:block}.brand .role{display:none}}
-
-/* ---------- VIEWS ---------- */
-.view{display:none;padding-top:62px}
-.view.active{display:block;animation:fade .5s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* reveal */
-.rv{opacity:0;transform:translateY(22px);transition:.8s cubic-bezier(.16,1,.3,1)}
-.rv.in{opacity:1;transform:none}
-
-/* ---------- HERO ---------- */
-.hero{padding:96px 0 70px}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
-.hero h1{font-size:clamp(2.4rem,5.6vw,4.2rem);font-weight:800;margin:22px 0 0;max-width:16ch}
-.hero h1 .hl{color:var(--primary)}
-.hero .lead{margin-top:26px;font-size:clamp(1.05rem,1.5vw,1.22rem);color:var(--muted);max-width:48ch}
-.hero .lead b{color:var(--text);font-weight:600}
-.hero-cta{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;padding:13px 22px;border-radius:10px;transition:.25s;cursor:pointer;border:1px solid transparent}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-2);box-shadow:0 8px 30px rgba(94,139,255,.3)}
-.btn-ghost{border-color:var(--border-2);color:var(--text)}.btn-ghost:hover{background:var(--surface-2);border-color:var(--primary-line)}
-.hero-tags{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px}
-.tag{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);background:var(--surface);padding:6px 11px;border-radius:7px}
-/* dashboard mock */
-.dash{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
-.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.dash-top .t{font-family:var(--display);font-weight:700;font-size:14px}
-.dash-top .pill{font-family:var(--mono);font-size:10px;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(63,215,164,.25);padding:4px 9px;border-radius:20px}
-.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
-.dstat{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px}
-.dstat .n{font-family:var(--display);font-weight:800;font-size:1.7rem;letter-spacing:-.03em}
-.dstat .n.up{color:var(--emerald)}.dstat .n.bl{color:var(--primary-2)}
-.dstat .l{font-size:11px;color:var(--muted);margin-top:3px}
-.bars{display:flex;align-items:flex-end;gap:7px;height:78px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:11px}
-.bars i{flex:1;background:linear-gradient(var(--primary),var(--primary-soft));border-radius:4px 4px 0 0;opacity:.9;animation:rise 1s cubic-bezier(.16,1,.3,1) both}
-@keyframes rise{from{height:4px!important;opacity:0}to{opacity:.9}}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:38px}}
-
-/* ---------- SECTION ---------- */
-section.blk{padding:72px 0;border-top:1px solid var(--border)}
-.sec-head{max-width:62ch;margin-bottom:42px}
-.sec-head h2{font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:800;margin-top:16px}
-.sec-head p{margin-top:16px;color:var(--muted);font-size:1.05rem;max-width:56ch}
-
-/* learning systems cards */
-.sys-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.sys-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.3s;display:flex;flex-direction:column}
-.sys-card:hover{transform:translateY(-5px);border-color:var(--primary-line);box-shadow:0 18px 44px rgba(0,0,0,.4)}
-.sys-thumb{height:128px;position:relative;display:grid;place-items:center;border-bottom:1px solid var(--border);overflow:hidden}
-.sys-thumb .ic{font-size:30px;z-index:2}
-.sys-thumb .glow{position:absolute;inset:0;opacity:.9}
-.sys-thumb img.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:14px;z-index:2;filter:drop-shadow(0 10px 14px rgba(22,24,29,.18))}
-.sys-thumb svg.prev{position:absolute;inset:0;width:100%;height:100%;z-index:2}
-.t-lms .glow{background:radial-gradient(circle at 50% 40%,rgba(184,85,43,.22),transparent 65%)}
-.t-safe .glow{background:radial-gradient(circle at 50% 40%,rgba(242,180,92,.28),transparent 65%)}
-.t-drive .glow{background:radial-gradient(circle at 50% 40%,rgba(63,215,164,.28),transparent 65%)}
-.t-aero .glow{background:radial-gradient(circle at 50% 40%,rgba(63,169,255,.30),transparent 65%)}
-.t-turbine .glow{background:radial-gradient(circle at 50% 40%,rgba(90,200,210,.28),transparent 65%)}
-.t-datacenter .glow{background:radial-gradient(circle at 50% 40%,rgba(139,110,246,.28),transparent 65%)}
-.sys-body{padding:20px;flex:1;display:flex;flex-direction:column}
-.sys-cat{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.sys-card h3{font-size:1.25rem;margin:9px 0 8px}
-.sys-card p{color:var(--muted);font-size:.93rem;flex:1}
-.sys-meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
-.mini{font-family:var(--mono);font-size:9.5px;color:var(--faint);border:1px solid var(--border);padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em}
-.sys-go{margin-top:16px;font-size:13px;font-weight:600;color:var(--primary-2);display:flex;align-items:center;gap:7px}
-.sys-card:hover .sys-go .a{transform:translateX(4px)}.sys-go .a{transition:.25s}
-@media(max-width:860px){.sys-grid{grid-template-columns:1fr}}
-
-/* ADDIE / process */
-.addie{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:34px}
-@media(max-width:1000px){.addie{grid-template-columns:repeat(3,1fr)}.addie-step::after{display:none}}
-.addie-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative}
-.addie-step .s{font-family:var(--mono);font-size:11px;color:var(--primary)}
-.addie-step h4{font-size:1.02rem;margin:8px 0 6px}
-.addie-step p{font-size:.83rem;color:var(--muted)}
-.addie-step::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:14px;z-index:3}
-.addie-step:last-child::after{display:none}
-@media(max-width:860px){.addie{grid-template-columns:1fr 1fr}.addie-step::after{display:none}}
-.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.method{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px;transition:.25s}
-.method:hover{border-color:var(--primary-line)}
-.method .ic{font-size:18px}
-.method h4{font-size:.98rem;margin:11px 0 6px}
-.method p{font-size:.82rem;color:var(--muted)}
-@media(max-width:860px){.method-grid{grid-template-columns:1fr 1fr}}
-
-/* artifacts */
-.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.art{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
-.art .ic{font-size:18px;color:var(--primary-2)}
-.art h4{margin:12px 0 6px;font-size:1.05rem}
-.art p{font-size:.86rem;color:var(--muted)}
-@media(max-width:860px){.art-grid{grid-template-columns:1fr}}
-
-/* about / resume */
-.two{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:start}
-@media(max-width:860px){.two{grid-template-columns:1fr;gap:34px}}
-.prose p{color:var(--muted);margin-bottom:16px;font-size:1.04rem}
-.prose b{color:var(--text);font-weight:600}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px}
-.panel h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:18px}
-.kv{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--border);font-size:.92rem}
-.kv:first-of-type{border-top:0}.kv .k{color:var(--faint)}.kv .v{text-align:right;font-weight:500}
-.comp-list{display:flex;flex-wrap:wrap;gap:8px}
-.comp{font-size:12px;border:1px solid var(--border);background:var(--surface-2);padding:7px 12px;border-radius:8px;color:var(--muted)}
-.res-row{padding:16px 0;border-top:1px solid var(--border)}
-.res-row:first-child{border-top:0}
-.res-row .rt{font-weight:600;font-family:var(--display)}
-.res-row .rs{font-size:12px;color:var(--primary-2);font-family:var(--mono);margin:3px 0 7px}
-.res-row p{font-size:.9rem;color:var(--muted)}
-
-/* contact */
-.contact{text-align:center;padding:90px 0}
-.contact h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
-.contact p{color:var(--muted);max-width:46ch;margin:18px auto 0;font-size:1.06rem}
-.contact .btn{margin-top:30px}
-.cx{margin-top:28px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.cx a:hover{color:var(--primary-2)}
-
-footer{border-top:1px solid var(--border);padding:26px 0;font-size:12px;color:var(--muted);font-family:var(--mono)}
-footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
-
-/* ============ PROJECT PAGE ============ */
-.proj-hero{padding:46px 0 30px;border-bottom:1px solid var(--border)}
-.back{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;cursor:pointer;transition:.2s;background:none;border:0;font-family:inherit;padding:0}
-.back:hover{color:var(--text)}
-.proj-hero h1{font-size:clamp(2rem,4.6vw,3.2rem);font-weight:800;margin:14px 0 0;max-width:18ch}
-.proj-hero .sub{margin-top:18px;color:var(--muted);font-size:1.1rem;max-width:58ch}
-.proj-facts{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.fact{background:var(--surface);padding:16px}
-.fact .fl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-.fact .fv{font-weight:600;font-size:.95rem;margin-top:5px}
-@media(max-width:760px){.proj-facts{grid-template-columns:1fr 1fr}.proj-hero h1{font-size:2rem}}
-
-/* sticky section nav */
-.proj-layout{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:40px 0}
-.sidenav{position:sticky;top:84px;align-self:start;font-size:13px}
-.sidenav a,.sidenav button{display:block;width:100%;text-align:left;padding:7px 12px;color:var(--muted);border-radius:8px;border-left:2px solid transparent;cursor:pointer;transition:.2s;line-height:1.3;background:none;border-top:0;border-right:0;border-bottom:0;font-family:inherit;font-size:inherit}
-.sidenav a:hover,.sidenav button:hover{color:var(--text);background:var(--surface)}
-.sidenav a.active{color:var(--primary-2);border-left-color:var(--primary)}
-@media(max-width:920px){.proj-layout{grid-template-columns:1fr}.sidenav{display:none}}
-
-.s-block{padding:30px 0;border-top:1px solid var(--border);scroll-margin-top:80px}
-.s-block:first-child{border-top:0}
-.s-block .num{font-family:var(--mono);font-size:11px;color:var(--primary)}
-.s-block h3{font-size:1.4rem;margin:8px 0 16px;font-weight:700}
-.s-block p{color:var(--muted);margin-bottom:14px}
-.s-block p b{color:var(--text);font-weight:600}
-
-/* objective list */
-.obj{list-style:none;display:flex;flex-direction:column;gap:10px}
-.obj li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
-.obj .lvl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--primary-2);border:1px solid var(--primary-line);padding:3px 8px;border-radius:6px;white-space:nowrap;align-self:start}
-.obj .lvl.app{color:var(--emerald);border-color:rgba(63,215,164,.3)}
-.obj .lvl.eval{color:#9a6a00;border-color:rgba(224,144,12,.35)}
-.obj li span{font-size:.95rem}
-
-/* arch / module map */
-.arch{display:flex;flex-direction:column;gap:10px}
-.arch-tier{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
-.arch-tier .at{font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.arch-tier .at .badge{font-family:var(--mono);font-size:10px;color:var(--primary);background:var(--primary-soft);padding:3px 8px;border-radius:6px}
-.mods{display:flex;flex-wrap:wrap;gap:8px}
-.mod{font-size:12px;background:var(--surface-2);border:1px solid var(--border);padding:7px 11px;border-radius:8px;color:var(--muted)}
-
-/* storyboard frame */
-.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.frame{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.frame .screen{height:150px;background:var(--surface-3);border-bottom:1px solid var(--border);position:relative;display:flex;flex-direction:column;padding:14px;gap:8px}
-.frame .screen .fnum{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:10px;color:var(--faint)}
-.mock-bar{height:8px;border-radius:4px;background:var(--border-2)}
-.mock-bar.w70{width:70%}.mock-bar.w40{width:40%}.mock-bar.w90{width:90%}
-.mock-btn{margin-top:auto;display:flex;gap:7px}
-.mock-btn i{height:22px;border-radius:6px;background:var(--primary-soft);border:1px solid var(--primary-line);flex:1}
-.mock-btn i.alt{background:var(--surface);border-color:var(--border)}
-.frame .meta{padding:14px}
-.frame .meta .role{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--primary-2);margin-bottom:4px}
-.frame .meta p{font-size:.85rem;color:var(--muted);margin-bottom:10px}
-.frame .meta p:last-child{margin-bottom:0}
-@media(max-width:680px){.story-grid{grid-template-columns:1fr}}
-
-/* generic cards row */
-.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px}
-.mini-card .ic{font-size:17px;color:var(--primary-2)}
-.mini-card h4{font-size:1rem;margin:10px 0 6px}
-.mini-card p{font-size:.85rem;color:var(--muted);margin:0}
-@media(max-width:760px){.row3,.row2{grid-template-columns:1fr}}
-
-/* assessment table */
-.tbl{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:11px;overflow:hidden;font-size:.88rem}
-.tbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:12px 14px;background:var(--surface-2);border-bottom:1px solid var(--border)}
-.tbl td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
-.tbl tr:last-child td{border-bottom:0}
-.tbl td b{color:var(--text);font-weight:600}
-.tbl .tag-l{font-family:var(--mono);font-size:10px;color:var(--primary-2)}
-
-/* accessibility checklist */
-.a11y{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.a11y div{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px}
-.a11y .ck{color:var(--emerald);font-weight:700}
-@media(max-width:680px){.a11y{grid-template-columns:1fr}}
-
-/* prototype screens */
-.proto{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.device{background:var(--surface);border:1px solid var(--border-2);border-radius:14px;padding:10px;box-shadow:0 14px 36px rgba(0,0,0,.35)}
-.device .scr{background:var(--bg);border:1px solid var(--border);border-radius:9px;min-height:220px;padding:14px;display:flex;flex-direction:column;gap:9px}
-.device .scr .hd{display:flex;justify-content:space-between;align-items:center}
-.device .scr .hd .dt{font-family:var(--display);font-weight:700;font-size:13px}
-.device .scr .hd .dp{font-family:var(--mono);font-size:9px;color:var(--emerald);background:var(--emerald-soft);padding:2px 6px;border-radius:10px}
-.device .cap{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center;margin-top:10px;letter-spacing:.04em}
-.progress{height:6px;background:var(--surface-3);border-radius:4px;overflow:hidden}
-.progress i{display:block;height:100%;background:var(--primary);border-radius:4px}
-.choice{border:1px solid var(--border);border-radius:8px;padding:10px;font-size:.78rem;color:var(--muted)}
-.choice.sel{border-color:var(--primary-line);background:var(--primary-soft);color:var(--text)}
-.donut{width:74px;height:74px;border-radius:50%;margin:6px auto;background:conic-gradient(var(--surface-3) 0 100%);display:grid;place-items:center}
-.donut::after{content:"—";width:52px;height:52px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:14px;color:var(--faint)}
-@media(max-width:760px){.proto{grid-template-columns:1fr}}
-
-/* metrics */
-.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.mc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
-.mc .v{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:-.03em;color:var(--primary-2)}
-.mc .v.up{color:var(--emerald)}
-.mc .l{font-size:.82rem;color:var(--muted);margin-top:6px}
-.mc .k{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:8px;text-transform:uppercase;letter-spacing:.06em}
-@media(max-width:760px){.metric-grid{grid-template-columns:1fr 1fr}}
-.note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px;display:flex;gap:8px}
-.note b{color:var(--primary-2)}
-.mtgt{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--emerald);background:var(--emerald-soft);border:1px solid rgba(13,104,64,.32);border-radius:999px;padding:6px 13px}
-
-/* reflection */
-.reflect{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:12px;padding:24px}
-.reflect p{color:var(--muted);margin-bottom:12px}
-.reflect p:last-child{margin-bottom:0}
-.reflect b{color:var(--text)}
-
-/* journey */
-.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.jstep{background:var(--surface);padding:16px}
-.jstep .jh{font-weight:600;font-size:.92rem;display:flex;align-items:center;gap:8px}
-.jstep .jh .d{width:7px;height:7px;border-radius:50%;background:var(--primary)}
-.jstep .je{font-size:.8rem;color:var(--muted);margin-top:8px}
-.jstep .jp{font-size:.74rem;color:var(--faint);margin-top:8px;font-style:italic}
-@media(max-width:760px){.journey{grid-template-columns:1fr 1fr}}
-/* ---------- a11y & robustness (pivot pass) ---------- */
-a.sys-card{color:inherit;text-decoration:none}
-a.art{color:inherit;text-decoration:none;display:block;transition:.25s}
-a.art:hover{transform:translateY(-3px);border-color:var(--primary-line)}
-button.btn{font-family:inherit;line-height:inherit}
-button.brand{background:none;border:0;padding:0;color:inherit;text-align:left}
-:is(a,button,[tabindex="0"]):focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:8px}
-@media print{.rv{opacity:1 !important;transform:none !important}}
-@media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.view.active{animation:none}.bars i{animation:none}}
-
-/* ---- flagship cards ---- */
-.flag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:980px){.flag-grid{grid-template-columns:1fr}}
-.flag-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:12px}
-.flag-card h3{margin:0;font-size:1.3rem}
-.flag-card .fc-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.flag-card dl{margin:0;display:grid;gap:8px}
-.flag-card dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
-.flag-card dd{margin:0;font-size:14.5px;line-height:1.55}
-.flag-card .fc-tags{display:flex;flex-wrap:wrap;gap:6px}
-.flag-card .fc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
-.flag-card .fc-actions .btn{margin-top:0;padding:10px 16px;font-size:13.5px;text-decoration:none}
-.flag-card .fc-note{font-size:12.5px;color:var(--muted);margin:0}
-</style>
+<meta name="description" content="Agentic AI engineer. I build multi-agent systems that pull data through MCP, check their own output against policy, and stop for a human before anything ships. Campaign Copilot, Overseer, and AeroMind FlightLab." />
+<meta property="og:title" content="Akhil Reddy Gaddam · Agentic AI Engineer" />
+<meta property="og:description" content="Agents that query real data, check their own work, and wait for a human before they ship." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2315171c'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='14' fill='%23f7f6f2' text-anchor='middle'%3EAK%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
-<div class="grid-bg"></div>
+<a class="skip" href="#main">Skip to content</a>
 
-<nav class="top">
-  <button class="brand" onclick="go('home')" aria-label="Home"><span class="mark">AK</span> AK <span class="role">Agentic AI Engineer</span></button>
-  <div class="navlinks" id="navlinks">
-    <button onclick="go('home');scrollTo2('flagship')">Flagship</button>
-    <button onclick="go('home');scrollTo2('systems')">Other work</button>
-    <button onclick="go('home');scrollTo2('process')">Method</button>
-    <button onclick="go('home');scrollTo2('artifacts')">Evidence</button>
-    <button onclick="go('home');scrollTo2('about')">About</button>
-    <button onclick="go('home');scrollTo2('resume')">Credentials</button>
-    <button class="cta" onclick="go('home');scrollTo2('contact')">Contact</button>
+<header class="site-header">
+  <div class="wrap">
+    <button class="brand" data-go="top" aria-label="Home"><span class="mark">AK</span> Akhil Reddy Gaddam <span class="role">Agentic AI Engineer</span></button>
+    <nav class="nav" id="navlinks" aria-label="Primary">
+      <button data-go="work">Work</button>
+      <button data-go="principles">How I build</button>
+      <button data-go="other-work">Other work</button>
+      <button data-go="about">About</button>
+      <button data-go="contact">Contact</button>
+      <a class="gh" href="https://github.com/AkhilDhruva" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Dark</button>
+      <button class="burger" aria-label="Menu" aria-controls="navlinks" aria-expanded="false">☰</button>
+    </div>
   </div>
-  <button class="burger" aria-label="Menu" aria-controls="navlinks" aria-expanded="false" onclick="var n=document.getElementById('navlinks');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰</button>
-</nav>
+</header>
 
 <!-- ============================= HOME ============================= -->
 <main id="home" class="view active">
-  <div class="wrap">
-    <!-- HERO -->
-    <header class="hero">
-      <div class="hero-grid">
-        <div>
-          <span class="kicker rv">Agentic AI Engineering · LangGraph · MCP · Evals</span>
-          <h1 class="rv">I build <span class="hl">agentic AI systems</span> that ship with guardrails, evals, and a human in the loop.</h1>
-          <p class="lead rv">Multi-agent workflows that pull real data through <b>MCP</b>, check their own output against policy, and stop for approval before anything ships. Three flagship builds below. Each one runs in your browser, and the code is on GitHub.</p>
-          <div class="hero-cta rv">
-            <button class="btn btn-primary" onclick="scrollTo2('flagship')">See the flagship projects →</button>
-            <a class="btn btn-ghost" href="campaign-copilot/index.html" target="_blank" rel="noopener">Try Campaign Copilot</a>
-          </div>
-          <div class="hero-tags rv"><span class="tag">LangGraph</span><span class="tag">MCP</span><span class="tag">RAG</span><span class="tag">Evals</span><span class="tag">Human Oversight</span><span class="tag">FastAPI · React</span></div>
-        </div>
-        <div class="dash rv">
-          <div class="dash-top"><span class="t">Campaign Copilot, by the numbers</span><span class="pill">● from the test suite, not claimed</span></div>
-          <div class="dash-stats">
-            <div class="dstat"><div class="n bl">36</div><div class="l">tests, all offline (pytest)</div></div>
-            <div class="dstat"><div class="n bl">20</div><div class="l">golden goals in the eval suite, CI-gated</div></div>
-            <div class="dstat"><div class="n bl">4</div><div class="l">MCP tools, the agents' only path to data</div></div>
-            <div class="dstat"><div class="n up">0</div><div class="l">API keys needed to run the demo</div></div>
-          </div>
-          <div class="bars">
-            <i style="height:42%"></i><i style="height:58%"></i><i style="height:50%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:88%"></i><i style="height:80%"></i>
-          </div>
-        </div>
-      </div>
-    </header>
-    <!-- FLAGSHIP -->
-    <section class="blk" id="flagship">
-      <div class="sec-head rv">
-        <span class="kicker">01 — Flagship projects</span>
-        <h2>Three systems you can try in two minutes and inspect in twenty.</h2>
-        <p>Each card says what problem it solves, what I built, and the stack. "Try it" opens a working demo. "Code" opens the repository with tests, evals, and a plain-English walkthrough.</p>
-      </div>
-      <div class="flag-grid">
+  <div id="main" tabindex="-1"></div>
+  <span id="top"></span>
 
-        <article class="flag-card rv">
-          <span class="fc-kicker">Multi-agent workflow · Banking marketing</span>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow rv">Agentic AI engineer · LangGraph · MCP · evals</span>
+        <h1 class="rv">Agents that query real data, <em>check their own work</em>, and wait for a human before they ship.</h1>
+        <p class="lead rv">I build multi-agent systems for regulated, high-stakes work: the data goes through typed tools instead of prompts, the output is checked against written policy, and every step is logged in a way that cannot be quietly edited. Three projects below. Each one runs in your browser, and the code is public.</p>
+        <div class="hero-cta rv">
+          <a class="btn btn-primary" href="campaign-copilot/index.html" target="_blank" rel="noopener">Try Campaign Copilot →</a>
+          <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/campaign-copilot" target="_blank" rel="noopener">Read the code</a>
+        </div>
+        <div class="hero-meta rv">Python · LangGraph · MCP SDK 2 · Claude structured outputs · FastAPI · React · TypeScript</div>
+      </div>
+      <aside class="proof rv" aria-label="Campaign Copilot by the numbers">
+        <div class="proof-head"><span>Campaign Copilot</span><span>from the test suite</span></div>
+        <div class="proof-grid">
+          <div class="proof-cell"><div class="n">36</div><div class="l">tests, all run offline</div></div>
+          <div class="proof-cell"><div class="n">20</div><div class="l">golden goals in the eval suite, CI-gated</div></div>
+          <div class="proof-cell"><div class="n">4</div><div class="l">MCP tools, the agents' only path to data</div></div>
+          <div class="proof-cell"><div class="n">0</div><div class="l">API keys needed to run the demo</div></div>
+        </div>
+        <div class="proof-foot">Numbers come from the repository's CI run, not from a slide.</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============================= WORK ============================= -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">01 · Flagship work</span>
+        <h2>Three systems you can try in two minutes and inspect in twenty.</h2>
+        <p>Each one states the problem, what I built, and the stack. "Try it" opens a working demo. "Code" opens the repository with tests, evals, and a plain-English walkthrough of every module.</p>
+      </div>
+
+      <article class="feat rv">
+        <div class="feat-body">
+          <div class="feat-kicker"><span class="num">01</span> Multi-agent workflow · bank marketing</div>
           <h3>Campaign Copilot</h3>
           <dl>
             <dt>The problem</dt>
-            <dd>A bank marketer wants a campaign that is backed by data and clears compliance. Today that is a week of handoffs between marketing, analytics, and compliance, and nobody can show afterwards why a claim was allowed.</dd>
+            <dd>A bank marketer wants a campaign that is backed by data and clears compliance. Today that is a week of handoffs between marketing, analytics and compliance, and afterwards nobody can show why a claim was allowed.</dd>
             <dt>What I built</dt>
-            <dd>A LangGraph workflow of five agents. The planner breaks the goal down; the audience agent queries a synthetic bank dataset only through an MCP server; the copy agent drafts a letter, an email, and two ads and cites the data behind each choice; the compliance agent runs a deterministic rulebook with retrieval over policy text and cites the paragraph for every flag; the evaluator scores and loops back at most twice. The graph then stops for a human to approve. Every step lands in a hash-chained audit log.</dd>
+            <dd>Five LangGraph agents. The <b>planner</b> breaks the goal down. The <b>audience agent</b> queries a synthetic bank dataset only through an MCP server. The <b>copy agent</b> drafts a letter, an email and two ads and cites the data behind each choice. The <b>compliance agent</b> runs a deterministic rulebook with retrieval over policy text and cites the paragraph for every flag. The <b>evaluator</b> scores and loops back at most twice. Then the graph stops for a human to approve. Every step lands in a hash-chained audit log.</dd>
             <dt>Stack</dt>
-            <dd class="fc-tags"><span class="tag">Python 3.11</span><span class="tag">LangGraph</span><span class="tag">MCP SDK 2</span><span class="tag">Claude structured outputs</span><span class="tag">FastAPI + SSE</span><span class="tag">React · TypeScript · Vite</span><span class="tag">pytest · 20 golden evals · CI</span></dd>
+            <dd class="chips"><span class="chip">Python 3.11</span><span class="chip">LangGraph</span><span class="chip">MCP SDK 2</span><span class="chip">Claude structured outputs</span><span class="chip">FastAPI · SSE</span><span class="chip">React · TypeScript</span><span class="chip">pytest · evals · CI</span></dd>
           </dl>
-          <p class="fc-note">Northwind Community Bank is fictional and the data is synthetic. The demo replays a recorded run; clone the repo to run the live agents with no API key.</p>
-          <div class="fc-actions">
-            <a class="btn btn-primary" href="campaign-copilot/index.html" target="_blank" rel="noopener">Try it &rarr;</a>
+          <div class="feat-actions">
+            <a class="btn btn-primary" href="campaign-copilot/index.html" target="_blank" rel="noopener">Try it →</a>
             <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/campaign-copilot" target="_blank" rel="noopener">Code</a>
           </div>
-        </article>
+          <p class="feat-note">Northwind Community Bank is fictional and the data is synthetic. The demo replays a recorded run; clone the repo to run the live agents, no API key needed.</p>
+        </div>
+        <figure class="feat-media">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <img src="assets/img/campaign-copilot.jpg" alt="Campaign Copilot waiting for a human to approve a revised draft, with the agent timeline on the left and the business-impact panel on the right" loading="lazy" width="1400" height="1000" />
+          <figcaption>The run pauses before publish. Approve or reject is a real LangGraph interrupt, not a button in the UI.</figcaption>
+        </figure>
+      </article>
 
-        <article class="flag-card rv">
-          <span class="fc-kicker">Research · Tamper-evident agent memory</span>
+      <article class="feat rv">
+        <div class="feat-body">
+          <div class="feat-kicker"><span class="num">02</span> Research · tamper-evident agent memory</div>
           <h3>Overseer</h3>
           <dl>
             <dt>The problem</dt>
             <dd>When AI agents share a memory, one wrong or malicious write silently poisons every later decision, and nobody can prove what an agent knew at the moment it acted.</dd>
             <dt>What I built</dt>
-            <dd>A paper and reference implementation of tamper-evident memory for AI agents: a bitemporal knowledge graph that records both when a fact was true and when it was written, with append-only, hash-chained events and external anchoring. Corrections are new records, never edits, so "what did the agent believe at 10:05?" has an exact answer. Verified with property tests, an adversarial battery, and formal checks.</dd>
+            <dd>A paper and reference implementation of tamper-evident memory for agents: a <b>bitemporal knowledge graph</b> that records both when a fact was true and when it was written, with <b>append-only, hash-chained events</b> and external anchoring. Corrections are new records, never edits, so "what did the agent believe at 10:05?" has an exact answer. Verified with property tests, an adversarial battery and formal checks.</dd>
             <dt>Stack</dt>
-            <dd class="fc-tags"><span class="tag">Python</span><span class="tag">NumPy · SciPy</span><span class="tag">Hypothesis property tests</span><span class="tag">Z3</span><span class="tag">SHA-256 chaining</span></dd>
+            <dd class="chips"><span class="chip">Python</span><span class="chip">NumPy · SciPy</span><span class="chip">Hypothesis</span><span class="chip">Z3</span><span class="chip">SHA-256 chaining</span><span class="chip">OpenTimestamps</span></dd>
           </dl>
-          <p class="fc-note">The demo lets you edit a record in a six-event agent ledger and watch verification fail at that line. It runs entirely in your browser.</p>
-          <div class="fc-actions">
-            <a class="btn btn-primary" href="overseer-demo.html" target="_blank" rel="noopener">Tamper demo &rarr;</a>
+          <div class="feat-actions">
+            <a class="btn btn-primary" href="overseer-demo.html" target="_blank" rel="noopener">Tamper demo →</a>
             <a class="btn btn-ghost" href="https://doi.org/10.5281/zenodo.23023088" target="_blank" rel="noopener">Paper</a>
             <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/overseer-agentic-memory" target="_blank" rel="noopener">Code</a>
           </div>
-        </article>
+          <p class="feat-note">The demo lets you edit a record in a six-event agent ledger and watch verification fail at that line. It runs entirely in your browser.</p>
+        </div>
+        <figure class="feat-media">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="svg-wrap">
+            <svg class="ledger" viewBox="0 0 520 190" role="img" aria-label="Six hash-chained ledger records; record four was edited and breaks the chain">
+              <g>
+                <rect class="blk ok" x="10" y="20" width="110" height="54" rx="8"/>
+                <text class="t" x="20" y="40">01 · intake-agent</text>
+                <text x="20" y="54">valid 09:14 · rec 09:15</text>
+                <text class="hash" x="20" y="67">hash 60b9ee0b…</text>
+              </g>
+              <path class="link" d="M120 47 H150" marker-end="url(#arr)"/>
+              <g>
+                <rect class="blk ok" x="150" y="20" width="110" height="54" rx="8"/>
+                <text class="t" x="160" y="40">02 · kyc-agent</text>
+                <text x="160" y="54">prev 60b9ee0b…</text>
+                <text class="hash" x="160" y="67">hash f57a587a…</text>
+              </g>
+              <path class="link" d="M260 47 H290"/>
+              <g>
+                <rect class="blk ok" x="290" y="20" width="110" height="54" rx="8"/>
+                <text class="t" x="300" y="40">03 · risk-agent</text>
+                <text x="300" y="54">prev f57a587a…</text>
+                <text class="hash" x="300" y="67">hash b9925e25…</text>
+              </g>
+              <path class="link" d="M400 47 H430"/>
+              <g>
+                <rect class="blk bad" x="430" y="20" width="80" height="54" rx="8"/>
+                <text class="t" x="440" y="40">04 · edited</text>
+                <text x="440" y="54">prev b9925e…</text>
+                <text class="hash" x="440" y="67">hash ≠ stored</text>
+              </g>
+              <path class="link broken" d="M470 74 V110 H120 V130"/>
+              <g>
+                <rect class="blk" x="10" y="130" width="110" height="50" rx="8"/>
+                <text class="t" x="20" y="150">05 · correction</text>
+                <text x="20" y="164">valid 02-28 · rec 10:05</text>
+              </g>
+              <path class="link broken" d="M120 155 H150"/>
+              <g>
+                <rect class="blk" x="150" y="130" width="110" height="50" rx="8"/>
+                <text class="t" x="160" y="150">06 · approval</text>
+                <text x="160" y="164">human review required</text>
+              </g>
+              <text x="290" y="150" class="t">verify():</text>
+              <text x="290" y="166" style="fill:var(--danger)">BROKEN at record 4</text>
+            </svg>
+          </div>
+          <figcaption>Each record hashes the previous one. Edit any record and every later link stops matching.</figcaption>
+        </figure>
+      </article>
 
-        <article class="flag-card rv">
-          <span class="fc-kicker">3D simulation · Training</span>
+      <article class="feat rv">
+        <div class="feat-body">
+          <div class="feat-kicker"><span class="num">03</span> 3D simulation · training</div>
           <h3>AeroMind FlightLab</h3>
           <dl>
             <dt>The problem</dt>
-            <dd>New drone operators crash real hardware while they are still learning what pitch, roll, yaw, and throttle do, and what the telemetry is telling them.</dd>
+            <dd>New drone operators crash real hardware while they are still learning what pitch, roll, yaw and throttle do, and what the telemetry is telling them.</dd>
             <dt>What I built</dt>
-            <dd>A browser-based 3D flight simulator that teaches stick inputs, telemetry literacy, and failsafe behavior before a first real flight. Every input becomes a visible, explained physics lesson, with scored scenarios and a readable HUD.</dd>
+            <dd>A browser-based 3D flight simulator that teaches stick inputs, telemetry literacy and failsafe behaviour before a first real flight. Every input becomes a visible, explained physics lesson, with scored scenarios and a readable HUD.</dd>
             <dt>Stack</dt>
-            <dd class="fc-tags"><span class="tag">Three.js</span><span class="tag">JavaScript</span><span class="tag">Single-file build</span><span class="tag">Vercel</span></dd>
+            <dd class="chips"><span class="chip">Three.js</span><span class="chip">JavaScript</span><span class="chip">Single-file build</span><span class="chip">Vercel</span></dd>
           </dl>
-          <p class="fc-note">Also a full case study on this site, from learner problem to assessment design.</p>
-          <div class="fc-actions">
-            <a class="btn btn-primary" href="https://aeromind-flightlab.vercel.app/" target="_blank" rel="noopener">Fly it &rarr;</a>
+          <div class="feat-actions">
+            <a class="btn btn-primary" href="https://aeromind-flightlab.vercel.app/" target="_blank" rel="noopener">Fly it →</a>
             <a class="btn btn-ghost" href="https://github.com/AkhilDhruva/AeroMind-FlightLab" target="_blank" rel="noopener">Code</a>
             <a class="btn btn-ghost" href="#/p-aero">Case study</a>
           </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- DESIGN PROCESS -->
-    <section class="blk" id="process">
-      <div class="sec-head rv">
-        <span class="kicker">02 — Method</span>
-        <h2>From problem to governed, adopted system.</h2>
-        <p>One working loop across AI and learning builds — every stage traces to a risk, an objective, or a measurable behavior. ADDIE and SAM still power the learning layer; the loop around them is wider.</p>
-      </div>
-      <div class="addie rv">
-        <div class="addie-step"><div class="s">01</div><h4>Frame</h4><p>Problem, risk surface, audience, baseline metric.</p></div>
-        <div class="addie-step"><div class="s">02</div><h4>Model</h4><p>Knowledge modeling — facts locked in cited spec libraries, SME sign-off as a gate.</p></div>
-        <div class="addie-step"><div class="s">03</div><h4>Orchestrate</h4><p>Workflows, branching, agents, simulations, storyboards.</p></div>
-        <div class="addie-step"><div class="s">04</div><h4>Evaluate</h4><p>Scored scenarios, xAPI instrumentation, Kirkpatrick L1–4.</p></div>
-        <div class="addie-step"><div class="s">05</div><h4>Govern</h4><p>Human-oversight points, honest scope claims, accessibility, provenance of every figure.</p></div>
-        <div class="addie-step"><div class="s">06</div><h4>Adopt</h4><p>Pilot, LMS / SCORM deploy, champions, change comms.</p></div>
-      </div>
-      <div class="method-grid">
-        <div class="method rv"><div class="ic">👤</div><h4>Adult Learning</h4><p>Relevance-first, self-directed, experience-anchored (Knowles / andragogy).</p></div>
-        <div class="method rv"><div class="ic">🌿</div><h4>Scenario-Based</h4><p>Decisions in context with branching consequences, not content dumps.</p></div>
-        <div class="method rv"><div class="ic">⚡</div><h4>Microlearning</h4><p>Focused, spaced, ≤5-min units mapped to single objectives.</p></div>
-        <div class="method rv"><div class="ic">🧩</div><h4>Performance Support</h4><p>Job aids at the moment of need — learning that lives in the workflow.</p></div>
-        <div class="method rv"><div class="ic">✅</div><h4>Assessment Design</h4><p>Aligned, criterion-referenced items that measure the objective.</p></div>
-        <div class="method rv"><div class="ic">📊</div><h4>Learning Analytics</h4><p>xAPI / LMS data tied to adoption and behavior-change signals.</p></div>
-        <div class="method rv"><div class="ic">♿</div><h4>Accessibility</h4><p>WCAG 2.2 AA, plain language, multi-device by default.</p></div>
-        <div class="method rv"><div class="ic">🎨</div><h4>UX for Learning</h4><p>Cognitive-load management, clear wayfinding, motivation by design.</p></div>
-      </div>
-    </section>
-
-    <!-- FEATURED ARTIFACTS -->
-    <section class="blk" id="artifacts">
-      <div class="sec-head rv">
-        <span class="kicker">03 — Technical Evidence</span>
-        <h2>Open the real thing — not slideware.</h2>
-      </div>
-      <div class="art-grid">
-        <a class="art rv" href="#systems"><div class="ic">🚀</div><h4>Live deployed systems</h4><p>Shipped web builds — agent-supervision sim, technical tutorials, 3D training assets. Every case study opens the real system.</p></a>
-        <a class="art rv" href="https://github.com/AkhilDhruva" target="_blank" rel="noopener"><div class="ic">📦</div><h4>Source repositories</h4><p>Public code on GitHub — including AeroMind FlightLab and the Gas Turbine 3D tutorial.</p></a>
-        <a class="art rv" href="https://gas-turbine-3d-tutorial.vercel.app/" target="_blank" rel="noopener"><div class="ic">🧊</div><h4>Interactive 3D web objects</h4><p>Three.js training assets — a 360° turbine cutaway and a 42U rack — embeddable in Rise as web objects.</p></a>
-        <a class="art rv" href="ai-workflow-quest.html" target="_blank" rel="noopener"><div class="ic">🛡️</div><h4>Human-oversight simulation</h4><p>AI Workflow Quest’s approval-gate engine: deterministic branching, context risk, rewindable consequences.</p></a>
-        <a class="art rv" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener"><div class="ic">📇</div><h4>Performance support at the point of work</h4><p>A printable pre-use safety card with sign-off — governance thinking on one page.</p></a>
-        <div class="art rv"><div class="ic">📊</div><h4>Instrumentation built in</h4><p>This site ships custom analytics events (project opens, outbound clicks) — measurement is part of the build, not an afterthought.</p></div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="blk" id="about">
-      <div class="sec-head rv"><span class="kicker">04 — About</span></div>
-      <div class="two">
-        <div class="prose rv">
-          <h2 style="font-size:2rem;margin-bottom:18px">I build governed AI systems — and the human layer that makes them work.</h2>
-          <p>I work in technical, high-stakes environments where trust is the product: AI workflows that keep humans over the loop, knowledge systems grounded in cited sources, and the training that turns both into adopted practice.</p>
-          <p>My edge is that I <b>ship</b>. I don’t stop at specs or storyboards — I build the branching engines, 3D assets, and instrumented interfaces myself, so the design intent and its guardrails survive all the way to production.</p>
-          <p>Across my work, the pattern is translation: converting complex systems into usable learning experiences for the people expected to act on them. Whether the subject is enterprise AI, jobsite safety, or decision-making under pressure, my goal is the same — <b>help teams understand the system, trust the process, and perform with confidence.</b></p>
+          <p class="feat-note">Also a full case study on this site, from learner problem to assessment design.</p>
         </div>
-        <div class="panel rv">
-          <h4>Core Competencies</h4>
-          <div class="comp-list">
-            <span class="comp">Human-Oversight Design</span><span class="comp">Agentic Workflow Design</span><span class="comp">Knowledge Modeling (cited spec libraries)</span><span class="comp">AI Evaluation &amp; Guardrails</span><span class="comp">JavaScript · Three.js</span><span class="comp">Instructional Design (ADDIE / SAM)</span><span class="comp">Learning Experience Design</span><span class="comp">Scenario-Based Learning</span><span class="comp">Microlearning</span><span class="comp">Performance Support</span><span class="comp">Assessment Design</span><span class="comp">Learning Analytics (xAPI)</span><span class="comp">Accessibility (WCAG 2.2 AA)</span><span class="comp">AI Enablement &amp; Adoption</span><span class="comp">Change Management</span><span class="comp">Articulate Storyline</span><span class="comp">Rise 360</span><span class="comp">H5P · Twine</span><span class="comp">Figma</span><span class="comp">Camtasia</span><span class="comp">LMS Administration</span>
+        <figure class="feat-media">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="svg-wrap"><img src="assets/img/aero.svg" alt="Illustration of the AeroMind drone simulator HUD" loading="lazy" /></div>
+          <figcaption>Pitch, roll, yaw and throttle, each shown as a physics lesson while you fly.</figcaption>
+        </figure>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================= PRINCIPLES ============================= -->
+  <section class="sec" id="principles">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">02 · How I build</span>
+        <h2>Four rules I apply to every agent system.</h2>
+      </div>
+      <div class="principles">
+        <div class="principle rv"><div class="k">01</div><h4>Data through tools, not prompts</h4><p>Agents reach data only through typed, logged tools (MCP). No raw SQL in a prompt, no number that cannot be traced to a call.</p></div>
+        <div class="principle rv"><div class="k">02</div><h4>Rules first, model second</h4><p>Whether copy says "guaranteed" is not a judgement call. Deterministic rules decide; retrieval cites the policy; the model proposes the rewrite.</p></div>
+        <div class="principle rv"><div class="k">03</div><h4>Evals before features</h4><p>A golden set with a CI threshold. Writing Campaign Copilot's 20 goals found four real bugs before any user did.</p></div>
+        <div class="principle rv"><div class="k">04</div><h4>A human in the loop by construction</h4><p>The approval gate is a graph interrupt with a checkpointer, so nothing ships without a decision, and the decision is in the audit log.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= OTHER WORK ============================= -->
+  <section class="sec" id="other-work">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">03 · Other work</span>
+        <h2>Earlier builds: learning systems, simulations and technical training.</h2>
+        <p>Instructional design and 3D work from before the pivot to agentic systems. Every card opens a full case study, and every case study opens the live build.</p>
+      </div>
+      <div class="cards">
+        <a class="card rv" href="#/p-lms">
+          <div class="thumb"><img src="assets/img/lms.svg" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Enterprise · human oversight</div><h3>AI Workflow Quest</h3><p>A branching simulation that trains employees to supervise AI agents: approval gates, context risk and rewindable consequences.</p><div class="go">Open case study →</div></div>
+        </a>
+        <a class="card rv" href="#/p-datacenter">
+          <div class="thumb"><img src="assets/img/datacenter.svg" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Data center ops · upskilling</div><h3>Data Center Technician Upskilling</h3><p>A three-program suite with an interactive 3D 42U rack, grounded in EIA-310-D, ASHRAE and Uptime/TIA-942 standards.</p><div class="go">Open case study →</div></div>
+        </a>
+        <a class="card rv" href="#/p-safe">
+          <div class="thumb"><img src="assets/p/01-hero.png" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Industrial · safety</div><h3>SiteReady: Scissor Lift Safety</h3><p>A mobile-first awareness module and a printable pre-use job aid: Stop, Fix or Proceed.</p><div class="go">Open case study →</div></div>
+        </a>
+        <a class="card rv" href="#/p-turbine">
+          <div class="thumb"><img src="assets/img/turbine.svg" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Energy · equipment</div><h3>Gas Turbine 3D Tutorial</h3><p>A 360° cutaway of a heavy-duty gas turbine. Rotate it, strip the casing, click any component.</p><div class="go">Open case study →</div></div>
+        </a>
+        <a class="card rv" href="#/p-drive">
+          <div class="thumb"><img src="assets/img/drive.svg" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Consumer · driver education</div><h3>Ohio DriveSmart Academy</h3><p>A React driver-ed prototype with eight modules, hazard practice and a guardrailed AI study coach.</p><div class="go">Open case study →</div></div>
+        </a>
+        <a class="card rv" href="#/p-aero">
+          <div class="thumb"><img src="assets/img/aero.svg" alt="" loading="lazy" /></div>
+          <div class="body"><div class="cat">Simulation · avionics</div><h3>AeroMind FlightLab</h3><p>The drone trainer from the flagship section, as a full instructional case study.</p><div class="go">Open case study →</div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= ABOUT ============================= -->
+  <section class="sec" id="about">
+    <div class="wrap about-grid">
+      <div class="prose rv">
+        <span class="eyebrow">04 · About</span>
+        <h2 style="font-size:1.9rem;margin:14px 0 18px">I build the systems and the guardrails, and I ship both.</h2>
+        <p>I work where trust is the product: AI workflows that keep a human over the loop, knowledge systems grounded in cited sources, and interfaces that make a model's reasoning inspectable.</p>
+        <p>My edge is that I <b>ship</b>. I do not stop at specs or storyboards. I build the graphs, the tools, the evals and the front ends myself, so the design intent and its guardrails survive all the way to production.</p>
+        <p>Before agents, I spent years turning complex technical systems into training people could act on: data-center operations, industrial safety, avionics. That background is why my agent work starts from the question "how will a person check this?" rather than "what can the model do?"</p>
+        <p>I am a published author on tamper-evident agent memory (Overseer, 2026) and I am open to AI engineering and technical-lead roles, remote or hybrid.</p>
+      </div>
+      <div class="rv">
+        <div class="panel">
+          <h4>Core competencies</h4>
+          <div class="chips">
+            <span class="chip">Agentic workflows (LangGraph)</span><span class="chip">MCP tool design</span><span class="chip">RAG and retrieval</span><span class="chip">Evals and guardrails</span><span class="chip">Human-oversight design</span><span class="chip">Python · FastAPI</span><span class="chip">TypeScript · React</span><span class="chip">Three.js</span><span class="chip">Knowledge modelling</span><span class="chip">Instructional design (ADDIE / SAM)</span>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- RESUME -->
-    <section class="blk" id="resume">
-      <div class="sec-head rv">
-        <span class="kicker">05 — Credentials</span>
-        <h2>Credentials &amp; frameworks.</h2>
-      </div>
-      <div style="max-width:680px">
-        <div class="panel rv">
-          <h4>Credentials &amp; Frameworks</h4>
-          <div class="kv"><span class="k">Methodology</span><span class="v">ADDIE · SAM · Backward Design</span></div>
-          <div class="kv"><span class="k">Theory</span><span class="v">Andragogy · Cognitive Load · Bloom's</span></div>
-          <div class="kv"><span class="k">Evaluation</span><span class="v">Kirkpatrick L1–4 · Phillips ROI</span></div>
-          <div class="kv"><span class="k">Standards</span><span class="v">WCAG 2.2 AA · SCORM / xAPI · Section 508</span></div>
-          <div class="kv"><span class="k">AI Enablement</span><span class="v">DOL AI Literacy Framework (2026)</span></div>
-          <div style="margin-top:22px"><a class="btn btn-ghost" href="mailto:Druva.akhil@gmail.com?subject=R%C3%A9sum%C3%A9%20request" style="width:100%;justify-content:center">Résumé available on request →</a></div>
+        <div class="panel">
+          <h4>Credentials and frameworks</h4>
+          <div class="kv"><span class="k">Research</span><span>Overseer: tamper-evident memory for AI agents (Zenodo, 2026)</span></div>
+          <div class="kv"><span class="k">Standards</span><span>WCAG 2.2 AA · SCORM / xAPI · Section 508</span></div>
+          <div class="kv"><span class="k">Methodology</span><span>ADDIE · SAM · Backward Design</span></div>
+          <div class="kv"><span class="k">Evaluation</span><span>Kirkpatrick L1–4 · Phillips ROI · LLM evals</span></div>
+          <div class="kv"><span class="k">AI enablement</span><span>DOL AI Literacy Framework (2026)</span></div>
+          <div style="margin-top:16px"><a class="btn btn-ghost" href="mailto:Druva.akhil@gmail.com?subject=R%C3%A9sum%C3%A9%20request" style="width:100%;justify-content:center">Résumé on request →</a></div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- CONTACT -->
-    <!-- LEARNING SYSTEMS -->
-    <section class="blk" id="systems">
-      <div class="sec-head rv">
-        <span class="kicker">06 — Other work</span>
-        <h2>Earlier builds: learning systems, simulations, and technical training.</h2>
-        <p>Instructional design and 3D training work from before the pivot to agentic systems. Every card opens a full case study.</p>
-      </div>
-      <div class="sys-grid">
-        <a class="sys-card rv" href="#/p-lms"><div class="sys-thumb t-lms"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AI Workflow Quest decision simulation"><rect x="60" y="16" width="240" height="96" rx="10" fill="#FFFFFF" stroke="#D8DEE6"/><path d="M60 26 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v6 h-240 z" fill="#F4EFE5"/><circle cx="74" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="84" cy="25" r="2.6" fill="#D8C9B6"/><circle cx="94" cy="25" r="2.6" fill="#D8C9B6"/><rect x="70" y="42" width="104" height="62" rx="8" fill="#F4EFE5"/><rect x="78" y="50" width="30" height="7" rx="3" fill="#B8552B"/><rect x="78" y="63" width="86" height="5" rx="2" fill="#9A917F"/><rect x="78" y="72" width="68" height="5" rx="2" fill="#9A917F"/><rect x="78" y="90" width="42" height="11" rx="5.5" fill="#B8552B"/><rect x="126" y="90" width="42" height="11" rx="5.5" fill="none" stroke="#B8552B"/><rect x="186" y="42" width="104" height="62" rx="8" fill="#211E19"/><rect x="194" y="50" width="14" height="5" rx="2" fill="#5BBF86"/><rect x="212" y="50" width="40" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="61" width="72" height="5" rx="2" fill="#5BBF86"/><rect x="194" y="72" width="52" height="5" rx="2" fill="#6E6B5E"/><rect x="194" y="84" width="9" height="8" rx="1" fill="#5BBF86"/></svg></div><div class="sys-body"><div class="sys-cat">Enterprise · Human oversight · Live build</div><h3>AI Workflow Quest</h3><p>A branching simulation that trains employees to supervise AI agents — approval gates, context risk, and rewindable consequences at the exact decision points a human must keep.</p><div class="sys-meta"><span class="mini">Human oversight</span><span class="mini">Branching</span><span class="mini">Responsible AI</span></div><div class="sys-go">Open case study <span class="a">&#8594;</span></div></div></a>
-        <a class="sys-card rv" href="#/p-datacenter">
-          <div class="sys-thumb t-datacenter"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative schematic of a 42U data-center server rack with airflow"><rect x="150" y="10" width="60" height="108" rx="7" fill="#0E131C" stroke="#2A3A52"/><rect x="156" y="16" width="48" height="96" rx="3" fill="#111826"/><g stroke="#8b6ef6" stroke-width="0.8" fill="#16202E"><rect x="159" y="20" width="42" height="8" rx="1.5"/><rect x="159" y="31" width="42" height="8" rx="1.5"/><rect x="159" y="42" width="42" height="8" rx="1.5"/><rect x="159" y="53" width="42" height="8" rx="1.5"/><rect x="159" y="64" width="42" height="8" rx="1.5"/><rect x="159" y="75" width="42" height="8" rx="1.5"/><rect x="159" y="86" width="42" height="8" rx="1.5"/><rect x="159" y="97" width="42" height="8" rx="1.5"/></g><g><circle cx="197" cy="24" r="1.5" fill="#54E08A"/><circle cx="197" cy="46" r="1.5" fill="#54E08A"/><circle cx="197" cy="79" r="1.5" fill="#54E08A"/><circle cx="197" cy="35" r="1.5" fill="#FFB547"/><circle cx="197" cy="90" r="1.5" fill="#3FA9FF"/></g><g stroke="#3FA9FF" stroke-width="1.6" fill="none" opacity=".85"><path d="M120 44 h20"/><path d="M132 40 l8 4 -8 4"/><path d="M120 64 h20"/><path d="M132 60 l8 4 -8 4"/><path d="M120 84 h20"/><path d="M132 80 l8 4 -8 4"/></g><g stroke="#FF6B5C" stroke-width="1.6" fill="none" opacity=".85"><path d="M220 44 h20"/><path d="M232 40 l8 4 -8 4"/><path d="M220 64 h20"/><path d="M232 60 l8 4 -8 4"/><path d="M220 84 h20"/><path d="M232 80 l8 4 -8 4"/></g></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Data center ops · Technical upskilling · Live build</div>
-            <h3>Data Center Technician Upskilling</h3>
-            <p>A three-program upskilling suite that takes a new hire from the floor to a trusted 24×7 shift — with a fully-built flagship (Rack to Runtime) and an interactive 3D 42U rack, grounded in EIA-310-D, ASHRAE, and Uptime/TIA-942 standards.</p>
-            <div class="sys-meta"><span class="mini">Storyline / Rise</span><span class="mini">3D rack</span><span class="mini">SCORM · xAPI</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-        <a class="sys-card rv" href="#/p-safe">
-          <div class="sys-thumb t-safe"><div class="glow"></div><img class="prev" src="assets/p/01-hero.png" alt="Preview of the SiteReady scissor-lift safety awareness module" loading="lazy"></div>
-          <div class="sys-body">
-            <div class="sys-cat">Industrial · Safety · Live build</div>
-            <h3>SiteReady — Scissor Lift Safety</h3>
-            <p>A built, deployable awareness micro-module and printable pre-use job aid that help operators recognize scissor-lift hazards and choose Stop, Fix, or Proceed.</p>
-            <div class="sys-meta"><span class="mini">Live module</span><span class="mini">Job aid</span><span class="mini">SCORM-ready</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-        <a class="sys-card rv" href="#/p-turbine">
-          <div class="sys-thumb t-turbine"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative cutaway schematic of an axial-flow gas turbine"><line x1="30" y1="64" x2="330" y2="64" stroke="#2A3A52" stroke-width="2" stroke-dasharray="5 5"/><polygon points="40,64 70,52 70,76" fill="#1f9ec4" opacity=".85"/><path d="M70 50 L150 40 L150 88 L70 78 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#7fdcf3" stroke-width="2"><line x1="84" y1="44" x2="84" y2="84"/><line x1="98" y1="45" x2="98" y2="83"/><line x1="112" y1="46" x2="112" y2="82"/><line x1="126" y1="47" x2="126" y2="81"/><line x1="140" y1="48" x2="140" y2="80"/></g><path d="M150 36 L196 28 L196 100 L150 92 Z" fill="#0b6f8f" opacity=".55" stroke="#1f9ec4" stroke-width="1.4"/><circle cx="173" cy="40" r="4" fill="#FFB547"/><circle cx="173" cy="88" r="4" fill="#FFB547"/><path d="M196 34 L268 44 L268 84 L196 94 Z" fill="#16202E" stroke="#1f9ec4" stroke-width="1.4"/><g stroke="#d8d3c6" stroke-width="3"><line x1="212" y1="40" x2="212" y2="88"/><line x1="230" y1="38" x2="230" y2="90"/><line x1="248" y1="36" x2="248" y2="92"/></g><path d="M268 44 L320 30 L320 98 L268 84 Z" fill="none" stroke="#1f9ec4" stroke-width="1.6"/><circle cx="290" cy="64" r="3" fill="#7fdcf3"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Energy · Equipment familiarization · Live build</div>
-            <h3>Gas Turbine — 3D Interactive Tutorial</h3>
-            <p>A browser-based 360° cutaway that teaches the anatomy and gas path of a heavy-duty gas turbine — rotate it, strip the casing, and click any component to learn what it does and why it matters.</p>
-            <div class="sys-meta"><span class="mini">3D cutaway</span><span class="mini">Hotspots</span><span class="mini">Three.js</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-        <a class="sys-card rv" href="#/p-aero">
-          <div class="sys-thumb t-aero"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of the AeroMind 3D drone training simulator"><rect x="60" y="14" width="240" height="100" rx="10" fill="#0E131C" stroke="#2A3A52"/><rect x="70" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="76" y="26" width="20" height="4" rx="2" fill="#36E0C8"/><rect x="120" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="126" y="26" width="26" height="4" rx="2" fill="#3FA9FF"/><rect x="170" y="22" width="44" height="12" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="176" y="26" width="16" height="4" rx="2" fill="#FFB547"/><ellipse cx="180" cy="98" rx="58" ry="7" fill="#16202E"/><ellipse cx="180" cy="98" rx="34" ry="4.5" fill="none" stroke="#3FA9FF" stroke-width="1.4" opacity=".8"/><rect x="168" y="64" width="24" height="9" rx="3" fill="#1C2533" stroke="#3FA9FF" stroke-width="1.2"/><line x1="168" y1="66" x2="150" y2="58" stroke="#36E0C8" stroke-width="2"/><line x1="192" y1="66" x2="210" y2="58" stroke="#36E0C8" stroke-width="2"/><ellipse cx="148" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><ellipse cx="212" cy="57" rx="11" ry="2.6" fill="#36E0C8" opacity=".55"/><circle cx="180" cy="70" r="2" fill="#FF5566"/><path d="M180 80 v10" stroke="#36E0C8" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="252" y="40" width="40" height="56" rx="6" fill="#16202E" stroke="#2A3A52"/><rect x="258" y="47" width="28" height="4" rx="2" fill="#3FA9FF"/><rect x="258" y="56" width="22" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="64" width="26" height="3.6" rx="1.8" fill="#5B6B82"/><rect x="258" y="74" width="12" height="12" rx="3" fill="none" stroke="#54E08A" stroke-width="1.4"/><path d="M261 80 l2.4 2.6 4.8-5.6" stroke="#54E08A" stroke-width="1.6" fill="none"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Simulation · Avionics training · Live build</div>
-            <h3>AeroMind — Drone Flight Trainer</h3>
-            <p>A 3D drone simulator that teaches pitch, roll, yaw, throttle, telemetry literacy, and failsafe behavior — every stick input becomes a visible, explained physics lesson.</p>
-            <div class="sys-meta"><span class="mini">3D simulation</span><span class="mini">Telemetry HUD</span><span class="mini">Gamepad + audio</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-        <a class="sys-card rv" href="#/p-drive">
-          <div class="sys-thumb t-drive"><div class="glow"></div><svg class="prev" viewBox="0 0 360 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative mockup of a driver-education hazard scenario"><rect x="82" y="14" width="84" height="100" rx="12" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="90" y="22" width="68" height="84" rx="6" fill="#EAF1F6"/><rect x="114" y="26" width="20" height="3" rx="1.5" fill="#CDD4DD"/><rect x="90" y="34" width="68" height="30" fill="#DCE8F0"/><path d="M112 104 L136 104 L129 64 L119 64 Z" fill="#9AA6B2"/><line x1="124" y1="66" x2="124" y2="102" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4 4"/><circle cx="118" cy="86" r="4" fill="#E0900C"/><circle cx="118" cy="86" r="9" fill="none" stroke="#E0900C" stroke-width="1.5" opacity="0.85"/><rect x="186" y="14" width="74" height="14" rx="7" fill="#E4F2EA"/><circle cx="196" cy="21" r="3" fill="#178A55"/><rect x="204" y="19" width="34" height="4" rx="2" fill="#9FCBB4"/><rect x="186" y="36" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="43" width="50" height="3" rx="1.5" fill="#C7D0DA"/><rect x="186" y="58" width="92" height="16" rx="8" fill="#E4F2EA" stroke="#178A55"/><path d="M194 66 l3 3 l6 -7" stroke="#178A55" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="208" y="65" width="44" height="3" rx="1.5" fill="#3E9E73"/><rect x="186" y="80" width="92" height="16" rx="8" fill="#FFFFFF" stroke="#D8DEE6"/><rect x="196" y="87" width="54" height="3" rx="1.5" fill="#C7D0DA"/></svg></div>
-          <div class="sys-body">
-            <div class="sys-cat">Consumer · Driver education · Live build</div>
-            <h3>Ohio DriveSmart Academy</h3>
-            <p>An interactive React driver-ed app: eight lesson modules, hazard-decision practice, illustrated flashcards, and a guardrailed AI study coach. Educational concept.</p>
-            <div class="sys-meta"><span class="mini">React app</span><span class="mini">AI coach</span><span class="mini">Accessible</span></div>
-            <div class="sys-go">Open case study <span class="a">→</span></div>
-          </div>
-        </a>
-      </div>
-    </section>
+  <!-- ============================= CONTACT ============================= -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <span class="eyebrow rv" style="justify-content:center">05 · Contact</span>
+      <h2 class="rv">Let's build AI systems people can trust, and actually use.</h2>
+      <p class="rv">Open to AI engineer, agentic-systems and technical-lead roles. Bring the governance gap or the delivery gap; I will bring the system.</p>
+      <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com">Druva.akhil@gmail.com →</a>
+      <div class="links rv"><a href="https://www.linkedin.com/in/akhilreddy-" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/AkhilDhruva" target="_blank" rel="noopener">GitHub</a><a href="https://doi.org/10.5281/zenodo.23023088" target="_blank" rel="noopener">Overseer paper</a></div>
+    </div>
+  </section>
 
-    <section class="contact" id="contact">
-      <div class="wrap">
-        <span class="kicker rv" style="justify-content:center">06 — Contact</span>
-        <h2 class="rv" style="margin-top:16px">Let's build AI systems people can trust — and actually use.</h2>
-        <p class="rv">Available for Knowledge Engineer, AI Enablement, Applied AI, and agentic-systems roles — and for learning-systems work where adoption is the hard part. Bring the governance gap or the performance gap; I'll bring the system.</p>
-        <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com">Druva.akhil@gmail.com →</a>
-        <div class="cx rv"><a href="https://www.linkedin.com/in/akhilreddy-" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/AkhilDhruva" target="_blank" rel="noopener">GitHub</a></div>
-      </div>
-    </section>
-  </div>
-  <footer><div class="wrap"><span>© 2026 AK · Knowledge Engineering · AI Enablement</span><span>Designed &amp; built by AK</span></div></footer>
+  <footer class="site-footer"><div class="wrap"><span>© 2026 Akhil Reddy Gaddam</span><span>Designed and built by hand. No tracking beyond page views.</span></div></footer>
 </main>
 
-<!-- ============================= PROJECT: LMS ============================= -->
+<!-- case-study views, rendered on demand from assets/projects.js -->
 <main id="p-lms" class="view"></main>
-<!-- PROJECT: SAFE -->
 <main id="p-safe" class="view"></main>
-<!-- PROJECT: DRIVE -->
 <main id="p-drive" class="view"></main>
-<!-- PROJECT: AERO -->
 <main id="p-aero" class="view"></main>
-<!-- PROJECT: TURBINE -->
 <main id="p-turbine" class="view"></main>
-<!-- PROJECT: DATA CENTER -->
 <main id="p-datacenter" class="view"></main>
 
-<script>
-const SB=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
-/* ---------- 15-section project template ---------- */
-const SECTIONS=[
- "Project Overview","Business Problem","Learner Problem","Target Audience","Learning Objectives",
- "Instructional Strategy","Content Architecture","Storyboard Samples","Interaction Design Decisions",
- "Assessment Strategy","Performance Support Assets","Accessibility Considerations","Prototype Screens",
- "Success Metrics","Reflection & Lessons Learned"];
-
-/* reusable visual builders */
-function frame(num,roleTxt,onscreen,narration,interaction,bars="w90"){
- return `<div class="frame"><div class="screen"><span class="fnum">${num}</span>
-   <div class="mock-bar w70"></div><div class="mock-bar ${bars}"></div><div class="mock-bar w40"></div>
-   <div class="mock-btn"><i></i><i class="alt"></i></div></div>
-   <div class="meta"><div class="role">${roleTxt}</div>
-   <p><b style="color:var(--text)">On-screen:</b> ${onscreen}</p>
-   <p><b style="color:var(--text)">Narration:</b> ${narration}</p>
-   <p><b style="color:var(--text)">Interaction:</b> ${interaction}</p></div></div>`;}
-
-const PROJECTS={
- "p-lms":{
-  title:"AI Workflow Quest",
-  sub:"A guided, branching simulation that moves a non-technical employee from AI user to AI supervisor — built on one thesis: don't simulate the agent, simulate the decision points.",
-  facts:[["Role","ID + LXD + front-end build"],["Audience","Non-technical AI users"],["Domain","AI enablement · responsible use"],["Mode","Web simulation · branching · single-file"]],
-  thumbClass:"t-lms",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="ai-workflow-quest.html" target="_blank" rel="noopener">&#9654; Open the live simulation</a></div><p>A built, interactive learning simulation that takes a non-technical employee through four authored scenarios — from a first AI delegation to supervising an automation chain — teaching them to <b>own the decision points</b> a human must keep. The governing idea: don't try to fake the AI, simulate the moments where judgment matters.</p><div class="row3"><div class="mini-card"><div class="ic">&#129517;</div><h4>User &#8594; supervisor</h4><p>The learner's role visibly flips from "using AI" to "supervising AI" at the pivotal approval.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Decide, don't watch</h4><p>Deterministic branches at a few load-bearing moments; consequence is shown, not described — and always recoverable.</p></div><div class="mini-card"><div class="ic">&#128202;</div><h4>Reads back real choices</h4><p>The closing report is computed from what the learner actually did — no hardcoded "demonstrated".</p></div></div>`,
-   "Business Problem":`<p>Organizations handed employees AI assistants faster than they taught the judgment to supervise them. The risk isn't a bad draft — it's an <b>unsupervised action</b>: an AI that sends, schedules, or shares before a human checks. Rubber-stamped approvals and context-blind automations leak data and erode trust.</p><p><b>The metric at risk:</b> safe, confident AI adoption. The gap is supervision behavior, not tool familiarity.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">Trust</span><span><b>Output looks finished, so it gets approved</b> — learners rubber-stamp without opening the draft.</span></li><li><span class="lvl">Blind spots</span><span><b>The dangerous moment is invisible</b> — the same output is safe or harmful depending on a context only a human checks (internal vs. external recipient).</span></li><li><span class="lvl">Model</span><span><b>No mental model of think vs. act</b> — which steps are reversible reasoning, which touch a person or a record.</span></li></ul>`,
-   "Target Audience":`<p>Primary: <b>non-technical knowledge workers</b> beginning to use AI assistants for real work. Secondary: <b>enablement leads</b> who need adoption that is responsible and defensible, not just frequent.</p>`,
-   "Learning Objectives":`<p>Behavioral objectives, scoped to the simulation:</p><ul class="obj"><li><span class="lvl">Understand</span><span>Distinguish a model-only draft from a real tool action that touches a person or record.</span></li><li><span class="lvl app">Apply</span><span>Decompose a task into think (reasoning) and act (irreversible) steps.</span></li><li><span class="lvl eval">Evaluate</span><span>Catch a context flaw before approving — the right action to the wrong recipient.</span></li><li><span class="lvl eval">Supervise</span><span>Verify, correct, and re-approve — and keep supervising on the next gate, not just once.</span></li><li><span class="lvl app">Decide</span><span>Choose what to automate vs. where to keep a human verification point.</span></li></ul>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127919;</div><h4>Simulate decisions, not the agent</h4><p>Authored branches concentrate at a few load-bearing moments; everything between is compressed and railed.</p></div><div class="mini-card"><div class="ic">&#9889;</div><h4>Just-in-time concepts</h4><p>One new idea surfaces at its moment of relevance — including the word "agent," which only earns its place once the learner needs it.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Consequence, recoverable</h4><p>The leak is experienced, then rewound — a mistake to learn from, never a punitive dead end.</p></div><div class="mini-card"><div class="ic">&#128483;</div><h4>Two voices, one screen</h4><p>A warm human coach (serif on paper) and a terse system layer (mono on dark) make the invisible visible without overload.</p></div></div>`,
-   "Content Architecture":`<p>Four scenarios across seven capability layers, with fidelity matched to teaching value.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">S1&#8211;S2</span> Foundations (full build)</div><div class="mods"><span class="mod">First delegation</span><span class="mod">Model vs. tool call</span><span class="mod">Think / act decomposition</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S3</span> The approval that mattered &#8212; centerpiece</div><div class="mods"><span class="mod">Review or rubber-stamp</span><span class="mod">Leak &#8594; rewind &#8594; repair</span><span class="mod">Second gate &#183; role flips</span></div></div><div class="arch-tier"><div class="at"><span class="badge">S4</span> Orchestration &#8212; storyboarded (honest scope)</div><div class="mods"><span class="mod">Who does what</span><span class="mod">Where to keep a verification point</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("S1 · First delegation","Contrast pair","A model-only draft sits beside the same task run as a real tool call, with an animated lookup trace.","Coach voice frames why the difference matters.","Connect the tool, watch the trace, then a quick check.")}${frame("S3 · The approval that mattered","Decision point",'The AI drafts a correct message to the wrong "Shanda" — internal vs. external. Approve, reject, or edit.',"No narration at the decision — the choice carries the weight.","Approve to see the leak and rewind; or edit recipient, claim, and context to repair.","w70")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Rubber-stamping is captured silently</b> — approving without opening the draft changes the consequence, without the UI scolding the learner.</span></li><li><span class="lvl">Why</span><span><b>The flaw is compound</b> — the output is only dangerous because the recipient is external; the lesson is context, not typos.</span></li><li><span class="lvl">Why</span><span><b>A second approval gate</b> proves supervision is a habit that persists, not a one-time catch.</span></li><li><span class="lvl">Why</span><span><b>Role flips on success</b> — the status changes from "user" to "supervisor" at the moment the behavior changes.</span></li></ul>`,
-   "Assessment Strategy":`<p>Assessment is the behavior itself — the closing report is computed from real choices, never hardcoded.</p><table class="tbl"><tr><th>Captured behavior</th><th>Signal</th><th>From</th></tr><tr><td><b>Checks work before approving</b></td><td class="tag-l">Verify</td><td>Did the learner open the draft?</td></tr><tr><td><b>Recognizes risk</b></td><td class="tag-l">Judgment</td><td>Caught the external recipient / sensitive context.</td></tr><tr><td><b>Breaks work into steps</b></td><td class="tag-l">Decompose</td><td>Think / act tagging accuracy.</td></tr><tr><td><b>Supervises AI</b></td><td class="tag-l">Transfer</td><td>Repaired and re-approved on the second gate.</td></tr></table>`,
-   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129534;</div><h4>Behavior report</h4><p>A debrief that reflects the learner's actual decisions back to them — and to a facilitator.</p></div><div class="mini-card"><div class="ic">&#128257;</div><h4>Rewind to repair</h4><p>Built-in recovery turns the mistake into the lesson, then lets the learner fix it.</p></div><div class="mini-card"><div class="ic">&#128228;</div><h4>Pilot instrumentation</h4><p>Captured signals are structured for an export / debrief view (planned) to support a real pilot.</p></div></div>`,
-   "Accessibility Considerations":`<p>Accessibility is the documented next iteration on this build — stated honestly rather than overclaimed.</p><div class="a11y"><div><span class="ck">&#10003;</span> AA-passing colour contrast across all text on the paper and system surfaces.</div><div><span class="ck">&#10003;</span> Real buttons for primary actions; semantic structure and a page language set.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: keyboard + focus-visible for the remaining choice rows.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: aria-live on the coach, incident, and report regions.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: prefers-reduced-motion for the animated traces.</div></div><p style="font-size:14px;color:var(--muted)">Claiming accessibility expertise means being honest about what is and isn't done yet — the keyboard, screen-reader, and reduced-motion pass is scoped and next.</p>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Coach</span><span class="dp">S1</span></div><div class="choice">Model-only draft</div><div class="choice sel">Same task as a tool call &#10003;</div></div><div class="cap">Contrast pair</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Approval</span><span class="dp">S3</span></div><div class="choice">Approve now</div><div class="choice sel">Open &amp; check the recipient &#10003;</div><div class="choice">Reject</div></div><div class="cap">The decision that mattered</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Report</span><span class="dp">Debrief</span></div><div class="choice sel">Recognizes risk &#10003;</div><div class="choice sel">Supervises AI &#10003;</div></div><div class="cap">Computed from real choices</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">human checkpoints correctly kept</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">rubber-stamped approvals</div><div class="k">L3 &#183; behavior</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">context-risk caught before send</div><div class="k">L3</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">appropriate-automation decisions</div><div class="k">L4</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending a pilot.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Simulating the decision points instead of the agent kept the build small and the teaching sharp — the leak-and-rewind on Scenario 3 carries more learning than any explanation could.</p><p><b>What I'd change:</b> The keyboard, screen-reader, and reduced-motion pass is the honest next step; the piece earns its accessibility claim only once that ships.</p><p><b>The transferable lesson:</b> Responsible-AI training is a supervision-behavior problem. Make the invisible decision visible, let the consequence be felt and recovered, and measure the behavior — not the click.</p></div>`
-  }},
- "p-safe":{
-  title:"SiteReady — Scissor Lift Safety Awareness",
-  sub:"A mobile-first awareness micro-module and a printable pre-use job aid that help new operators and site personnel recognize scissor-lift hazards and make the right first move — Stop, Fix, or Proceed.",
-  facts:[["Role","ID + LXD + front-end build"],["Audience","New operators & site personnel"],["Domain","Industrial safety · awareness"],["Mode","Web module · Job aid · SCORM-ready"]],
-  thumbClass:"t-safe",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="deploy/index.html" target="_blank" rel="noopener">▶ Open the live module</a><a class="btn btn-ghost" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener">⬇ Pre-Use Card (printable job aid)</a></div><p>A built, deployable <b>awareness micro-module</b> on scissor-lift safety, paired with a one-page <b>pre-use card</b> for the point of work. It teaches hazard recognition and the right first action through scroll-based microlearning, a randomized Stop / Fix / Proceed scenario check, and spaced-retrieval flashcards — then hands the worker a printable job aid to carry to the floor.</p><div class="row3"><div class="mini-card"><div class="ic">👁️</div><h4>Recognize</h4><p>Tip-over, struck-by, falls, and overhead/electrical hazards — dual-coded with isometric and scenario art.</p></div><div class="mini-card"><div class="ic">🌿</div><h4>Decide</h4><p>Low-stakes Stop / Fix / Proceed practice, drawn 3-of-5, with corrective retries and no shaming.</p></div><div class="mini-card"><div class="ic">📇</div><h4>Transfer</h4><p>A printable pre-use checklist + sign-off puts the job aid at the moment of work.</p></div></div>`,
-   "Business Problem":`<p>Annual classroom safety training satisfies a compliance checkbox but doesn't reliably transfer to behavior in the field, and scissor lifts remain a leading source of aerial-lift incidents — tip-overs, falls, and electrocutions. Sites need awareness that is <b>faster to deliver, clearer for a mixed-literacy crew, and actually carried to the floor</b>.</p><p><b>The metric at risk:</b> incident and near-miss rate, and the human and financial cost behind it. A transfer-and-behavior problem, not a content-volume problem.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">Context</span><span><b>Learning happens off-site; the hazard is on-site</b> — a transfer gap between the classroom and the platform.</span></li><li><span class="lvl">Literacy</span><span><b>Mixed reading levels and languages</b> make text-heavy slides inaccessible to part of the crew.</span></li><li><span class="lvl">Relevance</span><span><b>Generic content</b> loses experienced operators; the module stays specific to the machine in front of them.</span></li></ul>`,
-   "Target Audience":`<p>Primary: <b>new scissor-lift operators and general site personnel</b> — often deskless, mobile-first, multilingual, with varied literacy and little spare time. Secondary: <b>supervisors</b> who run pre-use checks and hold stop-work authority. Designed for a phone, gloves, and a few spare minutes.</p>`,
-   "Learning Objectives":`<p>Awareness-level objectives, written to be observable:</p><ul class="obj"><li><span class="lvl eval">Recognize</span><span>Identify the main scissor-lift hazards — tip-over, struck-by, falls, and overhead/electrical contact.</span></li><li><span class="lvl app">Apply</span><span>Run a pre-use walk-around and red-tag a machine that fails it.</span></li><li><span class="lvl eval">Locate</span><span>Find both E-Stops and the emergency-descent rescue path before elevating.</span></li><li><span class="lvl eval">Decide</span><span>Choose the right first action in a hazard scenario — Stop, Fix, or Proceed.</span></li></ul><p style="font-size:14px;color:var(--muted)">Scoped as <b>awareness</b> — explicitly not OSHA-authorized training, operator authorization, or a qualified-person evaluation.</p>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">🧠</div><h4>Behavior-based + dual coding</h4><p>Every rule pairs with a visual, one idea per screen, to cut cognitive load for a multilingual, lower-literacy crew.</p></div><div class="mini-card"><div class="ic">🌿</div><h4>Scenario decision practice</h4><p>Comic-style Stop / Fix / Proceed scenarios build judgment through consequence, not trivia.</p></div><div class="mini-card"><div class="ic">⚡</div><h4>Spaced retrieval</h4><p>An eight-card flashcard deck reinforces the rules with active recall.</p></div><div class="mini-card"><div class="ic">📇</div><h4>Performance support</h4><p>A printable pre-use card moves the job aid to the point of work — the L2→L3 bridge.</p></div></div>`,
-   "Content Architecture":`<p>An <b>awareness layer</b>, kept visibly separate from the competency-support layer (hands-on training, a qualified-person evaluation, and employer authorization).</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Explain</span> Scroll micro-module (M0–M8)</div><div class="mods"><span class="mod">Anatomy</span><span class="mod">Pre-use walk-around</span><span class="mod">Tip-over</span><span class="mod">Danger zone</span><span class="mod">Overhead / 10 ft</span><span class="mod">E-Stops</span><span class="mod">Manual descent</span><span class="mod">Fall protection</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Apply</span> Scenario check + retrieval</div><div class="mods"><span class="mod">Stop / Fix / Proceed (3 of 5)</span><span class="mod">Flashcards (×8)</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Support</span> Point of work</div><div class="mods"><span class="mod">Printable pre-use card</span><span class="mod">Tag-out guidance</span><span class="mod">Sign-off fields</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("M3 · Tip-over","Dual-coded rule","Side-by-side stable vs. tip-over states with 'Firm · Flat · Level' as the single takeaway.","Plain-language, one idea per screen.","Scroll activates the unstable state; a pulsing ring marks the risk.")}${frame("Scenario · E-Stop","Stop / Fix / Proceed","The platform lurches and the controls go dead. Three options, no obvious tell.","No narration — the decision carries the weight.","Pick an option → corrective feedback; the correct answer reveals the safe-outcome panel.","w70")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Focus-lock scroll</b> spotlights one module at a time to control cognitive load.</span></li><li><span class="lvl">Why</span><span><b>Numbered anatomy callouts</b> (hover, tap, or keyboard focus) link the diagram to the parts list via dual coding.</span></li><li><span class="lvl">Why</span><span><b>Consequence-based feedback</b> in the scenario check — corrective retries, no score, no shaming — so judgment transfers.</span></li><li><span class="lvl">Why</span><span><b>Reduced-motion fallback</b> renders every module linearly for motion-sensitive users and assistive tech.</span></li></ul>`,
-   "Assessment Strategy":`<p>Low-stakes and behavior-focused — the goal is the right move at the right moment, not a grade.</p><table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Scenario check</b></td><td class="tag-l">Scenario</td><td>Decide</td><td>Stop / Fix / Proceed on 3 of 5 randomized hazards, with corrective retries.</td></tr><tr><td><b>Flashcard deck</b></td><td class="tag-l">Retrieval</td><td>Recognize</td><td>Active recall of the eight rules; self-paced review.</td></tr><tr><td><b>Pre-use card</b></td><td class="tag-l">Transfer</td><td>Apply</td><td>On-the-job walk-around + sign-off (an L3 behavior signal).</td></tr></table>`,
-   "Performance Support Assets":`<div style="margin:0 0 14px"><a class="btn btn-ghost" href="SiteReady-ScissorLift-PreUseCard.html" target="_blank" rel="noopener">⬇ Open the printable Pre-Use Card</a></div><div class="row3"><div class="mini-card"><div class="ic">📋</div><h4>Pre-use checklist</h4><p>One-page walk-around with sign-off for machine ID, operator, and supervisor.</p></div><div class="mini-card"><div class="ic">🟥</div><h4>Tag-out + stop-work</h4><p>Red-tag a failed machine; anyone can stop unsafe work, anytime, no penalty.</p></div><div class="mini-card"><div class="ic">🖨️</div><h4>Print-ready</h4><p>Dedicated print styles render a clean one-page PDF for the toolbox.</p></div></div>`,
-   "Accessibility Considerations":`<div class="a11y"><div><span class="ck">✓</span> Skip link, semantic landmarks, and visible focus throughout.</div><div><span class="ck">✓</span> Reduced-motion mode renders all modules linearly.</div><div><span class="ck">✓</span> Scenario check is a labeled radiogroup with an aria-live result.</div><div><span class="ck">✓</span> Flashcards flip via keyboard (Enter / Space).</div><div><span class="ck">✓</span> Dual coding — never color or text alone — for low-literacy and multilingual readers.</div><div><span class="ck">✓</span> Single self-contained file; SCORM-ready for an LMS.</div></div>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Walk-around</span><span class="dp">M2</span></div><div class="choice sel">☑ Guardrails solid, gate latches</div><div class="choice">☐ Test both control stations</div></div><div class="cap">Pre-use checklist</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">E-Stop</span><span class="dp">Scenario</span></div><div class="choice">Climb over the rail</div><div class="choice sel">Hit the Emergency Stop ✓</div><div class="choice">Keep operating</div></div><div class="cap">Stop / Fix / Proceed</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Rule 1</span><span class="dp">Deck</span></div><div class="choice">Where do you elevate?</div><div class="choice sel">Firm · Flat · Level ✓</div></div><div class="cap">Spaced-retrieval flashcard</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">↑ improve</div><div class="l">module + scenario completion</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">↑ improve</div><div class="l">pre-use card use on the floor</div><div class="k">L3 · behavior</div></div><div class="mc"><div class="mtgt">↑ improve</div><div class="l">near-miss reporting</div><div class="k">L3 · culture</div></div><div class="mc"><div class="mtgt">↓ reduce</div><div class="l">recordable incidents</div><div class="k">L4</div></div></div><div class="note"><b>▸</b> Awareness concept — arrows show the direction of success. No results are claimed; measured data and a baseline are added once captured.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Keeping the awareness layer visibly separate from competency — and flagging every machine-specific claim <b style="color:var(--amber)">[VERIFY WITH SME]</b> — made the piece honest and defensible, which matters more than polish in a safety context.</p><p><b>What I'd change:</b> The eight takeaways drift slightly between the module and the pre-use card; I'd lock one canonical list and reuse it everywhere.</p><p><b>The transferable lesson:</b> Building the front-end myself meant the instructional intent survived all the way to the screen — dual coding, reduced-motion, and the point-of-work job aid were design decisions, not handoff casualties.</p></div>`
-  }},
- 
- "p-drive":{
-  title:"Ohio DriveSmart Academy",
-  sub:"An interactive driver-education prototype — eight lesson modules, illustrated flashcards, a Road-Test-Readiness gauge, and a guardrailed AI study coach — built in React with a server-side AI proxy. Educational concept, not a BMV-approved course.",
-  facts:[["Role","ID + LXD + full-stack build"],["Audience","Ohio teen learner drivers"],["Domain","Driver education · responsible AI"],["Mode","React + Vite app · serverless AI"]],
-  thumbClass:"t-drive",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="https://ohio-drivesmart-academy.vercel.app/" target="_blank" rel="noopener">&#9654; Open the live app</a></div><p>A built React/Vite single-page app that teaches teen drivers through a <b>learn &#8594; see &#8594; decide &#8594; feedback &#8594; mastery</b> loop, with illustrated flashcards, an xAPI-style learning record, an accessibility panel, and <b>RoadGuide AI</b> — a guardrailed study coach whose API key stays server-side. Framed honestly as an educational concept, not an official or BMV-approved course.</p><div class="row3"><div class="mini-card"><div class="ic">&#129496;</div><h4>Decide, then learn</h4><p>Each module practices a real driving decision and gates progress on mastery, not seat time.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>Guardrailed AI coach</h4><p>RoadGuide answers rules questions in plain English — never claims the learner is licensed; the key never reaches the browser.</p></div><div class="mini-card"><div class="ic">&#9855;</div><h4>Accessible by design</h4><p>Keyboard, focus, ARIA, reduce-motion, readable-font, larger-text and high-contrast toggles built in.</p></div></div>`,
-   "Business Problem":`<p>Novice drivers crash at far higher rates than experienced ones, and a rules-test-prep product can lift pass rates without changing the outcome that matters — real-road judgment. Dry, text-heavy courses also lose a digital-native audience fast.</p><p><b>The metric at risk:</b> novice-driver decision-readiness and crash risk. Sourced framing only (CDC, NHTSA, NSC, IIHS, Ohio DPS/OSHP) — no invented numbers.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">Skill gap</span><span><b>Rules &#8800; judgment</b> — a learner can pass the written test and still freeze at a real hazard.</span></li><li><span class="lvl">Motivation</span><span><b>Dry content disengages teens</b> — a voluntary, young audience needs pace, feedback, and progress.</span></li><li><span class="lvl">Practice</span><span><b>No safe place to fail</b> — first real decisions otherwise happen at speed.</span></li></ul>`,
-   "Target Audience":`<p>Primary: <b>Ohio teens (15&#8211;17)</b> on a temporary permit — mobile-native, low tolerance for friction, high response to feedback. Secondary: <b>parents and instructors</b> who supervise and review.</p>`,
-   "Learning Objectives":`<ul class="obj"><li><span class="lvl">Recall</span><span>State Ohio road rules, signs, and right-of-way in context.</span></li><li><span class="lvl eval">Perceive</span><span>Detect a developing hazard in a driving scene.</span></li><li><span class="lvl eval">Decide</span><span>Choose the safe response under time pressure.</span></li><li><span class="lvl app">Apply</span><span>Transfer scanning and decision habits to supervised real practice.</span></li></ul>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#127807;</div><h4>Decision loop per module</h4><p>Learn &#8594; see &#8594; decide &#8594; feedback &#8594; mastery, with remediation when a concept is missed.</p></div><div class="mini-card"><div class="ic">&#127918;</div><h4>Mastery gating</h4><p>Progress reflects demonstrated skill, shown on a Road-Test-Readiness gauge that tops out at "Practice-ready."</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Spaced flashcards</h4><p>Illustrated signs and markings reinforce recall between modules.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>Just-in-time coach</h4><p>RoadGuide AI answers a learner's question at the moment of confusion, within strict guardrails.</p></div></div>`,
-   "Content Architecture":`<p>A data-driven module system (eight built, scoped toward an 18-module curriculum), plus dashboard, flashcards, learning record, and a Documents page that holds the research and compliance basis.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Learn</span> Eight lesson modules</div><div class="mods"><span class="mod">Signs &amp; signals</span><span class="mod">Right-of-way</span><span class="mod">Hazard scenarios</span><span class="mod">Mastery + remediation</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Practice</span> Recall &amp; coach</div><div class="mods"><span class="mod">Illustrated flashcards</span><span class="mod">RoadGuide AI</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Evidence</span> Records &amp; basis</div><div class="mods"><span class="mod">xAPI-style learning record</span><span class="mod">Readiness gauge</span><span class="mod">Documents (sources + liability)</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("Module · Decide","Scenario decision","A first-person intersection — an unprotected left, the gap closing. Go, wait, or creep forward.","Brief coaching after the choice, never a scolding.","Pick an option, then see the consequence and the safer read.")}${frame("RoadGuide · Coach","Guardrailed AI","A learner asks a rules question; the coach answers in plain English and never claims they are licensed.","Calm, short, plain language.","A server-side proxy keeps the API key off the browser.","w70")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Readiness caps at "Practice-ready"</b> — the UI never implies the learner is licensed or legally ready.</span></li><li><span class="lvl">Why</span><span><b>The AI key stays server-side</b> — the browser calls a proxy, so the secret never ships in the bundle.</span></li><li><span class="lvl">Why</span><span><b>Feedback uses icon + text + colour</b> — never colour alone, so it reads for colour-blind users.</span></li><li><span class="lvl">Why</span><span><b>Reduce-motion is honoured</b> — animations respect the system setting and an in-app toggle.</span></li></ul>`,
-   "Assessment Strategy":`<table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Module mastery check</b></td><td class="tag-l">Mastery</td><td>Recall / Decide</td><td>Gates progress; triggers remediation on a miss.</td></tr><tr><td><b>Hazard scenario</b></td><td class="tag-l">Scenario</td><td>Perceive / Decide</td><td>Safe-choice rate under pressure.</td></tr><tr><td><b>Learning record</b></td><td class="tag-l">xAPI-style</td><td>Apply</td><td>Captured events shown on the record page (LRS-ready).</td></tr></table>`,
-   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#129302;</div><h4>RoadGuide AI</h4><p>A guardrailed study coach for plain-English rules questions, on demand.</p></div><div class="mini-card"><div class="ic">&#127183;</div><h4>Flashcard deck</h4><p>Illustrated signs and pavement markings for spaced recall.</p></div><div class="mini-card"><div class="ic">&#128196;</div><h4>Documents page</h4><p>The research sources and a clear liability statement — compliance in the open.</p></div></div>`,
-   "Accessibility Considerations":`<div class="a11y"><div><span class="ck">&#10003;</span> Full keyboard operability with visible focus throughout.</div><div><span class="ck">&#10003;</span> ARIA labels on controls; text equivalents for SVG diagrams and the readiness gauge.</div><div><span class="ck">&#10003;</span> Feedback is icon + text + colour — never colour alone.</div><div><span class="ck">&#10003;</span> Toggle panel: reduce-motion, plain-language, readable font (Atkinson Hyperlegible), larger text, high contrast.</div><div><span class="ck">&#10003;</span> prefers-reduced-motion honoured in CSS.</div><div><span class="ck">&#10003;</span> Compliance copy: educational concept only; readiness capped at "Practice-ready."</div></div>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Dashboard</span><span class="dp">Readiness</span></div><div class="choice sel">Readiness: Practice-ready &#10003;</div><div class="choice">8 modules · mastery-gated</div></div><div class="cap">Readiness gauge</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Intersection</span><span class="dp">Decide</span></div><div class="choice">Go now</div><div class="choice sel">Wait for the gap &#10003;</div><div class="choice">Creep forward</div></div><div class="cap">Scenario decision</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">RoadGuide</span><span class="dp">AI coach</span></div><div class="choice">When do I yield here?</div><div class="choice sel">Plain-English answer &#10003;</div></div><div class="cap">Guardrailed coach</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">hazard-detection accuracy</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">safe-choice rate under pressure</div><div class="k">L2 · decision skill</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">voluntary practice sessions</div><div class="k">Engagement</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">module mastery completion</div><div class="k">L2</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending a pilot.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Teaching judgment before rote rules, gated by mastery, gave the prototype a real spine — and a server-side AI proxy let me add an AI coach without ever exposing a key.</p><p><b>What I'd change:</b> State resets on reload; persisting progress and accessibility prefs in localStorage is the first enhancement — and persisting a11y prefs is itself a WCAG win.</p><p><b>The transferable lesson:</b> Responsible ed-tech is as much about what you refuse to claim — not "BMV-approved," not "licensed" — as about what you build.</p></div>`
-  }},
-
- "p-aero":{
-  title:"AeroMind — Drone Avionics Training Simulator",
-  sub:"A browser-based 3D flight simulator that teaches new drone operators pitch, roll, yaw, throttle, telemetry literacy, and failsafe behavior — before they ever touch real hardware. Every stick input becomes a visible, explained physics lesson.",
-  facts:[["Role","LXD + simulation design + 3D build"],["Audience","Student / first-time drone operators"],["Domain","Drone operation · safety habits"],["Mode","Web 3D sim · Three.js · single-file"]],
-  thumbClass:"t-aero",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="https://aeromind-flightlab.vercel.app/" target="_blank" rel="noopener">&#9654; Fly the live simulator</a><a class="btn btn-ghost" href="https://github.com/AkhilDhruva/AeroMind-FlightLab" target="_blank" rel="noopener">View source on GitHub</a></div><p>A built, playable 3D training simulator: a rendered quadcopter on a training field, a full telemetry HUD, twelve lesson modules, and a live <b>Input &#8594; Physics &#8594; Explanation</b> feed that narrates what just happened on every control input. Solid obstacles, procedural motor audio, gamepad support, and automatic Return-to-Home failsafes make safe habits feel like consequences, not rules. <b>Educational civilian flight-training simulation — not a real drone control system.</b></p><div class="row3"><div class="mini-card"><div class="ic">&#128737;</div><h4>Safety-first by design</h4><p>Smoothness is scored, not speed. Hard landings, collisions, and ignored warnings all cost the stability grade — and explain why.</p></div><div class="mini-card"><div class="ic">&#128202;</div><h4>Telemetry literacy</h4><p>Battery, GPS, signal, wind, heading, and mode are taught as things to <i>read</i>, with failure scenarios that make scanning them matter.</p></div><div class="mini-card"><div class="ic">&#129302;</div><h4>The sim explains itself</h4><p>Every input triggers a plain-language explanation of the physics it caused — tilt first, then movement.</p></div></div>`,
-   "Business Problem":`<p>Consumer and commercial drones put real aircraft in untrained hands. The cost of a beginner's first mistakes — a fly-away, a crashed gimbal, an airspace violation — is paid in hardware, liability, and lost confidence. Flight schools and hobbyists need a way to build <b>correct control instincts and failsafe trust</b> before the first real battery is ever armed.</p><p><b>The metric at risk:</b> first-flight incident rate and training drop-off. The gap is operator readiness, not aircraft capability.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">Model</span><span><b>Controls are not intuitive</b> — a drone tilts before it moves, strafes without turning, and rotates without travelling. Beginners conflate pitch, roll, and yaw.</span></li><li><span class="lvl">Overload</span><span><b>The HUD reads as noise</b> — battery %, satellites, signal, and mode mean nothing until a scenario makes each one matter.</span></li><li><span class="lvl">Trust</span><span><b>Failsafes get fought</b> — untrained pilots panic and fight Return-to-Home instead of letting the aircraft recover itself.</span></li></ul>`,
-   "Target Audience":`<p>First-time and student drone operators — teens to adults — flying consumer quadcopters; secondarily, instructors who want a zero-risk demonstration environment. Assumes no aviation background, no gamepad required (keyboard fully supported), and runs in any modern browser with no install.</p>`,
-   "Learning Objectives":`<ul class="obj"><li><span class="lvl">Operate</span><span>Command pitch, roll, yaw, and throttle independently and in combination to fly a controlled circuit.</span></li><li><span class="lvl">Read</span><span>Interpret live telemetry — battery, GPS, signal, wind, mode — and act on warnings before they become emergencies.</span></li><li><span class="lvl">Decide</span><span>Choose the safe response to low battery, wind drift, GPS degradation, and signal loss, including yielding to Return-to-Home.</span></li><li><span class="lvl">Land</span><span>Execute soft, precise landings — the skill that ends every flight, rehearsed until it is graded clean.</span></li></ul>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#9889;</div><h4>One axis at a time</h4><p>Throttle &#8594; pitch &#8594; roll &#8594; yaw as isolated modules with physical targets (rings, gates, markers), then a combined sortie.</p></div><div class="mini-card"><div class="ic">&#128483;</div><h4>Explain at the moment of input</h4><p>The explanation feed fires on the stick movement itself — the physics lesson lands exactly when the learner caused it.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Consequence, not punishment</h4><p>Collisions bounce and cost score; emergencies auto-recover via RTH. Mistakes teach and are always recoverable with R.</p></div><div class="mini-card"><div class="ic">&#127918;</div><h4>Scenario-based failure drills</h4><p>Low battery, wind, weak GPS, and signal loss are playable emergencies with auto-detected objectives, not slides.</p></div></div>`,
-   "Content Architecture":`<p>Twelve modules in a deliberate arc — anatomy first, single-axis control, integration, instrumentation, then emergencies.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Know</span> The aircraft</div><div class="mods"><span class="mod">Anatomy (click-to-inspect)</span><span class="mod">Free Flight sandbox</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Control</span> One axis at a time</div><div class="mods"><span class="mod">Throttle</span><span class="mod">Pitch · rings</span><span class="mod">Roll · cone gate</span><span class="mod">Yaw · markers</span><span class="mod">Combined mission</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Read</span> Instruments</div><div class="mods"><span class="mod">Avionics &amp; telemetry</span><span class="mod">Precision landing</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Survive</span> Emergencies</div><div class="mods"><span class="mod">Low battery</span><span class="mod">Wind drift</span><span class="mod">Signal loss</span><span class="mod">GPS degraded</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("M02 · Pitch","Tilt, then move","The drone noses down as W is held; three glowing rings ahead at constant altitude.","'The rear rotors spin up, the nose dips, and the aircraft accelerates forward. Notice it tilts before it moves.'","Hold W through all three rings; each ring lights green and chimes on a clean pass.")}${frame("Scenario · Low battery","Failsafe handover","Battery hits 12% mid-flight; amber warning pill, alert tone, then RTH takes the sticks.","'Critical battery. The flight controller is flying the aircraft home — watch, don't fight the controls.'","Pilot input is locked out until the aircraft lands itself on the pad.","w80")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>The feed explains inputs, not outcomes</b> — firing on the stick edge ties cause to physics at the exact teachable moment.</span></li><li><span class="lvl">Why</span><span><b>RTH locks out the sticks</b> — fighting the failsafe is the classic beginner error, so the sim makes yielding the only option and says so.</span></li><li><span class="lvl">Why</span><span><b>Obstacles are solid</b> — flying through scenery teaches nothing; a bounce, a &#8722;10 score hit, and a damage explanation teach clearance.</span></li><li><span class="lvl">Why</span><span><b>Motor audio is throttle-linked and goes silent when idle</b> — sound carries information (load, spool-up, alerts), never ambience for its own sake.</span></li><li><span class="lvl">Why</span><span><b>Gamepad maps to a real transmitter</b> — left stick throttle/yaw, right stick pitch/roll, with live calibration bars and an adjustable deadzone.</span></li></ul>`,
-   "Assessment Strategy":`<p>Continuous, behavioral, and explained — the grade is how you flew, not what you clicked.</p><table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Auto-detected objectives</b></td><td class="tag-l">Performance</td><td>Operate / Decide</td><td>Mission steps detected from flight state — altitude held, rings passed, marker aligned, landed near pad.</td></tr><tr><td><b>Stability score</b></td><td class="tag-l">Continuous</td><td>Operate</td><td>Starts at 100; jerky input, hard landings, and collisions subtract with an explanation each time.</td></tr><tr><td><b>Letter-grade debrief</b></td><td class="tag-l">Summative</td><td>All</td><td>Per-module toast with grade, collision count, and the one habit to fix next flight.</td></tr></table>`,
-   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#128202;</div><h4>Telemetry HUD + warnings</h4><p>Colour-coded cards and plain-language warning pills escalate before an emergency, mirroring real ground-station UIs.</p></div><div class="mini-card"><div class="ic">&#10067;</div><h4>Controls &amp; help overlay</h4><p>Full keyboard/gamepad reference one keypress away (?), plus a skippable first-flight onboarding.</p></div><div class="mini-card"><div class="ic">&#127911;</div><h4>Procedural audio cues</h4><p>Spool-up, landing thuds, objective chimes, and distinct alert tones — information through a second channel, mutable.</p></div></div>`,
-   "Accessibility Considerations":`<div class="a11y"><div><span class="ck">&#10003;</span> Fully keyboard-operable — a gamepad is recommended, never required.</div><div><span class="ck">&#10003;</span> Reduced-motion toggle calms UI animation and the drone's hover bob; <i>prefers-reduced-motion</i> honoured.</div><div><span class="ck">&#10003;</span> Feedback is never sound-alone or colour-alone — every audio cue has a visual twin (pills, flashes, feed entries).</div><div><span class="ck">&#10003;</span> Mute and volume controls; audio initialises only after a user gesture (autoplay-safe).</div><div><span class="ck">&#10003;</span> Preferences persist in localStorage across sessions.</div><div><span class="ck">&#10003;</span> Honest scope: civilian training abstraction — excludes weaponised, surveillance, and unauthorized-operation use cases.</div></div>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Pitch</span><span class="dp">M02</span></div><div class="choice sel">Ring 2 cleared &#10003; · ALT 2.2m</div><div class="choice">Feed: "nose dips, then moves"</div></div><div class="cap">Input &#8594; Physics &#8594; Explanation</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Battery 11%</span><span class="dp">RTH</span></div><div class="choice">Fight the controls</div><div class="choice sel">Let the failsafe land it &#10003;</div></div><div class="cap">Failure scenario</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Debrief</span><span class="dp">Grade</span></div><div class="choice sel">Stability 88/100 · B</div><div class="choice">1 collision — widen clearance</div></div><div class="cap">Letter-grade debrief</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">module completion across the 12-module arc</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">stability score on repeat attempts</div><div class="k">L2 · skill curve</div></div><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">collisions and hard landings per sortie</div><div class="k">L2 · behavior</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">correct failsafe response (yield to RTH)</div><div class="k">L3 · transfer intent</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending learner pilots.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Making the simulation explain itself — the input-edge explanation feed — turned a 3D toy into a teacher, and solid obstacles plus a scored failsafe turned safety from copy into consequence.</p><p><b>What I'd change:</b> The physics is a training abstraction tuned for learning clarity, not flight-model accuracy; a Rapier-based model behind the same lessons is the natural next step, along with recorded flight playback for debriefs.</p><p><b>The transferable lesson:</b> In simulation-based learning, the explanation layer is the product. The 3D scene earns attention; the feed, the telemetry, and the debrief do the teaching.</p></div>`
-  }},
- "p-turbine":{
-  title:"Gas Turbine — 3D Interactive Tutorial",
-  sub:"A browser-based 360° cutaway that teaches the anatomy and gas path of a heavy-duty gas turbine — rotate it, strip the casing, and click any component to learn what it does and why it matters. Built in Three.js as an original-geometry training model.",
-  facts:[["Role","LXD + 3D interactive build"],["Audience","Power-gen trainees & engineering students"],["Domain","Energy · rotating equipment"],["Mode","Web 3D tutorial · Three.js · single-file"]],
-  thumbClass:"t-turbine",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="https://gas-turbine-3d-tutorial.vercel.app/" target="_blank" rel="noopener">&#9654; Open the live tutorial</a><a class="btn btn-ghost" href="https://github.com/AkhilDhruva/Gas-Turbine-3D-Interactive-Tutorial" target="_blank" rel="noopener">View source on GitHub</a></div><p>A built, interactive 3D tutorial: a real-time cutaway of an axial-flow heavy-duty gas turbine you can spin a full 360&deg;, zoom into, and strip to the internals. Ten hotspots walk the gas path from air inlet to exhaust diffuser, each opening a plain-language explanation and a small spec card. <b>Illustrative training model — original geometry, not a manufacturer asset; a familiarization aid, not a maintenance or certification course.</b></p><div class="row3"><div class="mini-card"><div class="ic">&#128260;</div><h4>Explore, don't read</h4><p>Free 360&deg; rotation and a casing toggle turn a sealed machine into something a learner can open and orbit.</p></div><div class="mini-card"><div class="ic">&#128205;</div><h4>Part-by-part, in context</h4><p>Each hotspot teaches one component where it actually sits — compressor, combustor, turbine, diffuser.</p></div><div class="mini-card"><div class="ic">&#10145;</div><h4>Follow the energy</h4><p>Cold air in at the left, hot gas out at the right — the gas path is the spine of the whole tour.</p></div></div>`,
-   "Business Problem":`<p>A heavy-duty gas turbine is large, sealed, and runs at temperatures and speeds that make it impossible to open up for teaching. New technicians, engineering students, and technical staff are expected to understand a machine they can never take apart — and static cutaway posters flatten a deeply three-dimensional, nested assembly into lines on a page.</p><p><b>The metric at risk:</b> time-to-familiarity during onboarding, and the comprehension errors that follow when someone can't picture how the compressor, combustor, and turbine share one shaft. The gap is mental model, not motivation.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">Spatial</span><span><b>The arrangement is invisible</b> — it's hard to see that compressor, combustor, and turbine nest along a single rotor, or how the casing wraps the blade path.</span></li><li><span class="lvl">Vocabulary</span><span><b>The words are abstract</b> — stator, transition piece, diffuser, can-annular mean little without the object in front of you.</span></li><li><span class="lvl">Cause</span><span><b>The energy story is counter-intuitive</b> — that well over half the turbine's output is spent just driving its own compressor surprises most beginners.</span></li></ul>`,
-   "Target Audience":`<p>Entry-level power-generation technicians, mechanical and energy-engineering students, and technical onboarding or sales staff who need a working mental model of how a gas turbine is built and how it works. Assumes no turbomachinery background, runs in any modern browser with no install, and works on desktop (drag + scroll) and touch (drag + pinch).</p>`,
-   "Learning Objectives":`<ul class="obj"><li><span class="lvl">Identify</span><span>Name the major sections and components in order along the gas path, from air inlet to exhaust diffuser.</span></li><li><span class="lvl">Explain</span><span>State the function of each component — compression, combustion, expansion, and pressure recovery.</span></li><li><span class="lvl">Trace</span><span>Describe the flow of air and energy through the machine, and why the compressor consumes most of the turbine's work.</span></li><li><span class="lvl">Appreciate</span><span>Recognise why the hot section is the hard part — firing temperature, blade cooling, thermal-barrier coatings, and single-crystal alloys.</span></li></ul>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#128260;</div><h4>Manipulation before explanation</h4><p>Learners rotate and zoom the whole machine first; curiosity about a part precedes the text about it.</p></div><div class="mini-card"><div class="ic">&#128205;</div><h4>One component at a time</h4><p>A hotspot opens a single focused micro-explanation plus a two-row spec card — no walls of text.</p></div><div class="mini-card"><div class="ic">&#128065;</div><h4>Reveal the internals</h4><p>The casing toggle strips the housing so the outside-to-inside relationship becomes obvious, not assumed.</p></div><div class="mini-card"><div class="ic">&#128214;</div><h4>Linear tour on demand</h4><p>Prev / Next step through the components in gas-path order for learners who want a guided path.</p></div></div>`,
-   "Content Architecture":`<p>Ten hotspots organised in gas-path order — the same left-to-right journey the air takes through the machine.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">Cold</span> Air in &amp; compress</div><div class="mods"><span class="mod">Air inlet &amp; nose cone</span><span class="mod">Axial compressor</span><span class="mod">Blades &amp; stators</span><span class="mod">Rotor shaft</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Burn</span> Add fuel &amp; ignite</div><div class="mods"><span class="mod">Fuel nozzles</span><span class="mod">Can-annular combustor</span><span class="mod">Transition piece</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Hot</span> Expand &amp; extract</div><div class="mods"><span class="mod">Turbine section</span><span class="mod">Cooled turbine blades</span></div></div><div class="arch-tier"><div class="at"><span class="badge">Out</span> Recover &amp; exhaust</div><div class="mods"><span class="mod">Exhaust diffuser</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("Hotspot · Axial Compressor","Click to inspect","The machine is mid-rotation; a pulsing + marker sits on the compressor. Clicking it slides in a panel.","'A multi-stage axial compressor squeezes incoming air to roughly 20–23 times atmospheric pressure before combustion.'","Click the marker; the side panel opens with the explanation and a Stages / Pressure-ratio spec card.")}${frame("Casing toggle","Strip the housing","Learner taps the Casing button; the outer casing shells fade out to expose blades, cans, and the rotor drum.","'The housing hides the work — drop it and the blade rows and combustor cans you just read about appear in place.'","Toggle Casing off, rotate to the cutaway window, then step Next through the internals.","w80")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>The casing is a cutaway, not just hideable</b> — an 83&deg; window is carved out of every shell so internals stay visible even with the housing on.</span></li><li><span class="lvl">Why</span><span><b>Hotspots fade on the far side</b> — markers behind the machine dim and stop catching clicks, so you only interact with parts you can actually see.</span></li><li><span class="lvl">Why</span><span><b>DOM markers over in-scene sprites</b> — real &lt;button&gt; elements with aria-labels make each hotspot a proper, labelled control, not a painted dot.</span></li><li><span class="lvl">Why</span><span><b>Every part carries a two-row spec card</b> — one explanation plus two hard numbers keeps each stop quick to scan and easy to remember.</span></li><li><span class="lvl">Why</span><span><b>Original geometry, stated up front</b> — the model is built from primitives to teach honestly, with a standing note that it is not a manufacturer asset.</span></li></ul>`,
-   "Assessment Strategy":`<p>Version one is a familiarization tutorial — exploration and a guided tour, with no scored assessment yet. That is stated plainly rather than dressed up.</p><table class="tbl"><tr><th>Layer</th><th>Type</th><th>Objective</th><th>Status</th></tr><tr><td><b>Guided component tour</b></td><td class="tag-l">Formative</td><td>Identify / Explain</td><td>Live — Prev / Next walk every component in gas-path order.</td></tr><tr><td><b>Spec-card recall</b></td><td class="tag-l">Self-check</td><td>Explain</td><td>Live — each part pairs a function with two memorable figures.</td></tr><tr><td><b>Drag-to-label knowledge check</b></td><td class="tag-l">Summative</td><td>Identify</td><td><b style="color:var(--amber)">Planned</b> — the honest next layer before any mastery claim.</td></tr></table>`,
-   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#128203;</div><h4>Per-part spec cards</h4><p>A quick-reference function and two key figures for every component, available the moment it's selected.</p></div><div class="mini-card"><div class="ic">&#128065;</div><h4>Casing toggle</h4><p>A study tool in its own right — flip between the external machine and the exposed internals at will.</p></div><div class="mini-card"><div class="ic">&#128260;</div><h4>Reset &amp; auto-rotate</h4><p>One button restores the framed view; gentle auto-rotation invites exploration without demanding it.</p></div></div>`,
-   "Accessibility Considerations":`<p>Accessibility is the documented next iteration on this build — stated honestly rather than overclaimed.</p><div class="a11y"><div><span class="ck">&#10003;</span> Hotspots are real &lt;button&gt; elements with descriptive aria-labels.</div><div><span class="ck">&#10003;</span> Pointer, touch (drag &amp; pinch), and scroll-wheel input are all supported.</div><div><span class="ck">&#10003;</span> High-contrast labels and panel text over a light, glare-managed background.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: keyboard rotation, zoom, and focus-visible for the canvas and hotspots.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: prefers-reduced-motion to calm auto-rotate and the marker pulse.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: a non-3D text fallback listing every component and its description.</div></div><p style="font-size:14px;color:var(--muted)">A WebGL tutorial that claims accessibility has to be honest about the keyboard and reduced-motion gaps — they're scoped and next, not done.</p>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">Compressor</span><span class="dp">3 / 10</span></div><div class="choice sel">17 axial stages</div><div class="choice">~20–23 : 1 pressure ratio</div></div><div class="cap">Hotspot + spec card</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Casing</span><span class="dp">off</span></div><div class="choice sel">Internals exposed &#10003;</div><div class="choice">Cans · blades · rotor drum</div></div><div class="cap">Cutaway reveal</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Combustor</span><span class="dp">Hot</span></div><div class="choice sel">16 cans · ~1,600 &deg;C</div><div class="choice">Dry Low-NOx nozzles</div></div><div class="cap">Hot-section stop</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">components correctly identified on a follow-up check</div><div class="k">Kirkpatrick L2</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">self-rated familiarity, pre &#8594; post</div><div class="k">L1 · confidence</div></div><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">onboarding time to "can name the gas path"</div><div class="k">L2 · efficiency</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">hotspot coverage per session</div><div class="k">L2 · engagement</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; figures pending a learner pilot. Engineering figures in the tutorial are representative of the J/JAC class <b style="color:var(--amber)">[VERIFY WITH SME]</b>.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Letting learners strip the casing and orbit the machine made the spatial arrangement click in a way a flat cutaway never does — the gas path stops being a diagram and becomes a place.</p><p><b>What I'd change:</b> A drag-to-label knowledge check and a real keyboard / reduced-motion accessibility pass are the honest next steps before this earns a mastery or AA claim.</p><p><b>The transferable lesson:</b> For complex hardware, the interaction is the explanation. Rotating, revealing, and inspecting carry the teaching; the text just names what the learner already discovered.</p></div>`
-  }},
- "p-datacenter":{
-  title:"Data Center Technician Upskilling",
-  sub:"A three-program upskilling suite that takes a new hire from \"never been on the floor\" to trusted on a 24×7 shift — grounded in real standards (EIA-310-D, ASHRAE TC9.9, Uptime / TIA-942-C, ITIL), built in Storyline 360 / Rise 360, and accelerated with an AI production pipeline and a custom interactive 3D rack.",
-  facts:[["Role","Technical ID + LXD + 3D build"],["Audience","New data-center technicians"],["Domain","Data center operations · upskilling"],["Mode","Storyline/Rise · SCORM/xAPI · Three.js"]],
-  thumbClass:"t-datacenter",
-  body:{
-   "Project Overview":`<div style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px"><a class="btn btn-primary" href="https://data-center-training.vercel.app" target="_blank" rel="noopener">&#9654; Open the interactive 3D rack</a></div><p>A stackable, three-program upskilling <b>suite</b> that takes a new hire from "never been on the floor" to trusted on a 24&times;7 shift — grounded in real standards (EIA-310-D, ASHRAE TC9.9, Uptime / TIA-942-C, ITIL), built in Storyline 360 / Rise 360, and accelerated with an AI production pipeline. The middle program is built to full production depth, and the showpiece is an interactive 3D 42U rack you can open in any browser. <b>A portfolio training concept — market figures are cited; learning outcomes are design targets to validate in a pilot.</b></p><div class="row3"><div class="mini-card"><div class="ic">&#129513;</div><h4>A three-program ladder</h4><p>Operate the Environment &#8594; Rack to Runtime &#8594; Defend the Uptime — each course's exit is the next one's entry.</p></div><div class="mini-card"><div class="ic">&#11088;</div><h4>Flagship built to depth</h4><p>"Rack to Runtime" ships block-by-block copy, two branching scored scenarios, a quiz, and a Rise assembly runbook.</p></div><div class="mini-card"><div class="ic">&#128421;</div><h4>Interactive 3D rack</h4><p>A rotatable, clickable 42U rack with Power and Airflow views, built to EIA-310-D dimensions and embeddable in Rise.</p></div></div>`,
-   "Business Problem":`<p>The AI build-out has created one of the strongest structural skills shortages in any US sector — and the bottleneck isn't hardware, it's <b>trained people</b>. The market research grounding this project:</p><ul class="obj"><li><span class="lvl">Gap</span><span>A projected <b>140,000+ skilled-worker gap by 2030</b> in data-center operations as experienced technicians retire faster than new ones are trained <i>(Johnson Controls, via Data Center Knowledge)</i>.</span></li><li><span class="lvl">Growth</span><span>US data-center construction growing from <b>$48.18B (2024) to $112.33B (2030)</b> — a 15.15% CAGR <i>(Arizton)</i>.</span></li><li><span class="lvl">Hiring</span><span>Nearly <b>half of operators (46%)</b> report difficulty finding qualified candidates <i>(Uptime Institute Global Data Center Survey)</i>.</span></li></ul><p>The fastest-to-scale layer of that training is exactly the <b>knowledge / procedure</b> layer great e-learning owns: how a facility stays available, how to install and commission to spec, how to triage and escalate at 2 a.m.</p>`,
-   "Learner Problem":`<ul class="obj"><li><span class="lvl">No floor time</span><span><b>A new hire has never been on the floor</b> — racks, aisles, and the power / cooling path are abstractions until they can see and handle them.</span></li><li><span class="lvl">Procedure</span><span><b>SOP / MOP / EOP are just acronyms</b> — knowing when to follow a method of procedure and when to call a hold is judgment that shadowing teaches slowly and unevenly.</span></li><li><span class="lvl">Pressure</span><span><b>The 2 a.m. alarm is unrehearsed</b> — triaging a P1&#8211;P4 event, escalating correctly, and handing off cleanly is high-stakes and rarely practiced before it's real.</span></li></ul>`,
-   "Target Audience":`<p>New data-center technicians and operations hires — many with no prior floor experience — plus the shift leads and onboarding programs responsible for getting them to competency. Delivered through the LMS via SCORM 1.2 / xAPI, responsive for desktop and tablet, with the 3D rack running in any modern browser.</p>`,
-   "Learning Objectives":`<p>Bloom-tagged terminal and enabling objectives — and <b>every objective maps to an assessment item</b> (no orphan content, no unassessed objective).</p><ul class="obj"><li><span class="lvl">Operate</span><span>Apply data-center fundamentals — the Tier model, ASHRAE thermal envelope, SOP / MOP / EOP, and floor safety — to work safely from day one.</span></li><li><span class="lvl">Install</span><span>Install and commission a rack to spec, following the MOP and its hold points from dock to live.</span></li><li><span class="lvl">Decide</span><span>Make a defensible commissioning go / no-go call, treating a justified hold as the correct outcome.</span></li><li><span class="lvl">Defend</span><span>Monitor a live shift, triage P1&#8211;P4 events, escalate on time, and hand off cleanly.</span></li></ul>`,
-   "Instructional Strategy":`<div class="row2"><div class="mini-card"><div class="ic">&#128260;</div><h4>ADDIE backbone, SAM iteration</h4><p>A three-program ladder architected so each course's exit competency is the next one's entry.</p></div><div class="mini-card"><div class="ic">&#127807;</div><h4>Productive failure</h4><p>Wrong choices show honest consequences and route back; calling a hold or Stop <i>scores as a win</i>, not a dead end.</p></div><div class="mini-card"><div class="ic">&#128209;</div><h4>One cited source of truth</h4><p>A spec library is the single source; safety and spec wording stays verbatim, never AI-paraphrased, with SME sign-off as a gate.</p></div><div class="mini-card"><div class="ic">&#127916;</div><h4>Mayer multimedia principles</h4><p>Narration complements on-screen text, one idea per screen, and the critical number is signalled.</p></div></div>`,
-   "Content Architecture":`<p>A stackable, three-program suite — a ladder where each program's exit competency is the next one's entry. The middle program is built to full production depth in this package; the other two are designed and outlined.</p><div class="arch"><div class="arch-tier"><div class="at"><span class="badge">P1</span> Operate the Environment</div><div class="mods"><span class="mod">Tiers &amp; TIA-942</span><span class="mod">ASHRAE thermal</span><span class="mod">SOP / MOP / EOP</span><span class="mod">Floor safety</span><span class="mod">Designed + outlined</span></div></div><div class="arch-tier"><div class="at"><span class="badge">P2 &#11088;</span> Rack to Runtime &mdash; fully built</div><div class="mods"><span class="mod">Rack specs (EIA-310-D)</span><span class="mod">Install MOP</span><span class="mod">Commissioning go/no-go</span><span class="mod">First-night alarm</span><span class="mod">Quiz + runbook</span></div></div><div class="arch-tier"><div class="at"><span class="badge">P3</span> Defend the Uptime</div><div class="mods"><span class="mod">Monitor the shift</span><span class="mod">Triage P1&#8211;P4</span><span class="mod">Escalate</span><span class="mod">Clean hand-off</span><span class="mod">Designed + outlined</span></div></div></div>`,
-   "Storyboard Samples":`<div class="story-grid">${frame("P2 · Commissioning","Go / no-go call","The rack is installed; a checklist shows one power feed reading out of tolerance against the MOP spec.","'Two independent feeds should read within tolerance before you energise. One doesn't. What's your call?'","Choose Energise vs. Call a hold; calling the hold on the failed feed scores as the correct, safe outcome.")}${frame("P2 · First night","P1 alarm triage","2 a.m. — a high-temperature alarm fires on the new rack; several signals compete for attention.","'A P1 just came in. Work the priority, not the noise — what do you check, who do you call, and when?'","Triage the P1, escalate within the target window, and hand off; latency and missed signals are tracked.","w80")}</div>`,
-   "Interaction Design Decisions":`<ul class="obj"><li><span class="lvl">Why</span><span><b>Calling a hold scores as a win</b> — in a safety-critical domain, rewarding "stop when unsure" trains the instinct the floor actually needs.</span></li><li><span class="lvl">Why</span><span><b>Spec and safety wording is verbatim</b> — the cited spec library is the single source of truth; facts are locked once and never AI-paraphrased, with SME sign-off as a gate.</span></li><li><span class="lvl">Why</span><span><b>The 3D rack is a reusable web object</b> — one Three.js asset built to EIA-310-D embeds into Rise and stands alone in a browser, so the spatial model is consistent everywhere.</span></li><li><span class="lvl">Why</span><span><b>Scored sims live in Storyline</b> — variables and branching drive the go/no-go and alarm scenarios; responsive content and knowledge checks live in Rise.</span></li><li><span class="lvl">Why</span><span><b>Sims track meaningful metrics</b> — missed-P1, escalation latency, and clean-commission are captured to xAPI, not just a completion tick.</span></li></ul>`,
-   "Assessment Strategy":`<p>Knowledge checks plus scored branching sims, delivered to the LMS over SCORM 1.2 / xAPI — with every objective mapped to an assessment item.</p><table class="tbl"><tr><th>Assessment</th><th>Type</th><th>Objective</th><th>Measures</th></tr><tr><td><b>Verbatim quiz bank</b></td><td class="tag-l">Knowledge</td><td>Operate / Install</td><td>Recall of specs, tiers, and procedure drawn from the cited source library.</td></tr><tr><td><b>Commissioning go/no-go</b></td><td class="tag-l">Scored sim</td><td>Decide</td><td>Whether the learner energises unsafely or calls the justified hold.</td></tr><tr><td><b>First-night alarm</b></td><td class="tag-l">Scored sim</td><td>Defend</td><td>P1 handling, escalation latency, and clean hand-off, tracked to xAPI.</td></tr></table>`,
-   "Performance Support Assets":`<div class="row3"><div class="mini-card"><div class="ic">&#128421;</div><h4>Interactive 3D 42U rack</h4><p>Rotatable and clickable, with Power and Airflow views to EIA-310-D — a job aid and a teaching object in one, embeddable in Rise.</p></div><div class="mini-card"><div class="ic">&#128209;</div><h4>Cited spec library</h4><p>A single source of truth for racks, tiers, thermal, power, ops, and escalation — SME-verified and reused across all three programs.</p></div><div class="mini-card"><div class="ic">&#128736;</div><h4>MOP &amp; Rise runbook</h4><p>The install method-of-procedure with hold points, plus an assembly runbook so the flagship imports cleanly into Rise.</p></div></div>`,
-   "Accessibility Considerations":`<p>WCAG 2.1 AA is built into the course design — with the interactive 3D asset's full keyboard pass called out honestly as the verification item.</p><div class="a11y"><div><span class="ck">&#10003;</span> Real-text data (never text baked into images), with alt text on visuals and captions on narration.</div><div><span class="ck">&#10003;</span> Keyboard-operable with visible focus across the Rise / Storyline content.</div><div><span class="ck">&#10003;</span> Status shown by text + icon, never colour alone; reduced-motion respected.</div><div><span class="ck">&#10003;</span> Assessment feedback is specific and text-based, not colour- or sound-dependent.</div><div><span class="ck" style="color:var(--amber)">&#9711;</span> In progress: full keyboard operation and a text fallback for the interactive 3D rack web object.</div></div>`,
-   "Prototype Screens":`<div class="proto"><div class="device"><div class="scr"><div class="hd"><span class="dt">3D Rack</span><span class="dp">Airflow</span></div><div class="choice sel">Cold aisle &#8594; hot aisle</div><div class="choice">42U · EIA-310-D</div></div><div class="cap">Interactive 3D rack</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">Commission</span><span class="dp">Go/No-go</span></div><div class="choice">Energise the rack</div><div class="choice sel">Call a hold &#10003;</div></div><div class="cap">Scored decision</div></div><div class="device"><div class="scr"><div class="hd"><span class="dt">2 a.m.</span><span class="dp">P1</span></div><div class="choice sel">Escalate on time &#10003;</div><div class="choice">Chase the noise</div></div><div class="cap">Alarm triage</div></div></div>`,
-   "Success Metrics":`<div class="metric-grid"><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">time-to-competency / new-tech ramp time</div><div class="k">Kirkpatrick L3</div></div><div class="mc"><div class="mtgt">&#8595; reduce</div><div class="l">procedural incidents on the floor</div><div class="k">L4 · business</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">clean commissions &amp; on-time escalations</div><div class="k">L3 · behavior</div></div><div class="mc"><div class="mtgt">&#8593; improve</div><div class="l">onboarding &amp; audit consistency</div><div class="k">L4 · ops</div></div></div><div class="note"><b>&#9656;</b> Design targets — arrows show the direction of success. No results are claimed; these are the business case to validate in a pilot. Market figures are cited to Johnson Controls / Arizton / Uptime Institute.</div>`,
-   "Reflection & Lessons Learned":`<div class="reflect"><p><b>What worked:</b> Locking every fact once in a cited, SME-verified spec library — then projecting storyboard, scenarios, quiz, and asset specs from it — kept a technically dense build accurate and fast, and the interactive 3D rack turned rack anatomy from a diagram into something a learner can handle.</p><p><b>What I'd change:</b> P1 and P3 are designed and outlined but not yet built to the flagship's depth, and the 3D rack still needs its full keyboard pass — both are the honest next steps.</p><p><b>The transferable lesson:</b> For a hard technical domain, rigor and speed aren't opposites. A single cited source of truth plus an AI production pipeline let one deep, interactive flagship stand in for a pile of thin samples — which is exactly the bar the work is built to.</p></div>`
-  }}
-};
-
-/* ---------- render a project page ---------- */
-function renderProject(id){
- const p=PROJECTS[id];if(!p||document.getElementById(id).dataset.built)return;
- let nav='',body='';
- SECTIONS.forEach((s,i)=>{
-   const slug=id+'-s'+i;
-   nav+=`<button onclick="document.getElementById('${slug}').scrollIntoView({behavior:SB})">${String(i+1).padStart(2,'0')} · ${s}</button>`;
-   body+=`<div class="s-block" id="${slug}"><div class="num">${String(i+1).padStart(2,'0')} / 15</div><h3>${s}</h3>${p.body[s]||'<p>—</p>'}</div>`;
- });
- const facts=p.facts.map(f=>`<div class="fact"><div class="fl">${f[0]}</div><div class="fv">${f[1]}</div></div>`).join('');
- document.getElementById(id).innerHTML=`
-   <div class="proj-hero"><div class="wrap">
-     <button class="back" onclick="go('home');scrollTo2('systems')">← All systems</button>
-     <span class="kicker">Case Study</span>
-     <h1>${p.title}</h1>
-     <p class="sub">${p.sub}</p>
-     <div class="proj-facts">${facts}</div>
-   </div></div>
-   <div class="wrap"><div class="proj-layout">
-     <nav class="sidenav">${nav}</nav>
-     <div class="proj-content">${body}</div>
-   </div></div>
-   <div class="contact" style="border-top:1px solid var(--border)"><div class="wrap">
-     <h2 class="rv" style="font-size:2rem">Interested in this kind of work?</h2>
-     <a class="btn btn-primary rv" href="mailto:Druva.akhil@gmail.com" style="margin-top:24px">Get in touch →</a>
-   </div></div>
-   <footer><div class="wrap"><span>© 2026 AK · Knowledge Engineering · AI Enablement</span><span>${p.title}</span></div></footer>`;
- document.getElementById(id).dataset.built="1";
-}
-
-/* ---------- view router ---------- */
-const BASE_TITLE=document.title;
-function closeMenu(){var n=document.getElementById('navlinks');n.classList.remove('open');var b=document.querySelector('.burger');if(b)b.setAttribute('aria-expanded','false');}
-function routeId(){const h=location.hash||'';const id=h.indexOf('#/')===0?h.slice(2):'home';return (id!=='home'&&PROJECTS[id]&&document.getElementById(id))?id:'home';}
-function show(id){
- if(id!=='home'&&!(PROJECTS[id]&&document.getElementById(id)))id='home';
- const cur=document.querySelector('.view.active');
- const changed=!cur||cur.id!==id;
- if(id!=='home')renderProject(id);
- document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- closeMenu();
- if(changed)window.scrollTo(0,0);
- document.title=id==='home'?BASE_TITLE:BASE_TITLE+' — '+PROJECTS[id].title;
- /* analytics: which project view was opened */
- if(changed&&id!=='home'&&window.va){try{window.va('event',{name:'project_open',data:{project:id,title:(PROJECTS[id]&&PROJECTS[id].title)||id}});}catch(e){}}
- setTimeout(observeReveal,60);
-}
-function go(id){
- show(id);
- const h='#/'+id;
- if(location.hash!==h){try{history.pushState(null,'',h);}catch(e){location.hash='/'+id;}}
-}
-window.addEventListener('hashchange',function(){show(routeId());});
-window.addEventListener('popstate',function(){show(routeId());});
-function scrollTo2(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:SB});closeMenu();}
-
-/* ---------- reveal ---------- */
-let io;
-function observeReveal(){
- if(!io)io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});
- document.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{el.style.transitionDelay=(Math.min(i,5)*55)+'ms';io.observe(el);});
-}
-observeReveal();
-/* deep link on load: #/p-xxx opens that case study directly */
-if(location.hash.indexOf('#/')===0)show(routeId());
-/* robustness: reveal everything shortly after load (print, automation, no-scroll) */
-setTimeout(function(){document.querySelectorAll('.rv:not(.in)').forEach(function(el){el.classList.add('in');});},2500);
-
-/* ---------- analytics: outbound (live app / résumé) link clicks ---------- */
-document.addEventListener('click',function(e){
- var a=e.target.closest&&e.target.closest('a[target="_blank"][href^="http"]');
- if(a&&window.va){try{window.va('event',{name:'outbound_click',data:{href:a.getAttribute('href'),label:(a.textContent||'').replace(/\s+/g,' ').trim().slice(0,60)}});}catch(_){}}
-},true);
-</script>
-<!-- Vercel Web Analytics: page visits + custom project-click events.
-     Requires Web Analytics to be enabled for this project in the Vercel dashboard. -->
+<script src="assets/projects.js"></script>
+<script src="assets/site.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
